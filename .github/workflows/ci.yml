@@ -6,8 +6,35 @@ on:
 
 jobs:
 
+  changes:
+    name: Detect changed paths
+    runs-on: ubuntu-latest
+    outputs:
+      backend: ${{ steps.filter.outputs.backend }}
+      frontend: ${{ steps.filter.outputs.frontend }}
+      pwa: ${{ steps.filter.outputs.pwa }}
+      mobile: ${{ steps.filter.outputs.mobile }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Filter paths
+        uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            backend:
+              - backend/**
+            frontend:
+              - frontend/**
+            pwa:
+              - pwa/**
+            mobile:
+              - mobile/**
+
   backend:
     name: Backend (.NET)
+    needs: changes
+    if: needs.changes.outputs.backend == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -28,6 +55,8 @@ jobs:
 
   frontend:
     name: Frontend (Angular)
+    needs: changes
+    if: needs.changes.outputs.frontend == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -49,6 +78,8 @@ jobs:
 
   pwa:
     name: PWA (Angular)
+    needs: changes
+    if: needs.changes.outputs.pwa == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -70,6 +101,8 @@ jobs:
 
   mobile:
     name: Mobile (Flutter)
+    needs: changes
+    if: needs.changes.outputs.mobile == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

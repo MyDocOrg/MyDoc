@@ -1,0 +1,90 @@
+name: Monorepo CI
+
+on:
+  push:
+    branches: [develop, main]
+
+jobs:
+
+  backend:
+    name: Backend (.NET)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore
+        run: dotnet restore backend
+
+      - name: Build
+        run: dotnet build backend --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test backend --no-build --verbosity normal
+
+  frontend:
+    name: Frontend (Angular)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: |
+          cd frontend
+          npm ci
+
+      - name: Build Angular
+        run: |
+          cd frontend
+          npm run build -- --configuration production
+
+  pwa:
+    name: PWA (Angular)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: |
+          cd pwa
+          npm ci
+
+      - name: Build PWA
+        run: |
+          cd pwa
+          npm run build -- --configuration production
+
+  mobile:
+    name: Mobile (Flutter)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+
+      - name: Install dependencies
+        run: |
+          cd mobile
+          flutter pub get
+
+      - name: Build APK (debug)
+        run: |
+          cd mobile
+          flutter build apk --debug

@@ -11,3 +11,95 @@ obj/
 
 # Logs
 *.log
+
+# ===========================
+# Angular / Node.js Frontend
+# ===========================
+
+# Node dependencies
+node_modules/
+
+# Angular build outputs
+dist/
+frontend/dist/
+
+# Angular cache
+.angular/
+.cache/
+
+# TypeScript build info
+*.tsbuildinfo
+
+# Test coverage
+coverage/
+
+# ===========================
+# .NET Backend (adicional)
+# ===========================
+
+# NuGet packages
+*.nupkg
+*.snupkg
+[Pp]ackages/
+
+# User-specific files
+*.suo
+*.user
+*.sln.docstates
+*.userprefs
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa]rm/
+[Aa]rm64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# Visual Studio cache/options
+.vs/
+.vscode/
+*.rsuser
+
+# ReSharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# Rider
+.idea/
+*.sln.iml
+
+# ===========================
+# System / OS Files
+# ===========================
+
+# Windows
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# ===========================
+# Environment & Secrets
+# ===========================
+
+# Environment files
+.env
+.env.local
+.env.*.local
+*.env
+
+# Secrets
+appsettings.*.json
+!appsettings.json
+!appsettings.Development.json

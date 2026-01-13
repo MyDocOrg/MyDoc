@@ -26,8 +26,6 @@ jobs:
               - backend/**
             frontend:
               - frontend/**
-            pwa:
-              - pwa/**
             mobile:
               - mobile/**
 
@@ -74,29 +72,6 @@ jobs:
       - name: Build Angular
         run: |
           cd frontend
-          npm run build -- --configuration production
-
-  pwa:
-    name: PWA (Angular)
-    needs: changes
-    if: needs.changes.outputs.pwa == 'true'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Install dependencies
-        run: |
-          cd pwa
-          npm ci
-
-      - name: Build PWA
-        run: |
-          cd pwa
           npm run build -- --configuration production
 
   mobile:

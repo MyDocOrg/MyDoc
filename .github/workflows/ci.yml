@@ -2,7 +2,7 @@ name: Monorepo CI
 
 on:
   push:
-    branches: [develop, main]
+    branches: [dev, main]
 
 jobs:
 

@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using MyDoc.Application.BL;
+using MyDoc.Application.DAL;
 using MyDoc.Models;
-using MyDoc.UseCase;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +17,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-builder.Services.AddScoped<UserUseCase>();
+builder.Services.AddScoped<PacienteDAL>();
+
+builder.Services.AddScoped<PacienteBL>();
 
 var app = builder.Build();
 

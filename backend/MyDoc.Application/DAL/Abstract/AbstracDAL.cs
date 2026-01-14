@@ -1,13 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyDoc.Models;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace MyDoc.UseCase.Abstract
+namespace MyDoc.Application.DAL.Abstract
 {
-    public class AbstractUseCase<TEntity> where TEntity : class
+    public class AbstracDAL<TEntity> where TEntity : class
     {
         private readonly ApplicationDbContext _context;
         private readonly DbSet<TEntity> _dbSet;
-        public AbstractUseCase(ApplicationDbContext context)
+        public AbstracDAL(ApplicationDbContext context)
         {
             _context = context;
             _dbSet = context.Set<TEntity>();
@@ -23,7 +26,7 @@ namespace MyDoc.UseCase.Abstract
             return await _dbSet.FindAsync(id);
         }
 
-        protected async Task AddAsync(TEntity entity)
+        protected async System.Threading.Tasks.Task AddAsync(TEntity entity)
         {
             await _dbSet.AddAsync(entity);
         }
@@ -33,7 +36,7 @@ namespace MyDoc.UseCase.Abstract
             _dbSet.Remove(entity);
         }
 
-        protected async Task SaveAsync()
+        protected async System.Threading.Tasks.Task SaveAsync()
         {
             await _context.SaveChangesAsync();
         }

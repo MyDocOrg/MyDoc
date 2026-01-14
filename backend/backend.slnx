@@ -1,3 +1,5 @@
 <Solution>
+  <Project Path="MyDoc.Application/MyDoc.Application.csproj" Id="8dc0784b-8af4-41fe-be94-978d45273a58" />
+  <Project Path="MyDoc.Infrastructure/MyDoc.Infrastructure.csproj" Id="5bf110e9-080d-4460-bda3-ce9eb1fed250" />
   <Project Path="MyDoc/MyDoc.csproj" />
 </Solution>

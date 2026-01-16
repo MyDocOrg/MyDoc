@@ -7,12 +7,21 @@ import { PatientsComponent } from './pages/features/doctor/patients/patients.com
 import { PrescriptionsComponent } from './pages/features/doctor/prescriptions/prescriptions.component';
 import { ScheduleComponent } from './pages/features/doctor/schedule/schedule.component';
 import { SettingsComponent } from './pages/features/doctor/settings/settings.component';
+import { PatientHome } from './pages/features/patient/patient-home/patient-home';
+import { PatientAdd } from './pages/features/patient/patient-add/patient-add';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
     { path: 'login', component: LoginComponent },
     { path: 'home', component: HomeComponent },
     { path: 'register', component: RegisterComponent},
+    {
+        path: 'patient',
+        children: [
+            { path: '', component: PatientHome },
+            { path: 'add', component: PatientAdd }
+        ]
+    },
     
     // Rutas del módulo Doctor
     { 

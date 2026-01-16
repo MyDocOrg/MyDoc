@@ -1,0 +1,24 @@
+<div class="container-fluid">
+  <div class="row align-items-center">
+    <div class="col">
+      <h5 class="mb-0">Status task</h5>
+    </div>
+
+    <div class="col text-end">
+      <button type="button" class="btn btn-primary" routerLink="add">
+        Crear status task
+      </button>
+    </div>
+  </div>
+  <div class="row">
+    <app-patient-table
+      [headersTable]="['Id','firstName', 'lastName']"
+      [columsData]="['id', 'firstName', 'lastName']"
+      [tableData]="patientTable()"
+      [loading]="loading()"
+      (edit)="edit($event)"
+      (delete)="deleteT($event)"
+      (detail)="view($event)"
+    />
+  </div>
+</div>

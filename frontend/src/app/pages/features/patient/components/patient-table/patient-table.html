@@ -1,0 +1,146 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <!-- LEFT GROUP: search + dynamic filters -->
+  <div class="d-flex align-items-center gap-2">
+    <div class="d-flex align-items-center gap-2">
+      <!-- SEARCH -->
+      <input type="text" class="form-control" style="width: 220px" placeholder="Buscar..."
+        (input)="tableState.onSearch($any($event.target).value)" />
+      <!-- DYNAMIC FILTERS -->
+      <ng-content select="[table-filters]"></ng-content>
+    </div>
+
+    <div class="d-flex align-items-center gap-2">
+      <input
+        type="date"
+        class="form-control"
+        style="width: 150px"
+        (change)="tableState.onSearchByField('createdAtFrom', $any($event.target).value)"
+      />
+
+      <input
+        type="date"
+        class="form-control"
+        style="width: 150px"
+        (change)="tableState.onSearchByField('createdAtTo', $any($event.target).value)"
+      />
+
+    </div>
+  </div>
+
+  <!-- RIGHT: page size -->
+  <div class="d-flex align-items-center">
+    <input type="number" class="form-control" style="width: 60px" min="1" [value]="tableState.pageSize()" (change)="tableState.onPageSizeChange($any($event.target).value)" />
+  </div>
+</div>
+
+<table class="table table-hover align-middle">
+
+  <!-- HEADER -->
+  <thead>
+    <tr>
+      @for (header of headersTable(); track $index) {
+      <th>{{ header}}</th>
+      }
+      <th class="text-end">{{ 'TABLE.ACTIONS' }}</th>
+    </tr>
+  </thead>
+
+  <!-- BODY -->
+  <tbody>
+    @if (loading()) {
+    <tr>
+      <td [attr.colspan]="headersTable().length + 1" class="text-center py-5">
+        <div class="d-flex justify-content-center align-items-center gap-2">
+          <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
+          <span class="text-muted">Cargando información...</span>
+        </div>
+      </td>
+    </tr>
+    }
+
+    @else if (tableData().length === 0) {
+    <tr>
+      <td [attr.colspan]="headersTable().length + 1" class="text-center py-5">
+        <i class="fas fa-circle-info text-muted fs-4 d-block mb-2"></i>
+        <span class="text-muted">No se encontró información</span>
+      </td>
+    </tr>
+    }
+
+    @else {
+    @for (row of tableState.paginatedData(); track row.id ?? $index) {
+    <tr>
+      @for (column of columsData(); track $index) {
+      <td>{{ row[column] }}</td>
+      }
+
+      <td class="text-end">
+        <div class="dropdown">
+          <button class="btn btn-sm btn-light" type="button" data-bs-toggle="dropdown">
+            <i class="fas fa-ellipsis-vertical"></i>
+          </button>
+
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li>
+              <button class="dropdown-item" (click)="onDetail(row.id)">
+                <i class="fas fa-eye me-2"></i> {{ 'TABLE.VIEW' }}
+              </button>
+            </li>
+            <li>
+              <button class="dropdown-item" (click)="onEdit(row.id)">
+                <i class="fas fa-edit me-2"></i> {{ 'TABLE.EDIT' }}
+              </button>
+            </li>
+            <li>
+              <button class="dropdown-item text-danger" (click)="onDelete(row.id)">
+                <i class="fas fa-trash me-2"></i> {{ 'TABLE.DELETE' }}
+              </button>
+            </li>
+          </ul>
+        </div>
+      </td>
+    </tr>
+    }
+    }
+
+  </tbody>
+</table>
+
+<div class="d-flex justify-content-between align-items-center mt-3">
+
+  <!-- LEFT INFO -->
+  <small class="text-muted">
+    Página {{ tableState.page() }} de {{ tableState.totalPages() }}
+    · {{ tableState.filteredData().length }} registros
+  </small>
+
+  <!-- RIGHT PAGINATION -->
+  @if (tableState.totalPages() > 1) {
+  <nav>
+    <ul class="pagination mb-0">
+
+      <li class="page-item" [class.disabled]="tableState.page() === 1">
+        <button class="page-link" (click)="tableState.goToPage(tableState.page() - 1)">
+          «
+        </button>
+      </li>
+
+      @for (p of [].constructor(tableState.totalPages()); track $index) {
+      <li class="page-item" [class.active]="tableState.page() === $index + 1">
+        <button class="page-link" (click)="tableState.goToPage($index + 1)">
+          {{ $index + 1 }}
+        </button>
+      </li>
+      }
+
+      <li class="page-item" [class.disabled]="tableState.page() === tableState.totalPages()">
+        <button class="page-link" (click)="tableState.goToPage(tableState.page() + 1)">
+          »
+        </button>
+      </li>
+
+    </ul>
+  </nav>
+  }
+
+</div>

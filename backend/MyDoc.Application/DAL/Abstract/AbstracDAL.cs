@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MyDoc.Models;
+using MyDoc.Infrastructure.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;

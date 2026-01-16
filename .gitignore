@@ -99,6 +99,12 @@ $RECYCLE.BIN/
 .env.*.local
 *.env
 
+# Sensitive configuration files
+appsettings.Local.json
+appsettings.Production.json
+**/appsettings.Local.json
+**/appsettings.Production.json
+
 # Secrets
 appsettings.*.json
 !appsettings.json

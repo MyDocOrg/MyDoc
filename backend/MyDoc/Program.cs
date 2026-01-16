@@ -1,15 +1,19 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using MyDoc.Application.BL;
+using MyDoc.Application.Services;
 using MyDoc.Application.BO.Contants;
 using MyDoc.Application.DAL;
 using MyDoc.Infrastructure.AuthModels;
-using MyDoc.Models;
+using MyDoc.Infrastructure.Models;
+using MyDoc.Middleware;
 using System.Text;
 using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Load configuration from appsettings.Local.json (for local secrets)
+builder.Configuration.AddJsonFile("appsettings.Local.json", optional: true, reloadOnChange: true);
 
 // Add services to the container.
 
@@ -95,10 +99,14 @@ builder.Services
         };
     });
 
-builder.Services.AddScoped<PacienteDAL>();
-builder.Services.AddScoped<PacienteBL>();
+builder.Services.AddScoped<PatientDAL>();
+builder.Services.AddScoped<PatientService>();
 
 var app = builder.Build();
+
+// Configure custom middleware pipeline (order matters!)
+app.UseMiddleware<RequestLoggingMiddleware>();
+app.UseMiddleware<ExceptionHandlerMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

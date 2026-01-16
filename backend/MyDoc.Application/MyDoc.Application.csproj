@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <Folder Include="BO\Mappers\" />
+    <Folder Include="Services\" />
   </ItemGroup>
 
   <ItemGroup>

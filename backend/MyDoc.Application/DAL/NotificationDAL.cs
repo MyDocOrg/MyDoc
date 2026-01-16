@@ -6,33 +6,33 @@ using System.Threading.Tasks;
 
 namespace MyDoc.Application.DAL
 {
-    public class PatientDAL : AbstractDAL<Patient>
+    public class NotificationDAL : AbstractDAL<Notification>
     {
         private readonly ApplicationDbContext _context;
 
-        public PatientDAL(ApplicationDbContext context) : base(context)
+        public NotificationDAL(ApplicationDbContext context) : base(context)
         {
             _context = context;
         }
 
-        public async Task<List<Patient>> GetAll()
+        public async Task<List<Notification>> GetAll()
         {
             var result = await base.GetAllAsync();
             return result.ToList();
         }
 
-        public async Task<Patient?> GetById(int id)
+        public async Task<Notification?> GetById(int id)
         {
             return await base.GetByIdAsync(id);
         }
 
-        public async Task<Patient> Create(Patient entity)
+        public async Task<Notification> Create(Notification entity)
         {
             await base.AddAsync(entity);
             return entity;
         }
 
-        public async Task<Patient> Update(Patient entity)
+        public async Task<Notification> Update(Notification entity)
         {
             _context.Update(entity);
             await _context.SaveChangesAsync();

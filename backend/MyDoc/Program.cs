@@ -99,8 +99,35 @@ builder.Services
         };
     });
 
+// Register DAL services
+builder.Services.AddScoped<AppointmentDAL>();
+builder.Services.AddScoped<AppointmentStatusDAL>();
+builder.Services.AddScoped<ClinicDAL>();
+builder.Services.AddScoped<ClinicDoctorDAL>();
+builder.Services.AddScoped<ConsultationDAL>();
+builder.Services.AddScoped<DoctorDAL>();
+builder.Services.AddScoped<MedicalHistoryDAL>();
+builder.Services.AddScoped<MedicationScheduleDAL>();
+builder.Services.AddScoped<MedicineDAL>();
+builder.Services.AddScoped<NotificationDAL>();
 builder.Services.AddScoped<PatientDAL>();
+builder.Services.AddScoped<PrescriptionDAL>();
+builder.Services.AddScoped<PrescriptionMedicineDAL>();
+
+// Register Application services
+builder.Services.AddScoped<AppointmentService>();
+builder.Services.AddScoped<AppointmentStatusService>();
+builder.Services.AddScoped<ClinicService>();
+builder.Services.AddScoped<ClinicDoctorService>();
+builder.Services.AddScoped<ConsultationService>();
+builder.Services.AddScoped<DoctorService>();
+builder.Services.AddScoped<MedicalHistoryService>();
+builder.Services.AddScoped<MedicationScheduleService>();
+builder.Services.AddScoped<MedicineService>();
+builder.Services.AddScoped<NotificationService>();
 builder.Services.AddScoped<PatientService>();
+builder.Services.AddScoped<PrescriptionService>();
+builder.Services.AddScoped<PrescriptionMedicineService>();
 
 var app = builder.Build();
 

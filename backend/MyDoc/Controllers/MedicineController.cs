@@ -8,9 +8,9 @@ namespace MyDoc.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PatientController(PatientService Service) : ControllerBase
+    public class MedicineController(MedicineService Service) : ControllerBase
     {
-        private readonly PatientService _Service = Service;
+        private readonly MedicineService _Service = Service;
         
         [HttpGet]
         public async Task<IActionResult> GetAll()
@@ -27,14 +27,14 @@ namespace MyDoc.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] Patient entity)
+        public async Task<IActionResult> Create([FromBody] Medicine entity)
         {
             var result = await _Service.Create(entity);
             return StatusCode(result.Status, result);
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] Patient entity)
+        public async Task<IActionResult> Update([FromBody] Medicine entity)
         {
             var result = await _Service.Update(entity);
             return StatusCode(result.Status, result);

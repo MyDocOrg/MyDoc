@@ -9,6 +9,7 @@ using MyDoc.Infrastructure.Models;
 using MyDoc.Middleware;
 using System.Text;
 using System.Text.Json;
+using MyDoc.Application.Helper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -113,6 +114,7 @@ builder.Services.AddScoped<NotificationDAL>();
 builder.Services.AddScoped<PatientDAL>();
 builder.Services.AddScoped<PrescriptionDAL>();
 builder.Services.AddScoped<PrescriptionMedicineDAL>();
+builder.Services.AddScoped<AuthDAL>();
 
 // Register Application services
 builder.Services.AddScoped<AppointmentService>();
@@ -128,12 +130,17 @@ builder.Services.AddScoped<NotificationService>();
 builder.Services.AddScoped<PatientService>();
 builder.Services.AddScoped<PrescriptionService>();
 builder.Services.AddScoped<PrescriptionMedicineService>();
+builder.Services.AddScoped<AuthService>();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ApplicationProvider>();
+builder.Services.AddScoped<JwtHelper>();
 
 var app = builder.Build();
 
 // Configure custom middleware pipeline (order matters!)
 app.UseMiddleware<RequestLoggingMiddleware>();
 app.UseMiddleware<ExceptionHandlerMiddleware>();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

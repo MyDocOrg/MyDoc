@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="BO\Mappers\" />
+    <Folder Include="BO\Mappers\NewFolder\" />
   </ItemGroup>
 
   <ItemGroup>

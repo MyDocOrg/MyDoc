@@ -32,5 +32,11 @@ namespace MyDoc.Application.Helper
 
         public string Role =>
             User?.FindFirst(ClaimTypes.Role)?.Value ?? string.Empty;
+
+        public string ApplicationId =>
+            User?.FindFirst("application_id")?.Value ?? string.Empty;
+
+        public string ApplicationName =>
+            User?.FindFirst("application_name")?.Value ?? string.Empty;
     }
 }

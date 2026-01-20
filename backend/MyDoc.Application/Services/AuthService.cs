@@ -2,6 +2,7 @@
 using MyDoc.Application.BO.DTO.Auth;
 using MyDoc.Application.DAL;
 using MyDoc.Application.Helper;
+using MyDoc.Infrastructure.AuthModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,8 +12,8 @@ namespace MyDoc.Application.Services
     public class AuthService(AuthDAL dAL, JwtHelper jwtHelper)
     {
         private readonly AuthDAL _dAL = dAL;
-        private readonly JwtHelper _jwtHelper = jwtHelper; 
-        public async Task<ApiResponse<string>> Login(AuthLoginRequest request)
+        private readonly JwtHelper _jwtHelper = jwtHelper;
+        public async Task<ApiResponse<string>> Login(AuthLoginRequest request, string application)
         {
             try
             {
@@ -30,6 +31,23 @@ namespace MyDoc.Application.Services
             catch
             {
                 return ApiResponse<string>.Fail("Error while login");
+            }
+        }
+        public async Task<ApiResponse<User>> Register(AuthRegisterRequest request, string application)
+        {
+            try
+            {
+                var user = await _dAL.Add(new User
+                {
+                    Email = request.Email,
+                    Password = PasswordHelper.HashPassword(request.Password) 
+                });
+
+                return ApiResponse<User>.Ok(user);
+            }
+            catch
+            {
+                return ApiResponse<User>.Fail("Error while login");
             }
         }
     }

@@ -1,0 +1,23 @@
+﻿import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { DoctorAdd } from './doctor-add';
+
+describe('DoctorAdd', () => {
+  let component: DoctorAdd;
+  let fixture: ComponentFixture<DoctorAdd>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [DoctorAdd]
+    })
+    .compileComponents();
+
+    fixture = TestBed.createComponent(DoctorAdd);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});

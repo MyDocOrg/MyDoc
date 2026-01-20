@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+﻿import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PatientHome } from './patient-home';
 
@@ -14,7 +14,7 @@ describe('PatientHome', () => {
 
     fixture = TestBed.createComponent(PatientHome);
     component = fixture.componentInstance;
-    await fixture.whenStable();
+    fixture.detectChanges();
   });
 
   it('should create', () => {

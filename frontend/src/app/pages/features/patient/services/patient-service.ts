@@ -1,15 +1,14 @@
-import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+﻿import { inject, Injectable } from '@angular/core';
+import { environment } from '../../../../../environments/environment';
 import { IApiResponse } from '../../../../shared/Interfaces/IApiResponse';
-import { environment } from '../../../../../environments/environment.development';
-
+import { Observable } from 'rxjs/internal/Observable';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PatientService {
-  http = inject(HttpClient);
+   http = inject(HttpClient);
 
   GetAll() : Observable<IApiResponse<any[]>> { return this.http.get<IApiResponse<any[]>>(`${environment.apiUrl}/patient`); }
   Add(data : any) : Observable<IApiResponse<any[]>> { return this.http.post<IApiResponse<any[]>>(`${environment.apiUrl}/patient`, data); }

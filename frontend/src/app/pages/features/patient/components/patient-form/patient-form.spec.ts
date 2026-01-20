@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+﻿import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PatientForm } from './patient-form';
 
@@ -14,7 +14,7 @@ describe('PatientForm', () => {
 
     fixture = TestBed.createComponent(PatientForm);
     component = fixture.componentInstance;
-    await fixture.whenStable();
+    fixture.detectChanges();
   });
 
   it('should create', () => {

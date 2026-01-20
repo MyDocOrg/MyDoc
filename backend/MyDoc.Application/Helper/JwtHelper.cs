@@ -7,7 +7,7 @@ using System.IdentityModel.Tokens.Jwt;
 
 namespace MyDoc.Application.Helper
 {
-    internal class JwtHelper
+    public class JwtHelper
     {
         private readonly IConfiguration _config;
 

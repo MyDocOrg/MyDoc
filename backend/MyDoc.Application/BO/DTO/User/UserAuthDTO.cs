@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MyDoc.Application.BO.DTO.User
 {
-    public class UserAuthDTO
+    public record UserAuthDTO
     {
         public int Id { get; set; }
         public string Email { get; set; } = null!;

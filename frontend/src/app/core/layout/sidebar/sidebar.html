@@ -1,20 +1,53 @@
 <nav class="bg-dark text-white p-3 vh-100" style="width: 240px;">
-  <h5 class="mb-4">Polnito Rico</h5>
+  <h5 class="mb-4">{{ 'APP.TITLE' | translate }}</h5>
 
   <ul class="nav nav-pills flex-column gap-2">
     <li class="nav-item">
-      <a class="nav-link text-white" routerLink="/dashboard">
-        Dashboard
+      <a class="nav-link text-white" routerLink="/home">
+        <i class="bi bi-house-door me-2"></i>
+        {{ 'MENU.HOME' | translate }}
       </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link text-white" routerLink="/users">
-        Usuarios
+      <a class="nav-link text-white" routerLink="/appointments">
+        <i class="bi bi-calendar-check me-2"></i>
+        {{ 'MENU.APPOINTMENTS' | translate }}
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link text-white" routerLink="/patients">
+        <i class="bi bi-people me-2"></i>
+        {{ 'MENU.PATIENTS' | translate }}
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link text-white" routerLink="/doctors">
+        <i class="bi bi-person-badge me-2"></i>
+        {{ 'MENU.DOCTORS' | translate }}
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link text-white" routerLink="/clinics">
+        <i class="bi bi-building me-2"></i>
+        {{ 'MENU.CLINICS' | translate }}
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link text-white" routerLink="/prescriptions">
+        <i class="bi bi-file-medical me-2"></i>
+        {{ 'MENU.PRESCRIPTIONS' | translate }}
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link text-white" routerLink="/medicines">
+        <i class="bi bi-capsule me-2"></i>
+        {{ 'MENU.MEDICINES' | translate }}
       </a>
     </li>
     <li class="nav-item">
       <a class="nav-link text-white" routerLink="/settings">
-        Configuración
+        <i class="bi bi-gear me-2"></i>
+        {{ 'MENU.SETTINGS' | translate }}
       </a>
     </li>
   </ul>

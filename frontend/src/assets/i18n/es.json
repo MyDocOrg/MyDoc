@@ -1,0 +1,121 @@
+{
+  "APP": {
+    "TITLE": "Mi Aplicación Médica",
+    "WELCOME": "Bienvenido"
+  },
+  "MENU": {
+    "HOME": "Inicio",
+    "APPOINTMENTS": "Citas",
+    "PATIENTS": "Pacientes",
+    "DOCTORS": "Doctores",
+    "CLINICS": "Clínicas",
+    "CONSULTATIONS": "Consultas",
+    "PRESCRIPTIONS": "Recetas",
+    "MEDICINES": "Medicamentos",
+    "MEDICAL_HISTORY": "Historial Médico",
+    "MEDICATION_SCHEDULE": "Horario de Medicamentos",
+    "NOTIFICATIONS": "Notificaciones",
+    "SETTINGS": "Configuración",
+    "LOGOUT": "Cerrar Sesión"
+  },
+  "AUTH": {
+    "LOGIN": "Iniciar Sesión",
+    "REGISTER": "Registrarse",
+    "EMAIL": "Correo Electrónico",
+    "PASSWORD": "Contraseña",
+    "FORGOT_PASSWORD": "¿Olvidaste tu contraseña?",
+    "REMEMBER_ME": "Recordarme",
+    "NO_ACCOUNT": "¿No tienes cuenta?",
+    "ALREADY_HAVE_ACCOUNT": "¿Ya tienes cuenta?"
+  },
+  "COMMON": {
+    "SAVE": "Guardar",
+    "CANCEL": "Cancelar",
+    "DELETE": "Eliminar",
+    "EDIT": "Editar",
+    "ADD": "Agregar",
+    "SEARCH": "Buscar",
+    "CLOSE": "Cerrar",
+    "CONFIRM": "Confirmar",
+    "YES": "Sí",
+    "NO": "No",
+    "LOADING": "Cargando...",
+    "SUCCESS": "Éxito",
+    "ERROR": "Error",
+    "WARNING": "Advertencia",
+    "INFO": "Información",
+    "SELECT": "Seleccionar",
+    "VIEW": "Ver",
+    "DETAILS": "Detalles",
+    "ACTIONS": "Acciones",
+    "STATUS": "Estado",
+    "DATE": "Fecha",
+    "TIME": "Hora",
+    "NAME": "Nombre",
+    "DESCRIPTION": "Descripción",
+    "PHONE": "Teléfono",
+    "ADDRESS": "Dirección"
+  },
+  "APPOINTMENTS": {
+    "TITLE": "Gestión de Citas",
+    "NEW_APPOINTMENT": "Nueva Cita",
+    "SCHEDULE": "Agenda",
+    "PATIENT": "Paciente",
+    "DOCTOR": "Doctor",
+    "DATE": "Fecha",
+    "TIME": "Hora",
+    "REASON": "Motivo",
+    "STATUS": "Estado",
+    "PENDING": "Pendiente",
+    "CONFIRMED": "Confirmada",
+    "CANCELLED": "Cancelada",
+    "COMPLETED": "Completada"
+  },
+  "PATIENTS": {
+    "TITLE": "Gestión de Pacientes",
+    "NEW_PATIENT": "Nuevo Paciente",
+    "PATIENT_LIST": "Lista de Pacientes",
+    "FIRST_NAME": "Nombre",
+    "LAST_NAME": "Apellido",
+    "DATE_OF_BIRTH": "Fecha de Nacimiento",
+    "GENDER": "Género",
+    "MALE": "Masculino",
+    "FEMALE": "Femenino",
+    "OTHER": "Otro",
+    "BLOOD_TYPE": "Tipo de Sangre",
+    "ALLERGIES": "Alergias",
+    "EMERGENCY_CONTACT": "Contacto de Emergencia"
+  },
+  "DOCTORS": {
+    "TITLE": "Gestión de Doctores",
+    "NEW_DOCTOR": "Nuevo Doctor",
+    "SPECIALITY": "Especialidad",
+    "LICENSE_NUMBER": "Número de Licencia",
+    "SCHEDULE": "Horario",
+    "DASHBOARD": "Tablero"
+  },
+  "PRESCRIPTIONS": {
+    "TITLE": "Gestión de Recetas",
+    "NEW_PRESCRIPTION": "Nueva Receta",
+    "MEDICINE": "Medicamento",
+    "DOSAGE": "Dosis",
+    "FREQUENCY": "Frecuencia",
+    "DURATION": "Duración",
+    "INSTRUCTIONS": "Instrucciones"
+  },
+  "MESSAGES": {
+    "SAVE_SUCCESS": "Los cambios se guardaron correctamente",
+    "SAVE_ERROR": "Error al guardar los cambios",
+    "DELETE_CONFIRM": "¿Está seguro de que desea eliminar este registro?",
+    "DELETE_SUCCESS": "El registro se eliminó correctamente",
+    "DELETE_ERROR": "Error al eliminar el registro",
+    "REQUIRED_FIELD": "Este campo es obligatorio",
+    "INVALID_EMAIL": "El correo electrónico no es válido",
+    "INVALID_PHONE": "El teléfono no es válido"
+  },
+  "LANGUAGE": {
+    "SELECT": "Seleccionar Idioma",
+    "SPANISH": "Español",
+    "ENGLISH": "Inglés"
+  }
+}

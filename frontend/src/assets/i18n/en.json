@@ -1,0 +1,121 @@
+{
+  "APP": {
+    "TITLE": "My Medical Application",
+    "WELCOME": "Welcome"
+  },
+  "MENU": {
+    "HOME": "Home",
+    "APPOINTMENTS": "Appointments",
+    "PATIENTS": "Patients",
+    "DOCTORS": "Doctors",
+    "CLINICS": "Clinics",
+    "CONSULTATIONS": "Consultations",
+    "PRESCRIPTIONS": "Prescriptions",
+    "MEDICINES": "Medicines",
+    "MEDICAL_HISTORY": "Medical History",
+    "MEDICATION_SCHEDULE": "Medication Schedule",
+    "NOTIFICATIONS": "Notifications",
+    "SETTINGS": "Settings",
+    "LOGOUT": "Logout"
+  },
+  "AUTH": {
+    "LOGIN": "Login",
+    "REGISTER": "Register",
+    "EMAIL": "Email",
+    "PASSWORD": "Password",
+    "FORGOT_PASSWORD": "Forgot your password?",
+    "REMEMBER_ME": "Remember me",
+    "NO_ACCOUNT": "Don't have an account?",
+    "ALREADY_HAVE_ACCOUNT": "Already have an account?"
+  },
+  "COMMON": {
+    "SAVE": "Save",
+    "CANCEL": "Cancel",
+    "DELETE": "Delete",
+    "EDIT": "Edit",
+    "ADD": "Add",
+    "SEARCH": "Search",
+    "CLOSE": "Close",
+    "CONFIRM": "Confirm",
+    "YES": "Yes",
+    "NO": "No",
+    "LOADING": "Loading...",
+    "SUCCESS": "Success",
+    "ERROR": "Error",
+    "WARNING": "Warning",
+    "INFO": "Information",
+    "SELECT": "Select",
+    "VIEW": "View",
+    "DETAILS": "Details",
+    "ACTIONS": "Actions",
+    "STATUS": "Status",
+    "DATE": "Date",
+    "TIME": "Time",
+    "NAME": "Name",
+    "DESCRIPTION": "Description",
+    "PHONE": "Phone",
+    "ADDRESS": "Address"
+  },
+  "APPOINTMENTS": {
+    "TITLE": "Appointment Management",
+    "NEW_APPOINTMENT": "New Appointment",
+    "SCHEDULE": "Schedule",
+    "PATIENT": "Patient",
+    "DOCTOR": "Doctor",
+    "DATE": "Date",
+    "TIME": "Time",
+    "REASON": "Reason",
+    "STATUS": "Status",
+    "PENDING": "Pending",
+    "CONFIRMED": "Confirmed",
+    "CANCELLED": "Cancelled",
+    "COMPLETED": "Completed"
+  },
+  "PATIENTS": {
+    "TITLE": "Patient Management",
+    "NEW_PATIENT": "New Patient",
+    "PATIENT_LIST": "Patient List",
+    "FIRST_NAME": "First Name",
+    "LAST_NAME": "Last Name",
+    "DATE_OF_BIRTH": "Date of Birth",
+    "GENDER": "Gender",
+    "MALE": "Male",
+    "FEMALE": "Female",
+    "OTHER": "Other",
+    "BLOOD_TYPE": "Blood Type",
+    "ALLERGIES": "Allergies",
+    "EMERGENCY_CONTACT": "Emergency Contact"
+  },
+  "DOCTORS": {
+    "TITLE": "Doctor Management",
+    "NEW_DOCTOR": "New Doctor",
+    "SPECIALITY": "Specialty",
+    "LICENSE_NUMBER": "License Number",
+    "SCHEDULE": "Schedule",
+    "DASHBOARD": "Dashboard"
+  },
+  "PRESCRIPTIONS": {
+    "TITLE": "Prescription Management",
+    "NEW_PRESCRIPTION": "New Prescription",
+    "MEDICINE": "Medicine",
+    "DOSAGE": "Dosage",
+    "FREQUENCY": "Frequency",
+    "DURATION": "Duration",
+    "INSTRUCTIONS": "Instructions"
+  },
+  "MESSAGES": {
+    "SAVE_SUCCESS": "Changes saved successfully",
+    "SAVE_ERROR": "Error saving changes",
+    "DELETE_CONFIRM": "Are you sure you want to delete this record?",
+    "DELETE_SUCCESS": "Record deleted successfully",
+    "DELETE_ERROR": "Error deleting record",
+    "REQUIRED_FIELD": "This field is required",
+    "INVALID_EMAIL": "Email is not valid",
+    "INVALID_PHONE": "Phone number is not valid"
+  },
+  "LANGUAGE": {
+    "SELECT": "Select Language",
+    "SPANISH": "Spanish",
+    "ENGLISH": "English"
+  }
+}

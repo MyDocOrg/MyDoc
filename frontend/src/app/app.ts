@@ -3,6 +3,7 @@ import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs';
 import { Sidebar } from "./core/layout/sidebar/sidebar";
 import { Topbar } from "./core/layout/topbar/topbar";
+import { ThemeService } from './core/services/theme.service';
 
 @Component({
   selector: 'app-root',
@@ -13,9 +14,13 @@ import { Topbar } from "./core/layout/topbar/topbar";
 export class App {
   protected readonly title = signal('Polnito rico');
   router = inject(Router);
+  themeService = inject(ThemeService);
   isShowLayout = signal(true);
 
   constructor() {
+    // Inicializar servicio de tema
+    this.themeService;
+    
     // Verificar la URL inicial
     this.updateLayoutVisibility(this.router.url);
 

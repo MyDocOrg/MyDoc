@@ -1,14 +1,44 @@
-<nav class="navbar navbar-light bg-light px-4 shadow-sm">
-  <span class="navbar-brand mb-0 h6">
+<mat-toolbar class="topbar-container">
+  <span class="topbar-title">
     Panel Administrativo
   </span>
 
-  <div class="d-flex align-items-center gap-3">
-    <span class="text-muted small">
-      Admin
-    </span>
-    <button class="btn btn-outline-danger btn-sm">
-      Cerrar Sesión
+  <span class="spacer"></span>
+
+  <div class="topbar-actions">
+    <!-- Botón de cambio de tema -->
+    <button 
+      mat-icon-button
+      (click)="toggleTheme()"
+      [matTooltip]="isDarkMode ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'">
+      @if (isDarkMode) {
+        <mat-icon>light_mode</mat-icon>
+      } @else {
+        <mat-icon>dark_mode</mat-icon>
+      }
     </button>
+
+    <!-- Menú de usuario -->
+    <button mat-button [matMenuTriggerFor]="userMenu" class="user-button">
+      <mat-icon>account_circle</mat-icon>
+      <span class="user-name">Admin</span>
+      <mat-icon class="dropdown-icon">arrow_drop_down</mat-icon>
+    </button>
+    
+    <mat-menu #userMenu="matMenu" class="user-menu">
+      <button mat-menu-item>
+        <mat-icon>person</mat-icon>
+        <span>Perfil</span>
+      </button>
+      <button mat-menu-item>
+        <mat-icon>settings</mat-icon>
+        <span>Ajustes</span>
+      </button>
+      <mat-divider></mat-divider>
+      <button mat-menu-item class="logout-item">
+        <mat-icon>logout</mat-icon>
+        <span>Cerrar Sesión</span>
+      </button>
+    </mat-menu>
   </div>
-</nav>
+</mat-toolbar>

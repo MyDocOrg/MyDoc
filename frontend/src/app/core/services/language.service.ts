@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, PLATFORM_ID, inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
@@ -7,9 +8,17 @@ import { TranslateService } from '@ngx-translate/core';
 export class LanguageService {
   private currentLanguage: string = 'es';
   private readonly STORAGE_KEY = 'selectedLanguage';
+  private platformId = inject(PLATFORM_ID);
+  private isBrowser: boolean;
 
   constructor(private translate: TranslateService) {
-    this.initializeLanguage();
+    this.isBrowser = isPlatformBrowser(this.platformId);
+    // Solo inicializar en el navegador
+    if (this.isBrowser) {
+      setTimeout(() => this.initializeLanguage(), 0);
+    } else {
+      this.translate.setDefaultLang('es');
+    }
   }
 
   /**
@@ -34,7 +43,10 @@ export class LanguageService {
     if (language !== this.currentLanguage) {
       this.translate.use(language);
       this.currentLanguage = language;
-      localStorage.setItem(this.STORAGE_KEY, language);
+      
+      if (this.isBrowser) {
+        localStorage.setItem(this.STORAGE_KEY, language);
+      }
     }
   }
 

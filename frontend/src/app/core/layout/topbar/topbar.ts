@@ -1,26 +1,27 @@
 import { Component, inject } from '@angular/core';
-import { TranslateModule } from '@ngx-translate/core';
-import { LanguageService } from '../../services/language.service';
 import { CommonModule } from '@angular/common';
+import { ThemeService } from '../../services/theme.service';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDividerModule } from '@angular/material/divider';
 
 @Component({
   selector: 'app-topbar',
-  imports: [TranslateModule, CommonModule],
+  imports: [CommonModule, MatButtonModule, MatIconModule, MatMenuModule, MatToolbarModule, MatTooltipModule, MatDividerModule],
   templateUrl: './topbar.html',
   styleUrl: './topbar.scss',
 })
 export class Topbar {
-  languageService = inject(LanguageService);
+  themeService = inject(ThemeService);
   
-  get currentLanguage(): string {
-    return this.languageService.getCurrentLanguage();
+  get isDarkMode(): boolean {
+    return this.themeService.isDarkMode();
   }
 
-  get availableLanguages() {
-    return this.languageService.getAvailableLanguages();
-  }
-
-  changeLanguage(languageCode: string): void {
-    this.languageService.changeLanguage(languageCode);
+  toggleTheme(): void {
+    this.themeService.toggleTheme();
   }
 }

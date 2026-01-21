@@ -3,7 +3,6 @@ import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs';
 import { Sidebar } from "./core/layout/sidebar/sidebar";
 import { Topbar } from "./core/layout/topbar/topbar";
-import { LanguageService } from './core/services/language.service';
 
 @Component({
   selector: 'app-root',
@@ -14,13 +13,9 @@ import { LanguageService } from './core/services/language.service';
 export class App {
   protected readonly title = signal('Polnito rico');
   router = inject(Router);
-  languageService = inject(LanguageService);
   isShowLayout = signal(true);
 
   constructor() {
-    // Inicializar el servicio de idiomas
-    this.languageService;
-    
     // Verificar la URL inicial
     this.updateLayoutVisibility(this.router.url);
 

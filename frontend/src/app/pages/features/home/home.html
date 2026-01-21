@@ -3,33 +3,26 @@
     <div class="col-12">
       <div class="card shadow">
         <div class="card-header bg-primary text-white">
-          <h3>{{ 'APP.WELCOME' | translate }}</h3>
+          <h3>Bienvenido</h3>
         </div>
         <div class="card-body">
-          <p class="lead">{{ 'APP.TITLE' | translate }}</p>
+          <p class="lead">Sistema de Gestión Médica</p>
           
-          <div class="alert alert-info mt-4">
-            <h5>{{ 'LANGUAGE.SELECT' | translate }}</h5>
-            <p>{{ 'LANGUAGE.SPANISH' | translate }}: {{ currentLanguage === 'es' ? '✓' : '✗' }}</p>
-            <p>{{ 'LANGUAGE.ENGLISH' | translate }}: {{ currentLanguage === 'en' ? '✓' : '✗' }}</p>
-          </div>
-
-          <!-- Ejemplos de uso del pipe translate -->
           <div class="mt-4">
-            <h5>{{ 'MENU.HOME' | translate }}</h5>
+            <h5>Módulos Disponibles</h5>
             <ul class="list-group">
-              <li class="list-group-item">{{ 'MENU.APPOINTMENTS' | translate }}</li>
-              <li class="list-group-item">{{ 'MENU.PATIENTS' | translate }}</li>
-              <li class="list-group-item">{{ 'MENU.DOCTORS' | translate }}</li>
-              <li class="list-group-item">{{ 'MENU.PRESCRIPTIONS' | translate }}</li>
+              <li class="list-group-item">Citas</li>
+              <li class="list-group-item">Pacientes</li>
+              <li class="list-group-item">Doctores</li>
+              <li class="list-group-item">Recetas</li>
             </ul>
           </div>
 
           <div class="mt-4">
-            <h5>{{ 'COMMON.ACTIONS' | translate }}</h5>
-            <button class="btn btn-primary me-2">{{ 'COMMON.SAVE' | translate }}</button>
-            <button class="btn btn-secondary me-2">{{ 'COMMON.CANCEL' | translate }}</button>
-            <button class="btn btn-danger">{{ 'COMMON.DELETE' | translate }}</button>
+            <h5>Acciones</h5>
+            <button class="btn btn-primary me-2">Guardar</button>
+            <button class="btn btn-secondary me-2">Cancelar</button>
+            <button class="btn btn-danger">Eliminar</button>
           </div>
         </div>
       </div>

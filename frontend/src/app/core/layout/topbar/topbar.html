@@ -1,30 +1,14 @@
 <nav class="navbar navbar-light bg-light px-4 shadow-sm">
   <span class="navbar-brand mb-0 h6">
-    {{ 'APP.TITLE' | translate }}
+    Panel Administrativo
   </span>
 
   <div class="d-flex align-items-center gap-3">
-    <!-- Selector de idioma -->
-    <div class="dropdown">
-      <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-        <i class="bi bi-globe"></i> {{ currentLanguage === 'es' ? 'ES' : 'EN' }}
-      </button>
-      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
-        @for (lang of availableLanguages; track lang.code) {
-          <li>
-            <a class="dropdown-item" [class.active]="currentLanguage === lang.code" (click)="changeLanguage(lang.code)" style="cursor: pointer;">
-              {{ lang.name }}
-            </a>
-          </li>
-        }
-      </ul>
-    </div>
-
     <span class="text-muted small">
       Admin
     </span>
     <button class="btn btn-outline-danger btn-sm">
-      {{ 'MENU.LOGOUT' | translate }}
+      Cerrar Sesión
     </button>
   </div>
 </nav>

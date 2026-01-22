@@ -1,1 +1,24 @@
-﻿<p>prescription-home works!</p>
+﻿<div class="container-fluid">
+  <div class="row align-items-center">
+    <div class="col">
+      <h5 class="mb-0">Prescripciones</h5>
+    </div>
+
+    <div class="col text-end">
+      <button type="button" class="btn btn-primary" routerLink="add">
+        Crear Prescripción
+      </button>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <app-generic-table
+      [headersTable]="['Id','Historia Médica', 'Instrucciones Generales', 'Creado']"
+      [columsData]="['id', 'medicalHistoryId', 'generalInstructions', 'createdAt']"
+      [tableData]="prescriptionList()"
+      [loading]="loading"
+      (edit)="editPrescription($event)"
+      (delete)="deletePrescription($event)"
+      (detail)="viewPrescription($event)"
+    />
+  </div>
+</div>

@@ -1,1 +1,24 @@
-﻿<p>doctor-home works!</p>
+﻿<div class="container-fluid">
+  <div class="row align-items-center">
+    <div class="col">
+      <h5 class="mb-0">Doctores</h5>
+    </div>
+
+    <div class="col text-end">
+      <button type="button" class="btn btn-primary" routerLink="add">
+        Crear Doctor
+      </button>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <app-generic-table
+      [headersTable]="['Id','Nombre Completo', 'Especialidad', 'Licencia', 'Teléfono', 'Email', 'Activo']"
+      [columsData]="['id', 'fullName', 'specialty', 'professionalLicense', 'phone', 'email', 'isActive']"
+      [tableData]="doctorList()"
+      [loading]="loading"
+      (edit)="editDoctor($event)"
+      (delete)="deleteDoctor($event)"
+      (detail)="viewDoctor($event)"
+    />
+  </div>
+</div>

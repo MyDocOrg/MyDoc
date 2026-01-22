@@ -1,1 +1,97 @@
-﻿<p>doctor-form works!</p>
+﻿<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-8">
+      <div class="card shadow-sm">
+        <div class="card-header">
+          <h5 class="mb-0">
+            {{ id() && id() !== 0 ? 'Editar Doctor' : 'Crear Doctor' }}
+          </h5>
+        </div>
+
+        <div class="card-body">
+          <form (submit)="onSubmit($event)">
+            <!-- Full Name -->
+            <div class="mb-3">
+              <label class="form-label">Nombre Completo *</label>
+              <input
+                type="text"
+                class="form-control"
+                [field]="doctorForm.fullName"
+                placeholder="Ingrese nombre completo"
+              />
+            </div>
+
+            <!-- Specialty -->
+            <div class="mb-3">
+              <label class="form-label">Especialidad *</label>
+              <input
+                type="text"
+                class="form-control"
+                [field]="doctorForm.specialty"
+                placeholder="Ingrese especialidad"
+              />
+            </div>
+
+            <!-- Professional License -->
+            <div class="mb-3">
+              <label class="form-label">Licencia Profesional *</label>
+              <input
+                type="text"
+                class="form-control"
+                [field]="doctorForm.professionalLicense"
+                placeholder="Ingrese licencia profesional"
+              />
+            </div>
+
+            <!-- Phone -->
+            <div class="mb-3">
+              <label class="form-label">Teléfono</label>
+              <input
+                type="tel"
+                class="form-control"
+                [field]="doctorForm.phone"
+                placeholder="Ingrese teléfono"
+              />
+            </div>
+
+            <!-- Email -->
+            <div class="mb-3">
+              <label class="form-label">Email</label>
+              <input
+                type="email"
+                class="form-control"
+                [field]="doctorForm.email"
+                placeholder="Ingrese email"
+              />
+            </div>
+
+            <!-- Is Active -->
+            <div class="mb-3 form-check">
+              <input
+                type="checkbox"
+                class="form-check-input"
+                [field]="doctorForm.isActive"
+                id="isActive"
+              />
+              <label class="form-check-label" for="isActive">Activo</label>
+            </div>
+
+            <!-- Actions -->
+            <div class="d-flex justify-content-end gap-2">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                (click)="router.navigate(['/doctor'])"
+              >
+                Cancelar
+              </button>
+              <button type="submit" class="btn btn-primary">
+                {{ id() && id() !== 0 ? 'Actualizar' : 'Guardar' }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

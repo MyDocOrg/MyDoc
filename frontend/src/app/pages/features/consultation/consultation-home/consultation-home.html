@@ -1,1 +1,24 @@
-﻿<p>consultation-home works!</p>
+﻿<div class="container-fluid">
+  <div class="row align-items-center">
+    <div class="col">
+      <h5 class="mb-0">Consultas</h5>
+    </div>
+
+    <div class="col text-end">
+      <button type="button" class="btn btn-primary" routerLink="add">
+        Crear Consulta
+      </button>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <app-generic-table
+      [headersTable]="['Id','Cita', 'Motivo', 'Diagnóstico', 'Peso (kg)', 'Altura (cm)']"
+      [columsData]="['id', 'appointmentId', 'reason', 'diagnosis', 'weightKg', 'heightCm']"
+      [tableData]="consultationList()"
+      [loading]="loading"
+      (edit)="editConsultation($event)"
+      (delete)="deleteConsultation($event)"
+      (detail)="viewConsultation($event)"
+    />
+  </div>
+</div>

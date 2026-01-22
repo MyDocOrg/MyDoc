@@ -1,1 +1,107 @@
-﻿<p>patient-form works!</p>
+﻿<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-8">
+      <div class="card shadow-sm">
+        <div class="card-header">
+          <h5 class="mb-0">
+            {{ id() && id() !== 0 ? 'Editar Paciente' : 'Crear Paciente' }}
+          </h5>
+        </div>
+
+        <div class="card-body">
+          <form (submit)="onSubmit($event)">
+            <!-- Full Name -->
+            <div class="mb-3">
+              <label class="form-label">Nombre Completo *</label>
+              <input
+                type="text"
+                class="form-control"
+                [field]="patientForm.fullName"
+                placeholder="Ingrese nombre completo"
+              />
+            </div>
+
+            <!-- Birth Date -->
+            <div class="mb-3">
+              <label class="form-label">Fecha de Nacimiento</label>
+              <input
+                type="date"
+                class="form-control"
+                [field]="patientForm.birthDate"
+              />
+            </div>
+
+            <!-- Gender -->
+            <div class="mb-3">
+              <label class="form-label">Género</label>
+              <select class="form-control" [field]="patientForm.gender">
+                <option value="">Seleccione género</option>
+                <option value="M">Masculino</option>
+                <option value="F">Femenino</option>
+                <option value="O">Otro</option>
+              </select>
+            </div>
+
+            <!-- Phone -->
+            <div class="mb-3">
+              <label class="form-label">Teléfono</label>
+              <input
+                type="tel"
+                class="form-control"
+                [field]="patientForm.phone"
+                placeholder="Ingrese teléfono"
+              />
+            </div>
+
+            <!-- Email -->
+            <div class="mb-3">
+              <label class="form-label">Email</label>
+              <input
+                type="email"
+                class="form-control"
+                [field]="patientForm.email"
+                placeholder="Ingrese email"
+              />
+            </div>
+
+            <!-- Address -->
+            <div class="mb-3">
+              <label class="form-label">Dirección</label>
+              <textarea
+                class="form-control"
+                [field]="patientForm.address"
+                placeholder="Ingrese dirección"
+                rows="3"
+              ></textarea>
+            </div>
+
+            <!-- Is Active -->
+            <div class="mb-3 form-check">
+              <input
+                type="checkbox"
+                class="form-check-input"
+                [field]="patientForm.isActive"
+                id="isActive"
+              />
+              <label class="form-check-label" for="isActive">Activo</label>
+            </div>
+
+            <!-- Actions -->
+            <div class="d-flex justify-content-end gap-2">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                (click)="router.navigate(['/patient'])"
+              >
+                Cancelar
+              </button>
+              <button type="submit" class="btn btn-primary">
+                {{ id() && id() !== 0 ? 'Actualizar' : 'Guardar' }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

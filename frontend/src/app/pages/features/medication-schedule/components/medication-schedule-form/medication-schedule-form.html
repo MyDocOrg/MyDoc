@@ -1,1 +1,85 @@
-﻿<p>medication-schedule-form works!</p>
+﻿<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-8">
+      <div class="card shadow-sm">
+        <div class="card-header">
+          <h5 class="mb-0">
+            {{ id() && id() !== 0 ? 'Editar Horario de Medicación' : 'Crear Horario de Medicación' }}
+          </h5>
+        </div>
+
+        <div class="card-body">
+          <form (submit)="onSubmit($event)">
+            <!-- Prescription ID -->
+            <div class="mb-3">
+              <label class="form-label">Prescripción *</label>
+              <input
+                type="number"
+                class="form-control"
+                [field]="medicationScheduleForm.prescriptionId"
+                placeholder="ID de la prescripción"
+              />
+            </div>
+
+            <!-- Medicine ID -->
+            <div class="mb-3">
+              <label class="form-label">Medicamento *</label>
+              <input
+                type="number"
+                class="form-control"
+                [field]="medicationScheduleForm.medicineId"
+                placeholder="ID del medicamento"
+              />
+            </div>
+
+            <!-- Scheduled Date -->
+            <div class="mb-3">
+              <label class="form-label">Fecha Programada</label>
+              <input
+                type="date"
+                class="form-control"
+                [field]="medicationScheduleForm.scheduledDate"
+              />
+            </div>
+
+            <!-- Scheduled Time -->
+            <div class="mb-3">
+              <label class="form-label">Hora Programada</label>
+              <input
+                type="time"
+                class="form-control"
+                [field]="medicationScheduleForm.scheduledTime"
+              />
+            </div>
+
+            <!-- Taken -->
+            <div class="mb-3 form-check">
+              <input
+                type="checkbox"
+                class="form-check-input"
+                [field]="medicationScheduleForm.taken"
+                id="taken"
+              />
+              <label class="form-check-label" for="taken">¿Tomado?
+              </label>
+            </div>
+
+            <!-- Actions -->
+            <div class="d-flex justify-content-end gap-2">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                (click)="router.navigate(['/medication-schedule'])"
+              >
+                Cancelar
+              </button>
+              <button type="submit" class="btn btn-primary">
+                {{ id() && id() !== 0 ? 'Actualizar' : 'Guardar' }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

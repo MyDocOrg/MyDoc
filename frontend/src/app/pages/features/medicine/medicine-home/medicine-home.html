@@ -1,1 +1,24 @@
-﻿<p>medicine-home works!</p>
+﻿<div class="container-fluid">
+  <div class="row align-items-center">
+    <div class="col">
+      <h5 class="mb-0">Medicamentos</h5>
+    </div>
+
+    <div class="col text-end">
+      <button type="button" class="btn btn-primary" routerLink="add">
+        Crear Medicamento
+      </button>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <app-generic-table
+      [headersTable]="['Id','Nombre', 'Descripción', 'Presentación', 'Activo']"
+      [columsData]="['id', 'name', 'description', 'presentation', 'isActive']"
+      [tableData]="medicineList()"
+      [loading]="loading"
+      (edit)="editMedicine($event)"
+      (delete)="deleteMedicine($event)"
+      (detail)="viewMedicine($event)"
+    />
+  </div>
+</div>

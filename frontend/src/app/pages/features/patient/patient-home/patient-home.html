@@ -1,1 +1,24 @@
-﻿<p>patient-home works!</p>
+﻿<div class="container-fluid">
+  <div class="row align-items-center">
+    <div class="col">
+      <h5 class="mb-0">Pacientes</h5>
+    </div>
+
+    <div class="col text-end">
+      <button type="button" class="btn btn-primary" routerLink="add">
+        Crear Paciente
+      </button>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <app-generic-table
+      [headersTable]="['Id','Nombre Completo', 'Teléfono', 'Email', 'Dirección', 'Activo']"
+      [columsData]="['id', 'fullName', 'phone', 'email', 'address', 'isActive']"
+      [tableData]="patientList()"
+      [loading]="loading"
+      (edit)="editPatient($event)"
+      (delete)="deletePatient($event)"
+      (detail)="viewPatient($event)"
+    />
+  </div>
+</div>

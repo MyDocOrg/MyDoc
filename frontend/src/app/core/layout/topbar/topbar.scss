@@ -30,27 +30,53 @@
       transform: scale(1.1);
     }
   }
+
+  .language-button {
+    .flag-icon-img {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .flag-emoji {
+      font-size: 24px;
+      line-height: 1;
+    }
+  }
 }
 
 .user-button {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 4px 12px;
-  border-radius: 8px;
   transition: all 0.2s ease;
-
-  .user-name {
-    font-weight: 500;
-    margin: 0 4px;
-  }
-
-  .dropdown-icon {
-    font-size: 20px;
-  }
+  width: 48px !important;
+  height: 48px !important;
+  padding: 0 !important;
 
   &:hover {
-    background-color: rgba(0, 0, 0, 0.04);
+    transform: scale(1.1);
+  }
+
+  .user-icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+    height: 100%;
+
+    mat-icon:first-child {
+      font-size: 24px;
+      width: 24px;
+      height: 24px;
+    }
+
+    .dropdown-arrow {
+      position: absolute;
+      right: -2px;
+      font-size: 16px !important;
+      width: 16px;
+      height: 16px;
+    }
   }
 }
 
@@ -90,8 +116,42 @@
 // Tema oscuro
 body[data-theme='dark'] {
   .user-button {
-    &:hover {
-      background-color: var(--bg-tertiary);
+    .dropdown-arrow {
+      color: var(--text-primary);
     }
   }
+}
+
+// Estilos para el menú de banderas
+.cardWithShadow {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.d-flex {
+  display: flex;
+}
+
+.align-items-center {
+  align-items: center;
+}
+
+.rounded-circle {
+  border-radius: 50%;
+}
+
+.object-cover {
+  object-fit: cover;
+}
+
+.m-r-8 {
+  margin-right: 8px;
+}
+
+.icon-20 {
+  width: 20px;
+  height: 20px;
+}
+
+.f-s-14 {
+  font-size: 14px;
 }

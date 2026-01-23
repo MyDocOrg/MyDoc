@@ -18,11 +18,44 @@
       }
     </button>
 
+    <!-- Botón de cambio de idioma -->
+    <button 
+      mat-icon-button
+      [matMenuTriggerFor]="flags"
+      [matTooltip]="'Cambiar idioma'"
+      class="language-button">
+      <img
+        [src]="currentLanguageObj.icon"
+        class="flag-icon-img"
+        [alt]="currentLanguageObj.language"
+      />
+    </button>
+
+    <mat-menu #flags="matMenu" class="cardWithShadow">
+      @for(lang of languages; track lang.code) {
+        <button mat-menu-item (click)="changeLanguage(lang)">
+          <div class="d-flex align-items-center">
+            <img
+              [src]="lang.icon"
+              class="rounded-circle object-cover m-r-8 icon-20"
+              [alt]="lang.language"
+            />
+            <span class="mat-subtitle-1 f-s-14">{{ lang.language }}</span>
+          </div>
+        </button>
+      }
+    </mat-menu>
+
     <!-- Menú de usuario -->
-    <button mat-button [matMenuTriggerFor]="userMenu" class="user-button">
-      <mat-icon>account_circle</mat-icon>
-      <span class="user-name">Admin</span>
-      <mat-icon class="dropdown-icon">arrow_drop_down</mat-icon>
+    <button 
+      mat-icon-button 
+      [matMenuTriggerFor]="userMenu" 
+      class="user-button"
+      [matTooltip]="'Usuario'">
+      <div class="user-icon-wrapper">
+        <mat-icon>account_circle</mat-icon>
+        <mat-icon class="dropdown-arrow">arrow_drop_down</mat-icon>
+      </div>
     </button>
     
     <mat-menu #userMenu="matMenu" class="user-menu">

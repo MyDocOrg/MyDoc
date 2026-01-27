@@ -40,7 +40,7 @@ export class LoginComponent {
 
   onSubmit() {
     // Navegar al home sin validaciones (como solicitó el usuario)
-    this.router.navigate(['/home']);
+    this.router.navigate(['/appointment']);
     
     // Si quisieras validar, descomenta esto:
     // if (this.loginForm.valid) {

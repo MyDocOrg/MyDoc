@@ -1,1 +1,7 @@
-<p>register works!</p>
+@if (role() == 'PATIENT') {
+  <app-register-patient />
+} @else if (role() == 'DOCTOR') {
+  <app-register-doctor />
+} @else {
+
+}

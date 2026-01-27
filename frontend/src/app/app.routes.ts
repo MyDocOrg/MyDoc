@@ -43,12 +43,14 @@ import { MedicationScheduleAdd } from './pages/features/medication-schedule/medi
 // Appointment Status
 import { AppointmentStatusHome } from './pages/features/appointment-status/appointment-status-home/appointment-status-home';
 import { AppointmentStatusAdd } from './pages/features/appointment-status/appointment-status-add/appointment-status-add';
+import { SelectRole } from './pages/features/auth/select-role/select-role';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
     { path: 'login', component: LoginComponent },
+    { path: 'select-role', component: SelectRole },
     { path: 'home', component: HomeComponent },
-    { path: 'register', component: RegisterComponent},
+    { path: 'register/:role', component: RegisterComponent},
     
     // Patient
     {

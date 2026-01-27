@@ -1,31 +1,79 @@
-<div class="container mt-5">
-  <div class="row">
-    <div class="col-12">
-      <div class="card shadow">
-        <div class="card-header bg-primary text-white">
-          <h3>Bienvenido</h3>
-        </div>
-        <div class="card-body">
-          <p class="lead">Sistema de Gestión Médica</p>
-          
-          <div class="mt-4">
-            <h5>Módulos Disponibles</h5>
-            <ul class="list-group">
-              <li class="list-group-item">Citas</li>
-              <li class="list-group-item">Pacientes</li>
-              <li class="list-group-item">Doctores</li>
-              <li class="list-group-item">Recetas</li>
-            </ul>
-          </div>
+<mat-toolbar color="primary" class="sticky-top shadow-sm justify-content-between px-md-5">
+      <span class="fw-bold d-flex align-items-center gap-2">
+        <mat-icon>local_hospital</mat-icon>
+        MedSystem
+      </span>
+      <div class="d-none d-md-block">
+        <button mat-button>Inicio</button>
+        <button routerLink="/login">Login</button>
+        <button mat-button>Especialidades</button>
+        <button mat-raised-button color="accent" class="ms-3">
+          AGENDA UNA DEMO
+        </button>
+      </div>
+    </mat-toolbar>
 
-          <div class="mt-4">
-            <h5>Acciones</h5>
-            <button class="btn btn-primary me-2">Guardar</button>
-            <button class="btn btn-secondary me-2">Cancelar</button>
-            <button class="btn btn-danger">Eliminar</button>
+    <header class="bg-light py-5">
+      <div class="container py-5">
+        <div class="row align-items-center">
+          <div class="col-lg-6 text-center text-lg-start">
+            <h1 class="display-3 fw-bold text-dark mb-4">
+              La evolución digital de tu <span class="text-primary">consultorio</span>
+            </h1>
+            <p class="lead text-secondary mb-5">
+              Optimiza la atención de tus pacientes con un sistema robusto, 
+              seguro y fácil de usar. Cumplimos con todas las normativas de salud.
+            </p>
+            <div class="d-grid d-md-flex justify-content-md-start gap-3">
+              <button mat-flat-button color="primary" class="py-4 px-4 fs-6">
+                PROBAR GRATIS AHORA
+              </button>
+              <button mat-stroked-button color="primary" class="py-4 px-4 fs-6">
+                VER PLANES
+              </button>
+            </div>
+          </div>
+          <div class="col-lg-6 d-none d-lg-block">
+            <div class="p-5 bg-white shadow rounded-4 border">
+               <img src="https://via.placeholder.com/600x400" alt="Dashboard Médico" class="img-fluid rounded shadow-sm">
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</div>
+    </header>
+
+    <section class="py-5 bg-white">
+      <div class="container py-5">
+        <div class="text-center mb-5">
+          <h2 class="h1 fw-bold">Diseñado para la eficiencia</h2>
+          <p class="text-muted">Herramientas que simplifican tu día a día.</p>
+        </div>
+
+        <div class="row g-4">
+          @for (item of features; track item.title) {
+            <div class="col-md-4">
+              <mat-card class="h-100 border-0 shadow-sm p-3">
+                <mat-card-header>
+                  <div mat-card-avatar class="feature-icon bg-primary-subtle text-primary d-flex align-items-center justify-content-center rounded-circle">
+                    <mat-icon>{{ item.icon }}</mat-icon>
+                  </div>
+                  <mat-card-title class="fw-bold">{{ item.title }}</mat-card-title>
+                </mat-card-header>
+                <mat-card-content class="mt-3">
+                  <p class="text-secondary">{{ item.description }}</p>
+                </mat-card-content>
+                <mat-card-actions>
+                  <button mat-button color="primary">SABER MÁS</button>
+                </mat-card-actions>
+              </mat-card>
+            </div>
+          }
+        </div>
+      </div>
+    </section>
+
+    <footer class="bg-dark text-white py-4 mt-auto">
+      <div class="container text-center">
+        <p class="mb-0">© 2026 MedSystem - Gestión Médica Profesional</p>
+      </div>
+    </footer>

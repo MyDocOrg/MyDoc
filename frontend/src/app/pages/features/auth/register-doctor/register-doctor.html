@@ -1,0 +1,63 @@
+<div class="container mt-4">
+  <mat-card class="shadow-sm border-0">
+    <mat-card-header class="bg-dark text-white p-3 rounded-top">
+      <mat-card-title>
+        <mat-icon class="me-2">medical_services</mat-icon> Perfil del Especialista
+      </mat-card-title>
+    </mat-card-header>
+
+    <div class="card-body p-4">
+      <form (submit)="onSubmitDoctor($event)">
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label fw-bold">Nombre(s) *</label>
+            <input type="text" class="form-control" [field]="doctorForm.firstName" />
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label fw-bold">Apellidos *</label>
+            <input type="text" class="form-control" [field]="doctorForm.lastName" />
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <div class="p-3 bg-light rounded-3 border border-primary-subtle">
+              <label class="form-label fw-bold text-primary">Especialidad *</label>
+              <input type="text" class="form-control border-primary" [field]="doctorForm.specialty" placeholder="Ej. Cardiología" />
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <div class="p-3 bg-light rounded-3 border border-primary-subtle">
+              <label class="form-label fw-bold text-primary">Cédula Profesional *</label>
+              <input type="text" class="form-control border-primary" [field]="doctorForm.profesionalLicense" placeholder="Núm. de Licencia" />
+            </div>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label class="form-label fw-bold">Email Institucional *</label>
+            <input type="email" class="form-control" [field]="doctorForm.email" />
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label fw-bold">Teléfono de Consultorio</label>
+            <input type="tel" class="form-control" [field]="doctorForm.phone" />
+          </div>
+
+          <div class="col-md-12 mb-3">
+            <label class="form-label fw-bold">Contraseña de Acceso *</label>
+            <input type="password" class="form-control" [field]="doctorForm.password" />
+          </div>
+
+          <div class="col-12 mb-4">
+            <label class="form-label fw-bold">Dirección del Consultorio / Clínica</label>
+            <input type="text" class="form-control" [field]="doctorForm.address" />
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-end gap-2 border-top pt-3">
+          <button mat-stroked-button type="button">Limpiar</button>
+          <button mat-flat-button color="accent" type="submit" class="px-4">
+            <mat-icon>check_circle</mat-icon> Dar de Alta Doctor
+          </button>
+        </div>
+      </form>
+    </div>
+  </mat-card>
+</div>

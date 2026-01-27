@@ -33,7 +33,7 @@ export class App {
   }
   
   private updateLayoutVisibility(url: string) {
-    const shouldShowLayout = url !== '/login' && url !== '/register';
+    const shouldShowLayout = url !== '/login' && !url.startsWith('/register/') && url !== '/home' && url !== '/select-role';
     this.isShowLayout.set(shouldShowLayout);
   }
 }

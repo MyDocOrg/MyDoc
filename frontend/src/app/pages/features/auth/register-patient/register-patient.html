@@ -1,0 +1,67 @@
+<div class="container mt-4">
+  <mat-card class="shadow-sm border-0">
+    <mat-card-header class="bg-primary text-white p-3 rounded-top">
+      <mat-card-title>
+        <mat-icon class="me-2">person_add</mat-icon> Registro de Nuevo Paciente
+      </mat-card-title>
+    </mat-card-header>
+
+    <div class="card-body p-4">
+      <form (submit)="onSubmitPatient($event)">
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label fw-bold">Nombre(s) *</label>
+            <input type="text" class="form-control" [field]="patientForm.firstName" placeholder="Ej. Juan" />
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label class="form-label fw-bold">Apellidos *</label>
+            <input type="text" class="form-control" [field]="patientForm.lastName" placeholder="Ej. Pérez" />
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label class="form-label fw-bold">Correo Electrónico *</label>
+            <input type="email" class="form-control" [field]="patientForm.email" placeholder="usuario@correo.com" />
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label class="form-label fw-bold">Contraseña *</label>
+            <input type="password" class="form-control" [field]="patientForm.password" />
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <label class="form-label fw-bold">Fecha de Nacimiento</label>
+            <input type="date" class="form-control" [field]="patientForm.birthDate" />
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <label class="form-label fw-bold">Género</label>
+            <select class="form-select" [field]="patientForm.gender">
+              <option value="">Seleccione...</option>
+              <option value="M">Masculino</option>
+              <option value="F">Femenino</option>
+              <option value="O">Otro</option>
+            </select>
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <label class="form-label fw-bold">Teléfono</label>
+            <input type="tel" class="form-control" [field]="patientForm.phone" placeholder="+52..." />
+          </div>
+
+          <div class="col-12 mb-4">
+            <label class="form-label fw-bold">Dirección Completa</label>
+            <textarea class="form-control" rows="2" [field]="patientForm.address" placeholder="Calle, Número, Colonia..."></textarea>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-end gap-2 border-top pt-3">
+          <button mat-button type="button" color="warn">Cancelar</button>
+          <button mat-raised-button color="primary" type="submit">
+            <mat-icon>save</mat-icon> Guardar Paciente
+          </button>
+        </div>
+      </form>
+    </div>
+  </mat-card>
+</div>

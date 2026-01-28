@@ -1,7 +1,86 @@
-@if (role() == 'PATIENT') {
-  <app-register-patient />
-} @else if (role() == 'DOCTOR') {
-  <app-register-doctor />
-} @else {
+<div class="container mt-5">
+  <mat-stepper linear #stepper class="shadow-sm border rounded">
+    
+    <mat-step [completed]="selectedRole() !== null">
+      <ng-template matStepLabel>Selecciona tu Rol</ng-template>
+      <div class="py-4">
+        <h3 class="text-center mb-4">¿Cómo deseas registrarte?</h3>
+        <div class="row g-3 justify-content-center">
+          @for (role of roles(); track role.id) {
+            <div class="col-md-4">
+              <div 
+                class="card h-100 btn-outline-primary border-2 shadow-sm pointer"
+                [class.border-primary]="selectedRole() === role.name"
+                (click)="selectRole(role)">
+                <div class="card-body text-center">
+                  <i class="bi bi-person-badge fs-1"></i> <h5 class="card-title mt-2">{{ role.name }}</h5>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+        <div class="d-flex justify-content-end mt-4">
+          <button mat-flat-button color="primary" matStepperNext [disabled]="!selectedRole()">
+            Siguiente
+          </button>
+        </div>
+      </div>
+    </mat-step>
 
-}
+    <mat-step [completed]="selectedSubscription() !== null">
+      <ng-template matStepLabel>Elige tu Plan</ng-template>
+      <div class="py-4">
+        <h3 class="text-center mb-4">Planes disponibles</h3>
+        <div class="row g-3">
+          @for (sub of subscriptions(); track sub.id) {
+            <div class="col-md-4">
+              <div 
+                class="card h-100 shadow-sm border-2"
+                [class.border-success]="selectedSubscription()?.id === sub.id">
+                <div class="card-body text-center">
+                  <h4>{{ sub.name }}</h4>
+                  <p class="display-6 fw-bold">${{ sub.price }}</p>
+                  <button class="btn w-100" 
+                    [ngClass]="selectedSubscription()?.id === sub.id ? 'btn-success' : 'btn-outline-success'"
+                    (click)="selectSubscription(sub)">
+                    {{ selectedSubscription()?.id === sub.id ? 'Seleccionado' : 'Elegir' }}
+                  </button>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+        <div class="d-flex justify-content-between mt-4">
+          <button mat-button matStepperPrevious>Atrás</button>
+          <button mat-flat-button color="primary" matStepperNext [disabled]="!selectedSubscription()">
+            Siguiente
+          </button>
+        </div>
+      </div>
+    </mat-step>
+
+    <mat-step>
+      <ng-template matStepLabel>Datos de Registro</ng-template>
+      <div class="py-4">
+        <div class="alert alert-info shadow-sm mb-4">
+          Registrándose como: <strong>{{ selectedRole()?.name }}</strong> con el plan: <strong>{{ selectedSubscription()?.name }}</strong>
+        </div>
+
+        @if (selectedRole()?.name === 'Paciente') {
+          <app-register-patient (patientData)="onSubmitPatient($event)" />
+        } @else if (selectedRole()?.name === 'Doctor') {
+          <app-register-doctor (doctorData)="onSubmitDoctor($event)"/>
+        } @else {
+          <div class="text-center">
+            <p>Por favor, regresa y selecciona un rol válido.</p>
+          </div>
+        }
+
+        <div class="mt-4">
+          <button mat-button matStepperPrevious>Atrás</button>
+        </div>
+      </div>
+    </mat-step>
+
+  </mat-stepper>
+</div>

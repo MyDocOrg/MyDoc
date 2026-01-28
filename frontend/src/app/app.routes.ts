@@ -50,7 +50,7 @@ export const routes: Routes = [
     { path: 'login', component: LoginComponent },
     { path: 'select-role', component: SelectRole },
     { path: 'home', component: HomeComponent },
-    { path: 'register/:role', component: RegisterComponent},
+    { path: 'register', component: RegisterComponent},
     
     // Patient
     {

@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, output, signal } from '@angular/core';
 import { Field, form } from '@angular/forms/signals';
 import { Router } from '@angular/router';
 import { MatCardTitle, MatCardHeader, MatCard } from "@angular/material/card";
@@ -12,12 +12,16 @@ import { MatIcon } from "@angular/material/icon";
 })
 export class RegisterDoctor {
   router = inject(Router);
+  doctorData = output<null | any>();
+  fullName = computed(() =>
+    `${this.doctorModel().firstName} ${this.doctorModel().lastName}`.trim()
+  );
 
   doctorModel = signal({
     email: '',
     password: '',
     specialty: '',
-    profesionalLicense: '',
+    professional_license: '',
     phone: '',
     address:'',
     firstName: '',
@@ -28,6 +32,9 @@ export class RegisterDoctor {
 
   onSubmitDoctor(event: Event) {
     event.preventDefault();
-    this.router.navigate(['/appointment']);
+    this.doctorData.emit({
+      ...this.doctorModel(),
+      full_name: this.fullName()
+    });
   }
 }

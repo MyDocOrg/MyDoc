@@ -1,0 +1,13 @@
+.pointer {
+  cursor: pointer;
+  transition: transform 0.2s, border-color 0.2s;
+  
+  &:hover {
+    transform: translateY(-5px);
+    border-color: #0d6efd;
+  }
+}
+
+.mat-step-header {
+  border-radius: 8px;
+}

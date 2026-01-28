@@ -17,5 +17,27 @@ namespace auth_backend.DAL
                 throw new Exception("Something went wrong fetching application by name", ex);
             }
         }
+        public async Task<Application> GetById(int id)
+        {
+            try
+            {
+                return await _context.Application.Where(a => a.Id == id).FirstOrDefaultAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Something went wrong fetching application by name", ex);
+            }
+        }
+        public async Task<List<Application>> GetList()
+        {
+            try
+            {
+                return await _context.Application.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Something went wrong fetching application by name", ex);
+            }
+        }
     }
 }

@@ -26,13 +26,12 @@ namespace auth_backend.Controllers
                 return StatusCode(500, ApiResponse<string>.Fail($"An unexpected error occurred during login: {ex.Message}", 500));
             }
         }
-        [HttpPost("MyDoc/Register")]
-        public async Task<IActionResult> MyDocRegister(AuthRegisterRequest request)
+        [HttpPost("MyDoc/Register/Doctor")]
+        public async Task<IActionResult> MyDocRegister(AuthRegisterDoctorRequest request)
         {
             try
             {
-
-                var result = await _service.RegisterMyDoc(request);
+                var result = await _service.RegisterDoctorMyDoc(request);
                 return StatusCode(result.Status, result);
             }
             catch (Exception ex)
@@ -40,13 +39,41 @@ namespace auth_backend.Controllers
                 return StatusCode(500, ApiResponse<string>.Fail($"An unexpected error occurred during login: {ex.Message}", 500));
             }
         }
-        [HttpPost("MyVet/Register")]
-        public async Task<IActionResult> MyVetRegister(AuthRegisterRequest request)
+        [HttpPost("MyDoc/Register/Patient")]
+        public async Task<IActionResult> MyDocPatient(AuthRegisterPatientRequest request)
         {
             try
             {
 
-                var result = await _service.RegisterMyVet(request);
+                var result = await _service.RegisterPatientMyDoc(request);
+                return StatusCode(result.Status, result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<string>.Fail($"An unexpected error occurred during login: {ex.Message}", 500));
+            }
+        }
+        [HttpPost("MyVet/Register/Vet")]
+        public async Task<IActionResult> MyVetRegister(AuthRegisterVeterinarianRequest request)
+        {
+            try
+            {
+
+                var result = await _service.RegisterVeterinarianMyVet(request);
+                return StatusCode(result.Status, result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<string>.Fail($"An unexpected error occurred during login: {ex.Message}", 500));
+            }
+        }
+        [HttpPost("MyVet/Register/Owner")]
+        public async Task<IActionResult> MyVetOwnerRegister(AuthRegisterOwnerRequest request)
+        {
+            try
+            {
+
+                var result = await _service.RegisterOwnerMyVet(request);
                 return StatusCode(result.Status, result);
             }
             catch (Exception ex)

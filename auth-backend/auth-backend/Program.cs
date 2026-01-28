@@ -1,3 +1,4 @@
+using auth_backend.Controllers;
 using auth_backend.DAL;
 using auth_backend.Helper;
 using auth_backend.Models;
@@ -19,11 +20,23 @@ builder.Services.AddDbContext<AuthContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("AuthConnection"));
 });
 
+builder.Services.AddDbContext<MyDocContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("MyDocConnection"));
+});
+
 builder.Services.AddScoped<AuthDAL>();
 builder.Services.AddScoped<ApplicationDAL>();
 builder.Services.AddScoped<RoleDAL>();
+builder.Services.AddScoped<MyDocDAL>();
+builder.Services.AddScoped<MyVetDAL>();
+builder.Services.AddScoped<SuscriptionDAL>();
 
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<ApplicationService>();
+builder.Services.AddScoped<RoleService>();
+builder.Services.AddScoped<SuscriptionService>();
+
 builder.Services.AddScoped<JwtHelper>();
 builder.Services.AddScoped<ApplicationProvider>();
 

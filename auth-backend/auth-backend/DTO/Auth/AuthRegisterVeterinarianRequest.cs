@@ -23,10 +23,6 @@ namespace auth_backend.DTO.Auth
         [Unicode(false)]
         public string? phone { get; set; }
 
-        [StringLength(100)]
-        [Unicode(false)]
-        public string? email { get; set; }
-
         public bool? is_active { get; set; }
 
         public int RoleId { get; set; }

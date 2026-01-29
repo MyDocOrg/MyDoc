@@ -21,10 +21,7 @@ export class ClinicForm {
     name: '',
     address: '',
     phone: '',
-    email: '',
-    isActive: true,
-    createdAt: null,
-    updatedAt: null,
+    email: ''
   });
 
   clinicForm = form(this.clinicModel);

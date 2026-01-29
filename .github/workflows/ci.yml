@@ -1,4 +1,4 @@
-name: Monorepo CI
+name: Monorepo CI/CD
 
 on:
   push:
@@ -97,3 +97,27 @@ jobs:
         run: |
           cd mobile
           flutter build apk --debug
+
+  deploy-backend:
+    name: Deploy Backend to Azure
+    needs: [backend, changes]
+    if: github.ref == 'refs/heads/main' && needs.changes.outputs.backend == 'true'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Publish app
+        run: dotnet publish backend -c Release -o publish
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: mydocbackend
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: publish

@@ -38,5 +38,16 @@ namespace MyDoc.Application.DAL
             await _context.SaveChangesAsync();
             return entity;
         }
+
+        public async Task<bool> Delete(int id)
+        {
+            var entity = await base.GetByIdAsync(id);
+            if (entity == null)
+            {
+                return false;
+            }
+            //await base.DeleteAsync(entity);
+            return true;
+        }
     }
 }

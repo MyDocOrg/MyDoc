@@ -44,5 +44,13 @@ namespace MyDoc.Controllers
             var result = await _Service.Update(entity);
             return StatusCode(result.Status, result);
         }
+
+        // DELETE api/<PatientController>/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var result = await _Service.Delete(id);
+            return StatusCode(result.Status, result);
+        }
     }
 }

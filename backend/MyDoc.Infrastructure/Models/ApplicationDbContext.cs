@@ -42,8 +42,14 @@ public partial class ApplicationDbContext : DbContext
     public virtual DbSet<PrescriptionMedicine> PrescriptionMedicines { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=mydocdbinstance.cjmky0i8i025.us-east-2.rds.amazonaws.com,1433;Database=MyDoc;User Id=mydocadmin;Password=mydocmastersql2026*;Encrypt=True;TrustServerCertificate=True;");
+{
+    if (!optionsBuilder.IsConfigured)
+    {
+        // Este mensaje solo aparecerá si alguien no configura correctamente
+        throw new InvalidOperationException(
+            "Database connection not configured. Add connection string to appsettings.json");
+    }
+}
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

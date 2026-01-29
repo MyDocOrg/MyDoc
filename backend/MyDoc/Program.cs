@@ -114,7 +114,6 @@ builder.Services.AddScoped<NotificationDAL>();
 builder.Services.AddScoped<PatientDAL>();
 builder.Services.AddScoped<PrescriptionDAL>();
 builder.Services.AddScoped<PrescriptionMedicineDAL>();
-builder.Services.AddScoped<AuthDAL>();
 
 // Register Application services
 builder.Services.AddScoped<AppointmentService>();
@@ -130,10 +129,11 @@ builder.Services.AddScoped<NotificationService>();
 builder.Services.AddScoped<PatientService>();
 builder.Services.AddScoped<PrescriptionService>();
 builder.Services.AddScoped<PrescriptionMedicineService>();
-builder.Services.AddScoped<AuthService>();
+
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ApplicationProvider>();
 builder.Services.AddScoped<JwtHelper>();
+builder.Services.AddScoped<CurrentUserHelper>();
 
 builder.Services.AddCors(options =>
 {

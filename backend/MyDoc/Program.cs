@@ -135,7 +135,19 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ApplicationProvider>();
 builder.Services.AddScoped<JwtHelper>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("DefaultCors", policy =>
+    {
+        policy.AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+    });
+});
+
 var app = builder.Build();
+
+app.UseCors("DefaultCors");
 
 // Configure custom middleware pipeline (order matters!)
 app.UseMiddleware<RequestLoggingMiddleware>();

@@ -100,7 +100,7 @@ jobs:
 
   deploy-backend:
     name: Deploy Backend to Azure
-    needs: [backend, changes]
+    needs: changes
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
 

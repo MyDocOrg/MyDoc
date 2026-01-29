@@ -12,6 +12,7 @@ namespace MyDoc.Controllers
     {
         private readonly PatientService _Service = Service;
 
+        //Trigger CD test just ignore this line
         // GET: api/<PatientController>
         [HttpGet]
         public async Task<IActionResult> GetAll()

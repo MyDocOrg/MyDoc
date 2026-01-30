@@ -11,7 +11,9 @@ namespace MyDoc.Controllers
     public class PatientController(PatientService Service) : ControllerBase
     {
         private readonly PatientService _Service = Service;
-        
+
+        //Trigger CD test just ignore this line
+        // GET: api/<PatientController>
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -19,6 +21,7 @@ namespace MyDoc.Controllers
             return StatusCode(result.Status, result);
         }
 
+        // GET api/<PatientController>/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -26,6 +29,7 @@ namespace MyDoc.Controllers
             return StatusCode(result.Status, result);
         }
 
+        // POST api/<PatientController>
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] Patient entity)
         {
@@ -33,10 +37,19 @@ namespace MyDoc.Controllers
             return StatusCode(result.Status, result);
         }
 
+        // PUT api/<PatientController>
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] Patient entity)
         {
             var result = await _Service.Update(entity);
+            return StatusCode(result.Status, result);
+        }
+
+        // DELETE api/<PatientController>/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var result = await _Service.Delete(id);
             return StatusCode(result.Status, result);
         }
     }

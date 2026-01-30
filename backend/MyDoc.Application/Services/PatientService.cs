@@ -38,5 +38,11 @@ namespace MyDoc.Application.Services
             var result = await _dAL.Update(entity);
             return ApiResponse<Patient>.Ok(result);
         }
+
+        public async Task<ApiResponse<bool>> Delete(int id)
+        {
+            var result = await _dAL.Delete(id);
+            return ApiResponse<bool>.Ok(result);
+        }
     }
 }

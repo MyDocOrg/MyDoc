@@ -27,11 +27,6 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-builder.Services.AddDbContext<AuthContext>(options =>
-{
-    options.UseSqlServer(builder.Configuration.GetConnectionString("AuthConnection"));
-});
-
 // AUTHENTICATION & AUTHORIZATION
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

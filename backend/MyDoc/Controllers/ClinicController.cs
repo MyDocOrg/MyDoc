@@ -32,7 +32,6 @@ namespace MyDoc.Controllers
         {
             try
             {
-
                 var result = await _Service.GetAll();
                 return StatusCode(result.Status, result);
             }

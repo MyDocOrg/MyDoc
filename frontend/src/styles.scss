@@ -1,28 +1,19 @@
-
-// Include theming for Angular Material with `mat.theme()`.
 @use '@angular/material' as mat;
+@use 'assets/variables' as *;
+@use 'assets/mixins' as *;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
-// ====================================
-// Paleta de colores personalizada
-// ====================================
-
-// Define tu propia paleta de colores personalizada
-// Formato: (50: color-mas-claro, 100-900: tonos progresivos, A100-A700: acentos)
 $custom-primary-palette: (
   50: #e3f2fd,
   100: #bbdefb,
   200: #90caf9,
   300: #64b5f6,
   400: #42a5f5,
-  500: #2196f3,  // Color principal
+  500: $primary,
   600: #1e88e5,
-  700: #1976d2,
+  700: $primary-dark,
   800: #1565c0,
   900: #0d47a1,
-  A100: #82b1ff,
-  A200: #448aff,
-  A400: #2979ff,
-  A700: #2962ff,
   contrast: (
     50: rgba(black, 0.87),
     100: rgba(black, 0.87),
@@ -34,29 +25,20 @@ $custom-primary-palette: (
     700: white,
     800: white,
     900: white,
-    A100: rgba(black, 0.87),
-    A200: white,
-    A400: white,
-    A700: white,
   )
 );
 
-// Paleta de acento (para botones secundarios, enlaces, etc.)
 $custom-accent-palette: (
   50: #fce4ec,
   100: #f8bbd0,
   200: #f48fb1,
   300: #f06292,
   400: #ec407a,
-  500: #e91e63,  // Color principal de acento
+  500: $accent,
   600: #d81b60,
-  700: #c2185b,
+  700: $accent-dark,
   800: #ad1457,
   900: #880e4f,
-  A100: #ff80ab,
-  A200: #ff4081,
-  A400: #f50057,
-  A700: #c51162,
   contrast: (
     50: rgba(black, 0.87),
     100: rgba(black, 0.87),
@@ -68,29 +50,20 @@ $custom-accent-palette: (
     700: white,
     800: white,
     900: white,
-    A100: rgba(black, 0.87),
-    A200: white,
-    A400: white,
-    A700: white,
   )
 );
 
-// Paleta de advertencia (para errores, alertas)
 $custom-warn-palette: (
   50: #ffebee,
   100: #ffcdd2,
   200: #ef9a9a,
   300: #e57373,
   400: #ef5350,
-  500: #f44336,  // Color principal de advertencia
+  500: $danger,
   600: #e53935,
-  700: #d32f2f,
+  700: $danger-dark,
   800: #c62828,
   900: #b71c1c,
-  A100: #ff8a80,
-  A200: #ff5252,
-  A400: #ff1744,
-  A700: #d50000,
   contrast: (
     50: rgba(black, 0.87),
     100: rgba(black, 0.87),
@@ -102,16 +75,10 @@ $custom-warn-palette: (
     700: white,
     800: white,
     900: white,
-    A100: rgba(black, 0.87),
-    A200: white,
-    A400: white,
-    A700: white,
   )
 );
 
-// ====================================
-// Definir paletas de color de Material
-// ====================================
+// Usar paletas personalizadas
 $light-primary: mat.m2-define-palette($custom-primary-palette, 500);
 $light-accent: mat.m2-define-palette($custom-accent-palette, 500);
 $light-warn: mat.m2-define-palette($custom-warn-palette, 500);
@@ -120,7 +87,7 @@ $dark-primary: mat.m2-define-palette($custom-primary-palette, 400);
 $dark-accent: mat.m2-define-palette($custom-accent-palette, 400);
 $dark-warn: mat.m2-define-palette($custom-warn-palette, 400);
 
-// Crear tema claro
+// Crear temas
 $light-theme: mat.m2-define-light-theme((
   color: (
     primary: $light-primary,
@@ -129,7 +96,6 @@ $light-theme: mat.m2-define-light-theme((
   )
 ));
 
-// Crear tema oscuro
 $dark-theme: mat.m2-define-dark-theme((
   color: (
     primary: $dark-primary,
@@ -142,45 +108,47 @@ $dark-theme: mat.m2-define-dark-theme((
 // Variables de Color para Temas
 // ====================================
 :root {
-  // Tema Claro - Puedes personalizar estos valores
-  --bg-primary: #ffffff;
-  --bg-secondary: #f5f7fa;
-  --bg-tertiary: #e8ecf1;
-  --text-primary: #1a202c;
-  --text-secondary: #4a5568;
-  --text-tertiary: #a0aec0;
-  --border-color: #e2e8f0;
+  // Tema Claro - Colores desde variables
+  --bg-primary: #{$bg-light};
+  --bg-secondary: #{$bg-light-secondary};
+  --bg-tertiary: #{$bg-light-tertiary};
+  --text-primary: #{$text-light-primary};
+  --text-secondary: #{$text-light-secondary};
+  --text-tertiary: #{$text-light-tertiary};
+  --border-color: #{$border-light};
   --shadow: rgba(0, 0, 0, 0.1);
   --shadow-hover: rgba(0, 0, 0, 0.15);
   
   // Colores de Material personalizados
-  --primary-color: #2196f3;
-  --accent-color: #e91e63;
-  --warn-color: #f44336;
-  --success-color: #4caf50;
-  --info-color: #00bcd4;
+  --primary-color: #{$primary};
+  --accent-color: #{$accent};
+  --warn-color: #{$danger};
+  --success-color: #{$success};
+  --info-color: #{$info};
+  --warning-color: #{$warning};
 
   @include mat.all-component-themes($light-theme);
 }
 
 body[data-theme='dark'] {
-  // Tema Oscuro - Color unificado para consistencia
-  --bg-primary: #1e1e1e;
-  --bg-secondary: #1e1e1e;  // Mismo color para todo el fondo
-  --bg-tertiary: #2d2d2d;    // Solo para hover y elementos activos
-  --text-primary: #ffffff;
-  --text-secondary: #b8b8b8;
-  --text-tertiary: #8a8a8a;
-  --border-color: #333333;
+  // Tema Oscuro - Colores desde variables
+  --bg-primary: #{$bg-dark};
+  --bg-secondary: #{$bg-dark};
+  --bg-tertiary: #{$bg-dark-secondary};
+  --text-primary: #{$text-dark-primary};
+  --text-secondary: #{$text-dark-secondary};
+  --text-tertiary: #{$text-dark-tertiary};
+  --border-color: #{$border-dark};
   --shadow: rgba(0, 0, 0, 0.3);
   --shadow-hover: rgba(0, 0, 0, 0.5);
   
   // Colores de Material en modo oscuro
-  --primary-color: #42a5f5;
-  --accent-color: #ec407a;
-  --warn-color: #ef5350;
-  --success-color: #66bb6a;
-  --info-color: #26c6da;
+  --primary-color: #{$primary-light};
+  --accent-color: #{$accent-light};
+  --warn-color: #{$danger-light};
+  --success-color: #{$success-light};
+  --info-color: #{$info-light};
+  --warning-color: #{$warning-light};
 
   @include mat.all-component-colors($dark-theme);
 }
@@ -192,10 +160,14 @@ html, body {
 }
 
 body {
-  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  font-family: $font-family-primary;
   background-color: var(--bg-secondary);
   color: var(--text-primary);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background-color $transition-base, color $transition-base;
+  font-weight: $font-weight-normal;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 // ====================================
@@ -206,32 +178,45 @@ body {
   background-color: var(--bg-primary) !important;
   border-color: var(--border-color) !important;
   color: var(--text-primary) !important;
-  transition: all 0.3s ease;
+  transition: all $transition-base;
+  border-radius: $radius-lg;
+  box-shadow: $shadow;
+  
+  &:hover {
+    box-shadow: $shadow-md;
+  }
 }
 
 .navbar {
   background-color: var(--bg-primary) !important;
   border-bottom: 1px solid var(--border-color);
-  transition: all 0.3s ease;
+  transition: all $transition-base;
 }
 
 .form-control, .form-select {
   background-color: var(--bg-primary);
   border-color: var(--border-color);
   color: var(--text-primary);
+  border-radius: $radius-md;
+  transition: all $transition-fast;
   
   &:focus {
     background-color: var(--bg-primary);
     color: var(--text-primary);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(33, 150, 243, 0.25);
   }
 }
 
 .dropdown-menu {
   background-color: var(--bg-primary);
   border-color: var(--border-color);
+  border-radius: $radius-md;
+  box-shadow: $shadow-lg;
   
   .dropdown-item {
     color: var(--text-primary);
+    transition: all $transition-fast;
     
     &:hover {
       background-color: var(--bg-tertiary);
@@ -241,6 +226,63 @@ body {
 
 .text-muted {
   color: var(--text-secondary) !important;
+}
+
+// Botones personalizados
+.btn {
+  border-radius: $radius-md;
+  font-weight: $font-weight-medium;
+  transition: all $transition-fast;
+  
+  &-primary {
+    background-color: $primary;
+    border-color: $primary;
+    
+    &:hover {
+      background-color: $primary-dark;
+      border-color: $primary-dark;
+    }
+  }
+  
+  &-danger {
+    background-color: $danger;
+    border-color: $danger;
+    
+    &:hover {
+      background-color: $danger-dark;
+      border-color: $danger-dark;
+    }
+  }
+  
+  &-success {
+    background-color: $success;
+    border-color: $success;
+    
+    &:hover {
+      background-color: $success-dark;
+      border-color: $success-dark;
+    }
+  }
+  
+  &-warning {
+    background-color: $warning;
+    border-color: $warning;
+    
+    &:hover {
+      background-color: $warning-dark;
+      border-color: $warning-dark;
+    }
+  }
+  
+  &-info {
+    background-color: $info;
+    border-color: $info;
+    
+    &:hover {
+      background-color: $info-dark;
+      border-color: $info-dark;
+    }
+  }
 }
 
 /* You can add global styles to this file, and also import other style files */

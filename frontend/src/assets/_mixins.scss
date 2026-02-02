@@ -1,0 +1,102 @@
+// ====================================
+// Mixins y Utilidades SCSS
+// ====================================
+@use 'variables' as *;
+
+// Mixin para responsive
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == 'xs' {
+    @media (min-width: $breakpoint-xs) { @content; }
+  } @else if $breakpoint == 'sm' {
+    @media (min-width: $breakpoint-sm) { @content; }
+  } @else if $breakpoint == 'md' {
+    @media (min-width: $breakpoint-md) { @content; }
+  } @else if $breakpoint == 'lg' {
+    @media (min-width: $breakpoint-lg) { @content; }
+  } @else if $breakpoint == 'xl' {
+    @media (min-width: $breakpoint-xl) { @content; }
+  } @else if $breakpoint == 'xxl' {
+    @media (min-width: $breakpoint-xxl) { @content; }
+  }
+}
+
+// Mixin para flexbox
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+// Mixin para truncar texto
+@mixin text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// Mixin para line-clamp
+@mixin line-clamp($lines) {
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+// Mixin para transiciones
+@mixin transition($properties...) {
+  transition: $properties;
+}
+
+// Classes de utilidad para colores
+.text-primary { color: $primary !important; }
+.text-accent { color: $accent !important; }
+.text-success { color: $success !important; }
+.text-danger { color: $danger !important; }
+.text-warning { color: $warning !important; }
+.text-info { color: $info !important; }
+
+.bg-primary { background-color: $primary !important; }
+.bg-accent { background-color: $accent !important; }
+.bg-success { background-color: $success !important; }
+.bg-danger { background-color: $danger !important; }
+.bg-warning { background-color: $warning !important; }
+.bg-info { background-color: $info !important; }
+
+// Clases de utilidad para tipografía
+.font-light { font-weight: $font-weight-light !important; }
+.font-normal { font-weight: $font-weight-normal !important; }
+.font-medium { font-weight: $font-weight-medium !important; }
+.font-semibold { font-weight: $font-weight-semibold !important; }
+.font-bold { font-weight: $font-weight-bold !important; }
+
+.text-xs { font-size: $font-size-xs !important; }
+.text-sm { font-size: $font-size-sm !important; }
+.text-base { font-size: $font-size-base !important; }
+.text-lg { font-size: $font-size-lg !important; }
+.text-xl { font-size: $font-size-xl !important; }
+.text-2xl { font-size: $font-size-2xl !important; }
+.text-3xl { font-size: $font-size-3xl !important; }
+.text-4xl { font-size: $font-size-4xl !important; }
+
+// Clases de utilidad para sombras
+.shadow-sm { box-shadow: $shadow-sm !important; }
+.shadow { box-shadow: $shadow !important; }
+.shadow-md { box-shadow: $shadow-md !important; }
+.shadow-lg { box-shadow: $shadow-lg !important; }
+.shadow-xl { box-shadow: $shadow-xl !important; }
+.shadow-none { box-shadow: none !important; }
+
+// Clases de utilidad para border-radius
+.rounded-sm { border-radius: $radius-sm !important; }
+.rounded { border-radius: $radius-md !important; }
+.rounded-md { border-radius: $radius-md !important; }
+.rounded-lg { border-radius: $radius-lg !important; }
+.rounded-xl { border-radius: $radius-xl !important; }
+.rounded-2xl { border-radius: $radius-2xl !important; }
+.rounded-full { border-radius: $radius-full !important; }

@@ -9,7 +9,6 @@ import { ThemeService } from './core/services/theme.service';
   selector: 'app-root',
   imports: [RouterOutlet, Sidebar, Topbar],
   templateUrl: './app.html',
-  styleUrl: './app.scss'
 })
 export class App {
   protected readonly title = signal('Polnito rico');

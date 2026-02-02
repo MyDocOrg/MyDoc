@@ -1,61 +1,32 @@
 @use 'assets/variables' as *;
 @use 'assets/mixins' as *;
 
-.container-fluid {
-  height: 100vh;
-  padding: 0;
-  margin: 0;
-  overflow: hidden;
-}
+.container-fluid { height: 100vh; padding: 0; margin: 0; overflow: hidden; }
+.row { height: 100%; margin: 0; }
 
-.row {
-  height: 100%;
-  margin: 0;
-}
-
-// Columna Izquierda - Hero Section con Degradado
+// Columna Izquierda
 .left-column {
   background: linear-gradient(135deg, $primary 0%, $primary-dark 50%, #0d47a1 100%);
-  padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   overflow: hidden;
 
-  // Efecto decorativo
-  &::before {
+  &::before, &::after {
     content: '';
     position: absolute;
-    width: 500px;
-    height: 500px;
     background: rgba(255, 255, 255, 0.05);
     border-radius: 50%;
-    top: -100px;
-    left: -100px;
     animation: float 6s ease-in-out infinite;
   }
-
-  &::after {
-    content: '';
-    position: absolute;
-    width: 400px;
-    height: 400px;
-    background: rgba(255, 255, 255, 0.03);
-    border-radius: 50%;
-    bottom: -100px;
-    right: -100px;
-    animation: float 8s ease-in-out infinite reverse;
-  }
+  &::before { width: 500px; height: 500px; top: -100px; left: -100px; }
+  &::after { width: 400px; height: 400px; bottom: -100px; right: -100px; animation-direction: reverse; }
 }
 
 @keyframes float {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-20px);
-  }
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
 }
 
 .left-content {
@@ -70,7 +41,7 @@
   .hero-content {
     max-width: 600px;
     text-align: left;
-    animation: fadeInScale 1s ease-out;
+    animation: fadeIn 1s ease-out;
 
     .hero-title {
       font-size: $font-size-4xl;
@@ -89,14 +60,13 @@
 
     .hero-description {
       font-size: $font-size-lg;
-      font-weight: $font-weight-normal;
       color: rgba(255, 255, 255, 0.95);
       line-height: 1.6;
       margin: 0 0 $spacing-lg 0;
     }
 
     .hero-button {
-      background-color: $white;
+      background: $white;
       color: $primary;
       border: none;
       padding: $spacing-md $spacing-2xl;
@@ -109,31 +79,18 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
 
-      &:hover {
-        background-color: rgba(255, 255, 255, 0.95);
-        transform: translateY(-3px);
-        box-shadow: $shadow-xl;
-      }
-
-      &:active {
-        transform: translateY(-1px);
-      }
+      &:hover { background: rgba(255, 255, 255, 0.95); transform: translateY(-3px); box-shadow: $shadow-xl; }
+      &:active { transform: translateY(-1px); }
     }
   }
 }
 
-@keyframes fadeInScale {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-// Columna Derecha - Card Centrada Moderna
+// Columna Derecha
 .right-column {
   display: flex;
   align-items: center;
@@ -148,18 +105,6 @@
   padding: $spacing-2xl;
   background: $white;
   border-radius: $radius-2xl;
-  animation: fadeInUp 0.6s ease-out;
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 .welcome-header {
@@ -178,7 +123,6 @@
     color: $text-light-secondary;
     margin: 0;
     font-size: $font-size-base;
-    font-weight: $font-weight-normal;
   }
 }
 
@@ -187,102 +131,47 @@ form {
   flex-direction: column;
   gap: $spacing-lg;
 
-  .full-width {
-    width: 100%;
-  }
+  .full-width { width: 100%; }
 
-  // Estilos personalizados para Material Form Fields
-  ::ng-deep mat-form-field {
-    &.mat-mdc-form-field {
-      width: 100%;
-
-      .mat-mdc-text-field-wrapper {
-        padding-bottom: 0;
-
-        .mat-mdc-form-field-flex {
-          height: 48px; // Altura reducida
-          
-          .mdc-notched-outline {
-            .mdc-notched-outline__leading,
-            .mdc-notched-outline__notch,
-            .mdc-notched-outline__trailing {
-              border-color: $gray-300 !important;
-              border-width: 1px !important;
-              border-radius: $radius-lg !important;
-            }
-
-            .mdc-notched-outline__leading {
-              border-top-left-radius: $radius-lg !important;
-              border-bottom-left-radius: $radius-lg !important;
-              border-right: none !important;
-            }
-
-            .mdc-notched-outline__trailing {
-              border-top-right-radius: $radius-lg !important;
-              border-bottom-right-radius: $radius-lg !important;
-              border-left: none !important;
-            }
-
-            .mdc-notched-outline__notch {
-              border-left: none !important;
-              border-right: none !important;
-            }
-          }
-        }
-      }
-
-      // Estado hover
-      &:hover .mdc-notched-outline {
-        .mdc-notched-outline__leading,
-        .mdc-notched-outline__notch,
-        .mdc-notched-outline__trailing {
-          border-color: $gray-600 !important;
-        }
-      }
-
-      // Estado focus
-      &.mat-focused .mdc-notched-outline {
-        .mdc-notched-outline__leading,
-        .mdc-notched-outline__notch,
-        .mdc-notched-outline__trailing {
-          border-color: $primary !important;
-          border-width: 2px !important;
-        }
-      }
-
-      // Input con altura reducida
-      .mat-mdc-input-element {
-        font-family: $font-family-primary;
-        font-size: $font-size-base;
-        padding: $spacing-xs $spacing-sm;
-        height: auto;
-      }
-
-      // Label
-      .mat-mdc-floating-label {
-        font-family: $font-family-primary;
-        font-size: $font-size-sm;
-        color: $text-light-secondary;
-      }
+  ::ng-deep mat-form-field.mat-mdc-form-field {
+    .mat-mdc-text-field-wrapper {
+      padding-bottom: 0;
+      .mat-mdc-form-field-flex { height: 48px; }
     }
 
-    mat-icon[matPrefix] {
-      margin-right: $spacing-sm;
-      color: $primary;
-      font-size: 20px;
-      width: 20px;
-      height: 20px;
+    .mdc-notched-outline__leading,
+    .mdc-notched-outline__notch,
+    .mdc-notched-outline__trailing {
+      border: 1px solid $gray-300 !important;
+      border-radius: $radius-lg !important;
     }
 
-    button[matSuffix] {
-      mat-icon {
-        color: $gray-600;
-        transition: color $transition-fast;
+    .mdc-notched-outline__leading { border-right: none !important; }
+    .mdc-notched-outline__trailing { border-left: none !important; }
+    .mdc-notched-outline__notch { border-left: none !important; border-right: none !important; }
 
-        &:hover {
-          color: $primary;
-        }
-      }
+    &:hover .mdc-notched-outline__leading,
+    &:hover .mdc-notched-outline__notch,
+    &:hover .mdc-notched-outline__trailing { border-color: $gray-600 !important; }
+
+    &.mat-focused .mdc-notched-outline__leading,
+    &.mat-focused .mdc-notched-outline__notch,
+    &.mat-focused .mdc-notched-outline__trailing {
+      border-color: $primary !important;
+      border-width: 2px !important;
+    }
+
+    .mat-mdc-input-element {
+      font-family: $font-family-primary;
+      padding: $spacing-xs $spacing-sm;
+    }
+
+    mat-icon[matPrefix] { margin-right: $spacing-sm; color: $primary; }
+
+    button[matSuffix] mat-icon {
+      color: $gray-600;
+      transition: color $transition-fast;
+      &:hover { color: $primary; }
     }
   }
 
@@ -292,41 +181,21 @@ form {
     gap: $spacing-md;
     margin-top: -$spacing-xs;
 
-    .remember-checkbox {
-      ::ng-deep {
-        .mdc-form-field {
-          font-family: $font-family-primary;
-          font-size: $font-size-sm;
-          color: $text-light-secondary;
-        }
-
-        .mdc-checkbox {
-          .mdc-checkbox__background {
-            border: 2px solid $gray-400 !important;
-            border-radius: $radius-sm;
-          }
-
-          &:hover .mdc-checkbox__background {
-            border-color: $primary !important;
-          }
-        }
-
-        .mdc-checkbox__native-control:checked ~ .mdc-checkbox__background {
-          border-color: $primary !important;
-          background-color: $primary !important;
-        }
+    .remember-checkbox ::ng-deep {
+      .mdc-checkbox__background {
+        border: 2px solid $gray-400 !important;
+        border-radius: $radius-sm;
+      }
+      .mdc-checkbox:hover .mdc-checkbox__background { border-color: $primary !important; }
+      .mdc-checkbox__native-control:checked ~ .mdc-checkbox__background {
+        border-color: $primary !important;
+        background: $primary !important;
       }
     }
 
-    .links-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: $spacing-sm;
-    }
+    .links-row { display: flex; justify-content: space-between; }
 
-    .forgot-link,
-    .register-link {
+    .forgot-link, .register-link {
       color: $primary;
       text-decoration: none;
       font-size: $font-size-sm;
@@ -341,23 +210,19 @@ form {
         height: 2px;
         bottom: -2px;
         left: 0;
-        background-color: $primary;
+        background: $primary;
         transition: width $transition-fast;
       }
 
       &:hover {
         color: $primary-dark;
-
-        &::after {
-          width: 100%;
-        }
+        &::after { width: 100%; }
       }
     }
   }
 
   .submit-button {
     height: 48px;
-    font-size: $font-size-base;
     font-weight: $font-weight-semibold;
     margin-top: $spacing-md;
     border-radius: $radius-lg !important;
@@ -367,45 +232,19 @@ form {
     transition: all $transition-fast;
     color: $white !important;
 
-    &:hover {
-      box-shadow: $shadow-lg;
-      transform: translateY(-2px);
-    }
-
-    &:active {
-      transform: translateY(0);
-      box-shadow: $shadow;
-    }
+    &:hover { box-shadow: $shadow-lg; transform: translateY(-2px); }
+    &:active { transform: translateY(0); box-shadow: $shadow; }
   }
 }
 
-// Responsive
 @media (max-width: 991px) {
-  .left-column {
-    display: none;
-  }
-  
-  .right-column {
-    width: 100%;
-    padding: $spacing-lg;
-  }
-
-  .login-form-container {
-    padding: $spacing-xl;
-  }
+  .left-column { display: none; }
+  .right-column { width: 100%; padding: $spacing-lg; }
+  .login-form-container { padding: $spacing-xl; }
 }
 
 @media (max-width: 576px) {
-  .right-column {
-    padding: $spacing-md;
-  }
-
-  .login-form-container {
-    padding: $spacing-lg;
-    border-radius: $radius-xl;
-  }
-
-  .welcome-header h2 {
-    font-size: $font-size-2xl;
-  }
+  .right-column { padding: $spacing-md; }
+  .login-form-container { padding: $spacing-lg; border-radius: $radius-xl; }
+  .welcome-header h2 { font-size: $font-size-2xl; }
 }

@@ -10,6 +10,7 @@ namespace MyDoc.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ClinicController(ClinicService Service) : ControllerBase
     {
         private readonly ClinicService _Service = Service;

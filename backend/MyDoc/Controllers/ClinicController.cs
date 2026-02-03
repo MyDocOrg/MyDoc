@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MyDoc.Application.BO.Contants;
 using MyDoc.Application.BO.DTO.Clinic;
@@ -19,7 +20,7 @@ namespace MyDoc.Controllers
             try
             {
 
-                var result = await _Service.GetAll();
+                var result = await _Service.GetTable();
                 return StatusCode(result.Status, result);
             }
             catch (Exception ex)
@@ -44,12 +45,19 @@ namespace MyDoc.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var result = await _Service.GetById(id);
-            return StatusCode(result.Status, result);
+            try
+            {
+                var result = await _Service.GetById(id);
+                return StatusCode(result.Status, result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<string>.Fail($"An unexpected error occurred getting clinic {id}: {ex.Message}", 500));
+            }
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] ClinicRequestDTO entity)
+        public async Task<IActionResult> Create(ClinicRequestDTO entity)
         {
             try
             {
@@ -60,14 +68,20 @@ namespace MyDoc.Controllers
             {
                 return StatusCode(500, ApiResponse<string>.Fail($"An unexpected error occurred creating clinic: {ex.Message}", 500));
             }
-            
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update([FromBody] Clinic entity)
+        public async Task<IActionResult> Update(ClinicRequestDTO entity)
         {
-            var result = await _Service.Update(entity);
-            return StatusCode(result.Status, result);
+            try
+            {
+                var result = await _Service.Update(entity);
+                return StatusCode(result.Status, result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<string>.Fail($"An unexpected error occurred modyfing clinic: {ex.Message}", 500));
+            }
         }
     }
 }

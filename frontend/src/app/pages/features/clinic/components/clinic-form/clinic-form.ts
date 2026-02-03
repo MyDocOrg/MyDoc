@@ -23,7 +23,8 @@ export class ClinicForm {
     name: '',
     address: '',
     phone: '',
-    email: ''
+    email: '',
+    isActive: true,
   });
 
   clinicForm = form(this.clinicModel);
@@ -44,14 +45,14 @@ export class ClinicForm {
   GetById(){
     this.service.GetById(this.id()).subscribe({
       next: (res) => {
-        console.log(res)
         this.clinicModel.update(c => ({
           ...c,
           id : res.id,
           name : res.name,
           address : res.address,
           phone : res.phone,
-          email : res.email
+          email : res.email,
+          isActive : res.isActive,
         }));
       },
       error: console.error

@@ -10,6 +10,7 @@ using MyDoc.Middleware;
 using System.Text;
 using System.Text.Json;
 using MyDoc.Application.Helper;
+using MyDoc.Application.BO.Mappers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -124,6 +125,9 @@ builder.Services.AddScoped<NotificationService>();
 builder.Services.AddScoped<PatientService>();
 builder.Services.AddScoped<PrescriptionService>();
 builder.Services.AddScoped<PrescriptionMedicineService>();
+
+// Register mapper
+builder.Services.AddScoped<ClinicMapper>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ApplicationProvider>();

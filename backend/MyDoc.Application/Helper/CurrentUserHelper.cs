@@ -38,5 +38,15 @@ namespace MyDoc.Application.Helper
 
         public string ApplicationName =>
             User?.FindFirst("application_name")?.Value ?? string.Empty;
+
+        public int? PatientId =>
+            int.TryParse(User?.FindFirst("patientId")?.Value, out var patientId)
+                ? patientId
+                : null;
+
+        public int? DoctorId =>
+            int.TryParse(User?.FindFirst("doctorId")?.Value, out var doctorId)
+                ? doctorId
+                : null;
     }
 }

@@ -1,4 +1,6 @@
-﻿using MyDoc.Application.DAL.Abstract;
+﻿using Microsoft.EntityFrameworkCore;
+using MyDoc.Application.BO.DTO.Appointment;
+using MyDoc.Application.DAL.Abstract;
 using MyDoc.Infrastructure.Models;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +15,29 @@ namespace MyDoc.Application.DAL
         public AppointmentDAL(ApplicationDbContext context) : base(context)
         {
             _context = context;
+        }
+
+        public async Task<List<AppointmentTableDTO>> GetTable()
+        {
+
+            return await (from ap in _context.Appointment
+                          join doc in _context.Doctor on ap.doctor_id equals doc.id
+                          join clin in _context.Clinic on ap.clinic_id equals clin.id
+                          join est in _context.AppointmentStatus on ap.status_id equals est.id
+                          join pac in _context.Patient on ap.patient_id equals pac.id
+                          select new AppointmentTableDTO
+                          {
+                              AppointmentDate = ap.appointment_date,
+                              ClinicId = clin.id,
+                              ClinicName = clin.name,
+                              DoctorId = doc.id,
+                              DoctorName = doc.full_name,    
+                              Id = ap.id,
+                              StatusId = est.id,
+                              StatusName = est.name,
+                              PatientId = pac.id,
+                              PatientName = pac.full_name
+                          }).ToListAsync();
         }
 
         public async Task<List<Appointment>> GetAll()

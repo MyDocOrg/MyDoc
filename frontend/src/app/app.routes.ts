@@ -44,6 +44,7 @@ import { MedicationScheduleAdd } from './pages/features/medication-schedule/medi
 import { AppointmentStatusHome } from './pages/features/appointment-status/appointment-status-home/appointment-status-home';
 import { AppointmentStatusAdd } from './pages/features/appointment-status/appointment-status-add/appointment-status-add';
 import { SelectRole } from './pages/features/auth/select-role/select-role';
+import { ClinicEdit } from './pages/features/clinic/clinic-edit/clinic-edit';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -83,7 +84,7 @@ export const routes: Routes = [
         children: [
             { path: '', component: ClinicHome },
             { path: 'add', component: ClinicAdd },
-            { path: 'edit/:id', component: ClinicAdd }
+            { path: 'edit/:id', component: ClinicEdit }
         ]
     },
     

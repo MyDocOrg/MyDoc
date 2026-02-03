@@ -2,6 +2,7 @@
 import { Router, ActivatedRoute } from '@angular/router';
 import { Field, form } from '@angular/forms/signals';
 import { CommonModule } from '@angular/common';
+import { ClinicService } from '../../services/clinic-service';
 
 @Component({
   selector: 'app-clinic-form',
@@ -12,6 +13,7 @@ import { CommonModule } from '@angular/common';
 export class ClinicForm {
   router = inject(Router);
   route = inject(ActivatedRoute);
+  service = inject(ClinicService)
 
   id = signal(0);
   submitClinic = output<any>();
@@ -30,7 +32,7 @@ export class ClinicForm {
     const idParam = this.route.snapshot.paramMap.get('id');
     if (idParam) {
       this.id.set(Number(idParam));
-      // TODO: Llamar al servicio para obtener datos
+      this.GetById();
     }
   }
 
@@ -38,5 +40,21 @@ export class ClinicForm {
     event.preventDefault();
     const formData = this.clinicModel();
     this.submitClinic.emit(formData);
+  }
+  GetById(){
+    this.service.GetById(this.id()).subscribe({
+      next: (res) => {
+        console.log(res)
+        this.clinicModel.update(c => ({
+          ...c,
+          id : res.id,
+          name : res.name,
+          address : res.address,
+          phone : res.phone,
+          email : res.email
+        }));
+      },
+      error: console.error
+    });
   }
 }

@@ -1,10 +1,12 @@
 import { Component, effect, input, output} from '@angular/core';
 import { GenericTableService } from '../../services/generic-table-service';
 import { TranslatePipe } from '@ngx-translate/core';
+import { MatIcon } from "@angular/material/icon";
+import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-generic-table',
-  imports: [TranslatePipe],
+  imports: [TranslatePipe, MatIcon, MatTooltip],
   templateUrl: './generic-table.html',
   styleUrl: './generic-table.scss',
 })

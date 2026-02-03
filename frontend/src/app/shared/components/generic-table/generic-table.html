@@ -58,8 +58,38 @@
       @for (column of columsData(); track $index) {
       <td>{{ row[column] }}</td>
       }
-
       <td class="text-end">
+      <button
+        mat-icon-button
+        color="primary"
+        (click)="onDetail(row.id)"
+        matTooltip="{{ 'TABLE.VIEW' | translate }}"
+      >
+        <mat-icon>visibility</mat-icon>
+      </button>
+
+      <button
+        mat-icon-button
+        color="accent"
+        (click)="onEdit(row.id)"
+        matTooltip="{{ 'TABLE.EDIT' | translate }}"
+      >
+        <mat-icon>edit</mat-icon>
+      </button>
+
+      <button
+        mat-icon-button
+        color="warn"
+        (click)="onDelete(row.id)"
+        matTooltip="{{ 'TABLE.DELETE' | translate }}"
+      >
+        <mat-icon>delete</mat-icon>
+      </button>
+    </td>
+    </tr>
+
+
+      <!-- <td class="text-end">
         <div class="dropdown">
           <button class="btn btn-sm btn-light" type="button" data-bs-toggle="dropdown">
             <i class="fas fa-ellipsis-vertical"></i>
@@ -84,7 +114,7 @@
           </ul>
         </div>
       </td>
-    </tr>
+    </tr> -->
     }
     }
 

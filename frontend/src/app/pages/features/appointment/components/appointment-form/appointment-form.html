@@ -13,45 +13,34 @@
             <!-- Doctor ID -->
             <div class="mb-3">
               <label class="form-label">Doctor *</label>
-              <input
-                type="number"
-                class="form-control"
-                [field]="appointmentForm.doctorId"
-                placeholder="ID del doctor"
-              />
+              <select class="form-select" [field]="appointmentForm.doctorId">
+                <option value="" disabled selected>Seleccione un doctor</option>
+              @for (item of doctors(); track item.id) {
+                <option [value]="item.id">{{ item.full_name }}</option>
+              }
+              </select>
             </div>
 
             <!-- Clinic ID -->
             <div class="mb-3">
               <label class="form-label">Clínica *</label>
-              <input
-                type="number"
-                class="form-control"
-                [field]="appointmentForm.clinicId"
-                placeholder="ID de la clínica"
-              />
-            </div>
-
-            <!-- Patient ID -->
-            <div class="mb-3">
-              <label class="form-label">Paciente *</label>
-              <input
-                type="number"
-                class="form-control"
-                [field]="appointmentForm.patientId"
-                placeholder="ID del paciente"
-              />
+              <select class="form-select" [field]="appointmentForm.clinicId">
+                <option value="" disabled selected>Seleccione una clínica</option>
+              @for (item of clinics(); track item.id) {
+                <option [value]="item.id">{{ item.name }}</option>
+              }
+              </select>
             </div>
 
             <!-- Status ID -->
             <div class="mb-3">
               <label class="form-label">Estado *</label>
-              <input
-                type="number"
-                class="form-control"
-                [field]="appointmentForm.statusId"
-                placeholder="ID del estado"
-              />
+              <select class="form-select" [field]="appointmentForm.statusId">
+                <option value="" disabled selected>Seleccione un estado</option>
+              @for (item of statuses(); track item.id) {
+                <option [value]="item.id">{{ item.name }}</option>
+              }
+              </select>
             </div>
 
             <!-- Appointment Date -->

@@ -45,6 +45,7 @@ import { AppointmentStatusHome } from './pages/features/appointment-status/appoi
 import { AppointmentStatusAdd } from './pages/features/appointment-status/appointment-status-add/appointment-status-add';
 import { SelectRole } from './pages/features/auth/select-role/select-role';
 import { ClinicEdit } from './pages/features/clinic/clinic-edit/clinic-edit';
+import { AppointmentEdit } from './pages/features/appointment/appointment-edit/appointment-edit';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -94,7 +95,7 @@ export const routes: Routes = [
         children: [
             { path: '', component: AppointmentHome },
             { path: 'add', component: AppointmentAdd },
-            { path: 'edit/:id', component: AppointmentAdd }
+            { path: 'edit/:id', component: AppointmentEdit }
         ]
     },
     

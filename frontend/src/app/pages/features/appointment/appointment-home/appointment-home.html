@@ -13,7 +13,7 @@
   <div class="row mt-3">
     <app-generic-table
       [headersTable]="['Id','Doctor', 'Clínica', 'Paciente', 'Estado', 'Fecha']"
-      [columsData]="['id', 'doctorId', 'clinicId', 'patientId', 'statusId', 'appointmentDate']"
+      [columsData]="['id', 'doctorName', 'clinicName', 'patientName', 'statusName', 'appointmentDate']"
       [tableData]="appointmentList()"
       [loading]="loading"
       (edit)="editAppointment($event)"

@@ -2,6 +2,8 @@
 import { Router, ActivatedRoute } from '@angular/router';
 import { Field, form } from '@angular/forms/signals';
 import { CommonModule } from '@angular/common';
+import { AppointmentService } from '../../services/appointment-service';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-appointment-form',
@@ -12,18 +14,20 @@ import { CommonModule } from '@angular/common';
 export class AppointmentForm {
   router = inject(Router);
   route = inject(ActivatedRoute);
+  service = inject(AppointmentService);
+  doctors = toSignal<any[]>(this.service.GetAllDoctors());
+  clinics = toSignal<any[]>(this.service.GetAllClinics());
+  statuses = toSignal<any[]>(this.service.GetAllAppointmentStatuses());
 
   id = signal(0);
   submitAppointment = output<any>();
 
   appointmentModel = signal({
     id: 0,
-    doctorId: 0,
-    clinicId: 0,
-    patientId: 0,
-    statusId: 0,
-    appointmentDate: '',
-    createdAt: null,
+    doctorId: '',
+    clinicId: '',
+    statusId: '',
+    appointmentDate: ''
   });
 
   appointmentForm = form(this.appointmentModel);
@@ -32,7 +36,7 @@ export class AppointmentForm {
     const idParam = this.route.snapshot.paramMap.get('id');
     if (idParam) {
       this.id.set(Number(idParam));
-      // TODO: Llamar al servicio para obtener datos
+      this.GetById();
     }
   }
 
@@ -40,5 +44,20 @@ export class AppointmentForm {
     event.preventDefault();
     const formData = this.appointmentModel();
     this.submitAppointment.emit(formData);
+  }
+  GetById(){
+    this.service.GetById(this.id()).subscribe({
+      next: (res) => {
+        this.appointmentModel.update(c => ({
+          ...c,
+          id : res.id,
+          doctorId : res.doctor_id,
+          clinicId : res.clinic_id,
+          statusId : res.status_id,
+          appointmentDate : res.appointment_date
+        }));
+      },
+      error: console.error
+    });
   }
 }

@@ -21,7 +21,7 @@ export class AppointmentHome {
 
   GetAll(): void {
     this.loading = true;
-    this.service.GetAll().subscribe({
+    this.service.GetTable().subscribe({
       next: (res) => {
         this.loading = false;
         this.appointmentList.set(res.data || res);

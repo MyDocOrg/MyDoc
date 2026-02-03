@@ -4,15 +4,16 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { provideServiceWorker } from '@angular/service-worker';
-import { provideHttpClient, withFetch } from '@angular/common/http';
+import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { provideTranslateService } from '@ngx-translate/core';
 import {provideTranslateHttpLoader} from "@ngx-translate/http-loader";
+import { apiInterceptor } from './core/interceptors/api-interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(), 
     provideZonelessChangeDetection(),
-    provideHttpClient(withFetch()), 
+    provideHttpClient(withFetch(), withInterceptors([apiInterceptor])), 
     provideRouter(routes), 
     provideClientHydration(withEventReplay()), 
     provideServiceWorker('ngsw-worker.js', { 

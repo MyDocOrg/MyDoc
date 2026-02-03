@@ -117,5 +117,8 @@
     "SELECT": "Select Language",
     "SPANISH": "Spanish",
     "ENGLISH": "English"
+  },
+  "TABLES": {
+    "ACTIONS": "Acciones"
   }
 }

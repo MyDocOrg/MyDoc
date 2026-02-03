@@ -7,6 +7,8 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDividerModule } from '@angular/material/divider';
+import { TokenService } from '../../services/token-service';
+import { Router } from '@angular/router';
 
 interface Language {
   language: string;
@@ -22,6 +24,8 @@ interface Language {
   styleUrl: './topbar.scss',
 })
 export class Topbar {
+  tokenService = inject(TokenService);
+  router = inject(Router);
   themeService = inject(ThemeService);
   currentLanguage = signal<string>('es');
   
@@ -55,5 +59,10 @@ export class Topbar {
   changeLanguage(lang: Language): void {
     this.currentLanguage.set(lang.code);
     // Funcionalidad de i18n suspendida temporalmente
+  }
+
+  closeSession(){
+    this.tokenService.removeToken();
+    this.router.navigate(['/login']);
   }
 }

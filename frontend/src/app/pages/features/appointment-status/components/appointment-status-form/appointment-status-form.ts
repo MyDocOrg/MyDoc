@@ -2,6 +2,7 @@
 import { Router, ActivatedRoute } from '@angular/router';
 import { Field, form } from '@angular/forms/signals';
 import { CommonModule } from '@angular/common';
+import { AppointmentStatusService } from '../../services/appointment-status-service';
 
 @Component({
   selector: 'app-appointment-status-form',
@@ -12,6 +13,7 @@ import { CommonModule } from '@angular/common';
 export class AppointmentStatusForm {
   router = inject(Router);
   route = inject(ActivatedRoute);
+  service = inject(AppointmentStatusService);
 
   id = signal(0);
   submitAppointmentStatus = output<any>();
@@ -29,7 +31,7 @@ export class AppointmentStatusForm {
     const idParam = this.route.snapshot.paramMap.get('id');
     if (idParam) {
       this.id.set(Number(idParam));
-      // TODO: Llamar al servicio para obtener datos
+      this.GetById();
     }
   }
 
@@ -38,4 +40,19 @@ export class AppointmentStatusForm {
     const formData = this.appointmentStatusModel();
     this.submitAppointmentStatus.emit(formData);
   }
-}
+
+  GetById(){
+    this.service.GetById(this.id()).subscribe({
+      next: (res) => {
+        this.appointmentStatusModel.update(c => ({
+          ...c,
+          id: res.id,
+          name: res.name,
+          description: res.description,
+          isActive: res.isActive
+        }));
+      },
+      error: console.error
+    });
+  }
+} 

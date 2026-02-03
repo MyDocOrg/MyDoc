@@ -2,6 +2,7 @@
 import { Router, ActivatedRoute } from '@angular/router';
 import { Field, form } from '@angular/forms/signals';
 import { CommonModule } from '@angular/common';
+import { PrescriptionService } from '../../services/prescription-service';
 
 @Component({
   selector: 'app-prescription-form',
@@ -12,6 +13,7 @@ import { CommonModule } from '@angular/common';
 export class PrescriptionForm {
   router = inject(Router);
   route = inject(ActivatedRoute);
+  service = inject(PrescriptionService);
 
   id = signal(0);
   submitPrescription = output<any>();
@@ -29,7 +31,7 @@ export class PrescriptionForm {
     const idParam = this.route.snapshot.paramMap.get('id');
     if (idParam) {
       this.id.set(Number(idParam));
-      // TODO: Llamar al servicio para obtener datos
+      this.GetById();
     }
   }
 
@@ -38,4 +40,19 @@ export class PrescriptionForm {
     const formData = this.prescriptionModel();
     this.submitPrescription.emit(formData);
   }
-}
+
+  GetById(){
+    this.service.GetById(this.id()).subscribe({
+      next: (res) => {
+        this.prescriptionModel.update(c => ({
+          ...c,
+          id: res.id,
+          generalInstructions: res.generalInstructions,
+          medicalHistoryId: res.medicalHistoryId,
+          createdAt: res.createdAt
+        }));
+      },
+      error: console.error
+    });
+  }
+} 

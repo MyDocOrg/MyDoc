@@ -2,6 +2,7 @@
 import { Router, ActivatedRoute } from '@angular/router';
 import { Field, form } from '@angular/forms/signals';
 import { CommonModule } from '@angular/common';
+import { ConsultationService } from '../../services/consultation-service';
 
 @Component({
   selector: 'app-consultation-form',
@@ -12,6 +13,7 @@ import { CommonModule } from '@angular/common';
 export class ConsultationForm {
   router = inject(Router);
   route = inject(ActivatedRoute);
+  service = inject(ConsultationService);
 
   id = signal(0);
   submitConsultation = output<any>();
@@ -32,7 +34,7 @@ export class ConsultationForm {
     const idParam = this.route.snapshot.paramMap.get('id');
     if (idParam) {
       this.id.set(Number(idParam));
-      // TODO: Llamar al servicio para obtener datos
+      this.GetById();
     }
   }
 
@@ -41,4 +43,22 @@ export class ConsultationForm {
     const formData = this.consultationModel();
     this.submitConsultation.emit(formData);
   }
-}
+
+  GetById(){
+    this.service.GetById(this.id()).subscribe({
+      next: (res) => {
+        this.consultationModel.update(c => ({
+          ...c,
+          id: res.id,
+          appointmentId: res.appointmentId,
+          reason: res.reason,
+          diagnosis: res.diagnosis,
+          consultationDate: res.consultationDate,
+          weightKg: res.weightKg,
+          heightCm: res.heightCm
+        }));
+      },
+      error: console.error
+    });
+  }
+} 

@@ -11,10 +11,12 @@ import { SettingsComponent } from './pages/features/doctor/settings/settings.com
 // Patient
 import { PatientHome } from './pages/features/patient/patient-home/patient-home';
 import { PatientAdd } from './pages/features/patient/patient-add/patient-add';
+import { PatientEdit } from './pages/features/patient/patient-edit/patient-edit';
 
 // Doctor
 import { DoctorHome } from './pages/features/doctor/doctor-home/doctor-home';
 import { DoctorAdd } from './pages/features/doctor/doctor-add/doctor-add';
+import { DoctorEdit } from './pages/features/doctor/doctor-edit/doctor-edit';
 
 // Clinic
 import { ClinicHome } from './pages/features/clinic/clinic-home/clinic-home';
@@ -27,25 +29,40 @@ import { AppointmentAdd } from './pages/features/appointment/appointment-add/app
 // Consultation
 import { ConsultationHome } from './pages/features/consultation/consultation-home/consultation-home';
 import { ConsultationAdd } from './pages/features/consultation/consultation-add/consultation-add';
+import { ConsultationEdit } from './pages/features/consultation/consultation-edit/consultation-edit';
 
 // Medicine
 import { MedicineHome } from './pages/features/medicine/medicine-home/medicine-home';
 import { MedicineAdd } from './pages/features/medicine/medicine-add/medicine-add';
+import { MedicineEdit } from './pages/features/medicine/medicine-edit/medicine-edit';
 
 // Prescription
 import { PrescriptionHome } from './pages/features/prescription/prescription-home/prescription-home';
 import { PrescriptionAdd } from './pages/features/prescription/prescription-add/prescription-add';
+import { PrescriptionEdit } from './pages/features/prescription/prescription-edit/prescription-edit';
 
 // Medication Schedule
 import { MedicationScheduleHome } from './pages/features/medication-schedule/medication-schedule-home/medication-schedule-home';
 import { MedicationScheduleAdd } from './pages/features/medication-schedule/medication-schedule-add/medication-schedule-add';
+import { MedicationScheduleEdit } from './pages/features/medication-schedule/medication-schedule-edit/medication-schedule-edit';
 
 // Appointment Status
 import { AppointmentStatusHome } from './pages/features/appointment-status/appointment-status-home/appointment-status-home';
 import { AppointmentStatusAdd } from './pages/features/appointment-status/appointment-status-add/appointment-status-add';
+import { AppointmentStatusEdit } from './pages/features/appointment-status/appointment-status-edit/appointment-status-edit';
 import { SelectRole } from './pages/features/auth/select-role/select-role';
 import { ClinicEdit } from './pages/features/clinic/clinic-edit/clinic-edit';
 import { AppointmentEdit } from './pages/features/appointment/appointment-edit/appointment-edit';
+
+// Notification
+import { NotificationHome } from './pages/features/notification/notification-home/notification-home';
+import { NotificationAdd } from './pages/features/notification/notification-add/notification-add';
+import { NotificationEdit } from './pages/features/notification/notification-edit/notification-edit';
+
+// Medical History
+import { MedicalHistoryHome } from './pages/features/medical-history/medical-history-home/medical-history-home';
+import { MedicalHistoryAdd } from './pages/features/medical-history/medical-history-add/medical-history-add';
+import { MedicalHistoryEdit } from './pages/features/medical-history/medical-history-edit/medical-history-edit';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -62,8 +79,7 @@ export const routes: Routes = [
             { path: 'add', component: PatientAdd },
             { path: 'edit/:id', component: PatientAdd }
         ]
-    },
-    
+    },    
     // Doctor
     {
         path: 'doctor',
@@ -77,8 +93,7 @@ export const routes: Routes = [
             { path: 'schedule', component: ScheduleComponent },
             { path: 'settings', component: SettingsComponent }
         ]
-    },
-    
+    },    
     // Clinic
     {
         path: 'clinic',
@@ -107,8 +122,7 @@ export const routes: Routes = [
             { path: 'add', component: ConsultationAdd },
             { path: 'edit/:id', component: ConsultationAdd }
         ]
-    },
-    
+    },    
     // Medicine
     {
         path: 'medicine',
@@ -117,8 +131,7 @@ export const routes: Routes = [
             { path: 'add', component: MedicineAdd },
             { path: 'edit/:id', component: MedicineAdd }
         ]
-    },
-    
+    },    
     // Prescription
     {
         path: 'prescription',
@@ -127,8 +140,7 @@ export const routes: Routes = [
             { path: 'add', component: PrescriptionAdd },
             { path: 'edit/:id', component: PrescriptionAdd }
         ]
-    },
-    
+    },    
     // Medication Schedule
     {
         path: 'medication-schedule',
@@ -137,8 +149,7 @@ export const routes: Routes = [
             { path: 'add', component: MedicationScheduleAdd },
             { path: 'edit/:id', component: MedicationScheduleAdd }
         ]
-    },
-    
+    },    
     // Appointment Status
     {
         path: 'appointment-status',
@@ -146,6 +157,25 @@ export const routes: Routes = [
             { path: '', component: AppointmentStatusHome },
             { path: 'add', component: AppointmentStatusAdd },
             { path: 'edit/:id', component: AppointmentStatusAdd }
+        ]
+    },
+    // Notification
+    {
+        path: 'notification',
+        children: [
+            { path: '', component: NotificationHome },
+            { path: 'add', component: NotificationAdd },
+            { path: 'edit/:id', component: NotificationEdit }
+        ]
+    },
+
+    // Medical History
+    {
+        path: 'medical-history',
+        children: [
+            { path: '', component: MedicalHistoryHome },
+            { path: 'add', component: MedicalHistoryAdd },
+            { path: 'edit/:id', component: MedicalHistoryEdit }
         ]
     },
     

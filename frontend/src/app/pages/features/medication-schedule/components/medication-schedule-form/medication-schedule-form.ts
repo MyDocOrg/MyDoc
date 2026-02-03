@@ -2,6 +2,7 @@
 import { Router, ActivatedRoute } from '@angular/router';
 import { Field, form } from '@angular/forms/signals';
 import { CommonModule } from '@angular/common';
+import { MedicationScheduleService } from '../../services/medication-schedule-service';
 
 @Component({
   selector: 'app-medication-schedule-form',
@@ -12,6 +13,7 @@ import { CommonModule } from '@angular/common';
 export class MedicationScheduleForm {
   router = inject(Router);
   route = inject(ActivatedRoute);
+  service = inject(MedicationScheduleService);
 
   id = signal(0);
   submitMedicationSchedule = output<any>();
@@ -31,8 +33,25 @@ export class MedicationScheduleForm {
     const idParam = this.route.snapshot.paramMap.get('id');
     if (idParam) {
       this.id.set(Number(idParam));
-      // TODO: Llamar al servicio para obtener datos
+      this.GetById();
     }
+  }
+
+  GetById(){
+    this.service.GetById(this.id()).subscribe({
+      next: (res) => {
+        this.medicationScheduleModel.update(c => ({
+          ...c,
+          id: res.id,
+          prescriptionId: res.prescriptionId,
+          medicineId: res.medicineId,
+          scheduledDate: res.scheduledDate,
+          scheduledTime: res.scheduledTime,
+          taken: res.taken,
+        }));
+      },
+      error: (res) => { console.error(res.message) }
+    });
   }
 
   onSubmit(event: Event): void {

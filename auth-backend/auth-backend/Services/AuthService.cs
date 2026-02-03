@@ -26,6 +26,21 @@ namespace auth_backend.Services
                     throw new Exception("Invalidad password");
 
                 var result = await _dAL.UserPermissions(user.Id);
+                switch (result.RoleName)
+                {
+                    case "Paciente":
+                        result.PatientId =
+                            (await _myDocDAL.GetByUserIdPatient(user.Id)).id;
+                        break;
+
+                    case "Doctor":
+                        result.DoctorId =
+                            (await _myDocDAL.GetByUserIdDoctor(user.Id)).id;
+                        break;
+
+                    default:
+                        break; // Admin, Staff, etc.
+                }
                 var token = _jwtHelper.GenerateToken(result);
 
                 return ApiResponse<string>.Ok(token);

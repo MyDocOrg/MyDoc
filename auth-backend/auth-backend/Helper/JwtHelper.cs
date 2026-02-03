@@ -28,6 +28,16 @@ namespace auth_backend.Helper
                 new Claim("applicationName", user.ApplicationName)
             };
 
+            if (user.PatientId.HasValue)
+            {
+                claims.Add(new Claim("patientId", user.PatientId.Value.ToString()));
+            }
+
+            if (user.DoctorId.HasValue)
+            {
+                claims.Add(new Claim("doctorId", user.DoctorId.Value.ToString()));
+            }
+
             var key = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(jwtSettings["Key"])
             );

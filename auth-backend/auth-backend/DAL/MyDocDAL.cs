@@ -54,6 +54,28 @@ namespace auth_backend.DAL
                 throw new Exception("something went wrong", ex);
             }
         }
+        public async Task<Doctor> GetByUserIdDoctor(int id)
+        {
+            try
+            {
+                return await _context.Doctor.FirstOrDefaultAsync(d => d.user_id == id);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("something went wrong", ex);
+            }
+        }
+        public async Task<Patient> GetByUserIdPatient(int id)
+        {
+            try
+            {
+                return await _context.Patient.FirstOrDefaultAsync(p => p.user_id == id);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("something went wrong", ex);
+            }
+        }
         public async Task<List<Doctor>> GetListDoctor(int id)
         {
             try

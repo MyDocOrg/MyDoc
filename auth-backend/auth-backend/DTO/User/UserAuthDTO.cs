@@ -16,5 +16,11 @@ namespace auth_backend.DTO.User
 
         public int SuscriptionId { get; set; }
         public string SuscriptionName { get; set; } = null!;
+
+        // For patients users
+        public int? PatientId { get; set; }
+
+        // For doctos users
+        public int? DoctorId { get; set; }
     }
 }

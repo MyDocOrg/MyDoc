@@ -4,39 +4,81 @@ using MyDoc.Infrastructure.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
+using MyDoc.Application.BO.DTO.Notification;
+using MyDoc.Application.BO.Mappers;
+using MyDoc.Application.DAL;
+using MyDoc.Application.BO.Contants;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
 namespace MyDoc.Application.Services
 {
     public class NotificationService
     {
         private readonly NotificationDAL _dAL;
+        private readonly NotificationMapper _mapper;
 
-        public NotificationService(NotificationDAL dAL)
+        public NotificationService(NotificationDAL dAL, NotificationMapper mapper)
         {
             _dAL = dAL;
+            _mapper = mapper;
         }
 
-        public async Task<ApiResponse<List<Notification>>> GetAll()
+        public async Task<ApiResponse<List<NotificationDTO>>> GetAll()
         {
-            var result = await _dAL.GetAll();
-            return ApiResponse<List<Notification>>.Ok(result);
+            try
+            {
+                var result = await _dAL.GetAll();
+                var mapped = result.Select(n => _mapper.ToDTO(n)).ToList();
+                return ApiResponse<List<NotificationDTO>>.Ok(mapped);
+            }
+            catch
+            {
+                return ApiResponse<List<NotificationDTO>>.Fail("Error getting notifications");
+            }
         }
 
-        public async Task<ApiResponse<Notification?>> GetById(int id)
+        public async Task<ApiResponse<NotificationDTO?>> GetById(int id)
         {
-            var result = await _dAL.GetById(id);
-            return ApiResponse<Notification?>.Ok(result);
+            try
+            {
+                var result = await _dAL.GetById(id);
+                if (result == null) return ApiResponse<NotificationDTO?>.Ok(null);
+                return ApiResponse<NotificationDTO?>.Ok(_mapper.ToDTO(result));
+            }
+            catch
+            {
+                return ApiResponse<NotificationDTO?>.Fail("Error getting notification");
+            }
         }
 
-        public async Task<ApiResponse<Notification>> Create(Notification entity)
+        public async Task<ApiResponse<NotificationDTO>> Create(NotificationRequestDTO dto)
         {
-            var result = await _dAL.Create(entity);
-            return ApiResponse<Notification>.Ok(result);
+            try
+            {
+                var entity = _mapper.ToEntity(dto);
+                var result = await _dAL.Create(entity);
+                return ApiResponse<NotificationDTO>.Ok(_mapper.ToDTO(result));
+            }
+            catch
+            {
+                return ApiResponse<NotificationDTO>.Fail("Error creating notification");
+            }
         }
 
-        public async Task<ApiResponse<Notification>> Update(Notification entity)
+        public async Task<ApiResponse<NotificationDTO>> Update(NotificationRequestDTO dto)
         {
-            var result = await _dAL.Update(entity);
-            return ApiResponse<Notification>.Ok(result);
+            try
+            {
+                var entity = _mapper.ToEntity(dto);
+                var result = await _dAL.Update(entity);
+                return ApiResponse<NotificationDTO>.Ok(_mapper.ToDTO(result));
+            }
+            catch
+            {
+                return ApiResponse<NotificationDTO>.Fail("Error updating notification");
+            }
         }
     }
 }

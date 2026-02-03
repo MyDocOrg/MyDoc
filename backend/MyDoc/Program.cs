@@ -128,6 +128,17 @@ builder.Services.AddScoped<PrescriptionMedicineService>();
 
 // Register mapper
 builder.Services.AddScoped<ClinicMapper>();
+builder.Services.AddScoped<DoctorMapper>();
+builder.Services.AddScoped<PatientMapper>();
+builder.Services.AddScoped<MedicineMapper>();
+builder.Services.AddScoped<AppointmentStatusMapper>();
+builder.Services.AddScoped<ClinicDoctorMapper>();
+builder.Services.AddScoped<ConsultationMapper>();
+builder.Services.AddScoped<PrescriptionMapper>();
+builder.Services.AddScoped<PrescriptionMedicineMapper>();
+builder.Services.AddScoped<MedicationScheduleMapper>();
+builder.Services.AddScoped<NotificationMapper>();
+builder.Services.AddScoped<MedicalHistoryMapper>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ApplicationProvider>();

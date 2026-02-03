@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MyDoc.Application.Services;
 using MyDoc.Application.BO.Contants;
-using MyDoc.Infrastructure.Models;
+using MyDoc.Application.BO.DTO.Patient;
 
 namespace MyDoc.Controllers
 {
@@ -31,7 +31,7 @@ namespace MyDoc.Controllers
 
         // POST api/<PatientController>
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] Patient entity)
+        public async Task<IActionResult> Create([FromBody] PatientRequestDTO entity)
         {
             var result = await _Service.Create(entity);
             return StatusCode(result.Status, result);
@@ -39,7 +39,7 @@ namespace MyDoc.Controllers
 
         // PUT api/<PatientController>
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] Patient entity)
+        public async Task<IActionResult> Update([FromBody] PatientRequestDTO entity)
         {
             var result = await _Service.Update(entity);
             return StatusCode(result.Status, result);

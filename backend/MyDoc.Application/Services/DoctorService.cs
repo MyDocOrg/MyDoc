@@ -4,39 +4,86 @@ using MyDoc.Infrastructure.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
+using MyDoc.Application.BO.DTO.Doctor;
+using MyDoc.Application.BO.Mappers;
+using MyDoc.Application.DAL;
+using MyDoc.Application.Helper;
+using MyDoc.Infrastructure.Models;
+using MyDoc.Application.BO.Contants;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
 namespace MyDoc.Application.Services
 {
     public class DoctorService
     {
         private readonly DoctorDAL _dAL;
+        private readonly DoctorMapper _mapper;
 
-        public DoctorService(DoctorDAL dAL)
+        public DoctorService(DoctorDAL dAL, DoctorMapper mapper)
         {
             _dAL = dAL;
+            _mapper = mapper;
         }
 
-        public async Task<ApiResponse<List<Doctor>>> GetAll()
+        public async Task<ApiResponse<List<DoctorTableDTO>>> GetAll()
         {
-            var result = await _dAL.GetAll();
-            return ApiResponse<List<Doctor>>.Ok(result);
+            try
+            {
+                var result = await _dAL.GetAll();
+                var mapped = result.Select(d => _mapper.ToDoctorTableDTO(d)).ToList();
+                return ApiResponse<List<DoctorTableDTO>>.Ok(mapped);
+            }
+            catch
+            {
+                return ApiResponse<List<DoctorTableDTO>>.Fail("Error getting doctors");
+            }
         }
 
-        public async Task<ApiResponse<Doctor?>> GetById(int id)
+        public async Task<ApiResponse<DoctorDTO?>> GetById(int id)
         {
-            var result = await _dAL.GetById(id);
-            return ApiResponse<Doctor?>.Ok(result);
+            try
+            {
+                var result = await _dAL.GetById(id);
+                if (result == null) return ApiResponse<DoctorDTO?>.Ok(null);
+                return ApiResponse<DoctorDTO?>.Ok(_mapper.ToDTO(result));
+            }
+            catch
+            {
+                return ApiResponse<DoctorDTO?>.Fail("Error getting doctor");
+            }
         }
 
-        public async Task<ApiResponse<Doctor>> Create(Doctor entity)
+        public async Task<ApiResponse<DoctorDTO>> Create(DoctorRequestDTO dto)
         {
-            var result = await _dAL.Create(entity);
-            return ApiResponse<Doctor>.Ok(result);
+            try
+            {
+                var entity = _mapper.ToEntity(dto);
+                entity.is_active = dto.IsActive ?? true;
+                entity.created_at = System.DateTime.UtcNow;
+                var result = await _dAL.Create(entity);
+                return ApiResponse<DoctorDTO>.Ok(_mapper.ToDTO(result));
+            }
+            catch
+            {
+                return ApiResponse<DoctorDTO>.Fail("Error creating doctor");
+            }
         }
 
-        public async Task<ApiResponse<Doctor>> Update(Doctor entity)
+        public async Task<ApiResponse<DoctorDTO>> Update(DoctorRequestDTO dto)
         {
-            var result = await _dAL.Update(entity);
-            return ApiResponse<Doctor>.Ok(result);
+            try
+            {
+                var entity = _mapper.ToEntity(dto);
+                entity.updated_at = System.DateTime.UtcNow;
+                var result = await _dAL.Update(entity);
+                return ApiResponse<DoctorDTO>.Ok(_mapper.ToDTO(result));
+            }
+            catch
+            {
+                return ApiResponse<DoctorDTO>.Fail("Error updating doctor");
+            }
         }
     }
 }

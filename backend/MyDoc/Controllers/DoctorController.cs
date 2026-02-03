@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using MyDoc.Application.Services;
 using MyDoc.Application.BO.Contants;
-using MyDoc.Infrastructure.Models;
+using MyDoc.Application.BO.DTO.Doctor;
 
 namespace MyDoc.Controllers
 {
@@ -27,14 +29,14 @@ namespace MyDoc.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] Doctor entity)
+        public async Task<IActionResult> Create([FromBody] DoctorRequestDTO entity)
         {
             var result = await _Service.Create(entity);
             return StatusCode(result.Status, result);
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] Doctor entity)
+        public async Task<IActionResult> Update([FromBody] DoctorRequestDTO entity)
         {
             var result = await _Service.Update(entity);
             return StatusCode(result.Status, result);

@@ -63,7 +63,7 @@ namespace MyDoc.Controllers
             
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         public async Task<IActionResult> Update([FromBody] Clinic entity)
         {
             var result = await _Service.Update(entity);

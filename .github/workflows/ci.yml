@@ -6,118 +6,154 @@ on:
 
 jobs:
 
+# ------------------------------------------------
+# Detect changes per service
+# ------------------------------------------------
   changes:
-    name: Detect changed paths
     runs-on: ubuntu-latest
     outputs:
       backend: ${{ steps.filter.outputs.backend }}
+      auth: ${{ steps.filter.outputs.auth }}
       frontend: ${{ steps.filter.outputs.frontend }}
-      pwa: ${{ steps.filter.outputs.pwa }}
       mobile: ${{ steps.filter.outputs.mobile }}
     steps:
       - uses: actions/checkout@v4
-
-      - name: Filter paths
-        uses: dorny/paths-filter@v3
+      - uses: dorny/paths-filter@v3
         id: filter
         with:
           filters: |
             backend:
               - backend/**
+            auth:
+              - auth-backend/**
             frontend:
               - frontend/**
             mobile:
               - mobile/**
 
-  backend:
-    name: Backend (.NET)
+# ------------------------------------------------
+# TEST MYDOC API (.NET)
+# ------------------------------------------------
+  test-mydoc-api:
     needs: changes
     if: needs.changes.outputs.backend == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+      - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
+      - run: dotnet restore backend
+      - run: dotnet build backend --configuration Release --no-restore
+      - run: dotnet test backend --no-build --verbosity normal
 
-      - name: Restore
-        run: dotnet restore backend
+# ------------------------------------------------
+# TEST IDENTITY API (.NET)
+# ------------------------------------------------
+  test-identity-api:
+    needs: changes
+    if: needs.changes.outputs.auth == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - run: dotnet restore auth-backend
+      - run: dotnet build auth-backend --configuration Release --no-restore
+      - run: dotnet test auth-backend --no-build --verbosity normal
 
-      - name: Build
-        run: dotnet build backend --configuration Release --no-restore
-
-      - name: Test
-        run: dotnet test backend --no-build --verbosity normal
-
+# ------------------------------------------------
+# FRONTEND (Angular)
+# ------------------------------------------------
   frontend:
-    name: Frontend (Angular)
     needs: changes
     if: needs.changes.outputs.frontend == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '20'
-
-      - name: Install dependencies
-        run: |
+      - run: |
           cd frontend
           npm ci
-
-      - name: Build Angular
-        run: |
-          cd frontend
           npm run build -- --configuration production
 
+# ------------------------------------------------
+# MOBILE (Flutter)
+# ------------------------------------------------
   mobile:
-    name: Mobile (Flutter)
     needs: changes
     if: needs.changes.outputs.mobile == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
+      - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.24.0'
           channel: 'stable'
-
-      - name: Install dependencies
-        run: |
+      - run: |
           cd mobile
           flutter pub get
-
-      - name: Build APK (debug)
-        run: |
-          cd mobile
           flutter build apk --debug
 
-  deploy-backend:
-    name: Deploy Backend to Azure
-    needs: changes
-    if: github.ref == 'refs/heads/main'
+# ------------------------------------------------
+# BUILD & PUSH MYDOC API IMAGE
+# ------------------------------------------------
+  build-mydoc-api:
+    needs: [changes, test-mydoc-api]
+    if: needs.changes.outputs.backend == 'true'
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
+      - name: Login GHCR
+        run: echo ${{ secrets.GHCR_PAT }} | docker login ghcr.io -u ${{ secrets.GHCR_USERNAME }} --password-stdin
+      - name: Build image
+        run: docker build -t ghcr.io/${{ secrets.GHCR_USERNAME }}/mydoc-api:${{ github.sha }} ./backend
+      - name: Push image
+        run: docker push ghcr.io/${{ secrets.GHCR_USERNAME }}/mydoc-api:${{ github.sha }}
 
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+# ------------------------------------------------
+# BUILD & PUSH IDENTITY API IMAGE
+# ------------------------------------------------
+  build-identity-api:
+    needs: [changes, test-identity-api]
+    if: needs.changes.outputs.auth == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Login GHCR
+        run: echo ${{ secrets.GHCR_PAT }} | docker login ghcr.io -u ${{ secrets.GHCR_USERNAME }} --password-stdin
+      - name: Build image
+        run: docker build -t ghcr.io/${{ secrets.GHCR_USERNAME }}/identity-api:${{ github.sha }} ./auth-backend
+      - name: Push image
+        run: docker push ghcr.io/${{ secrets.GHCR_USERNAME }}/identity-api:${{ github.sha }}
+
+# ------------------------------------------------
+# DEPLOY MYDOC API → Azure App Service
+# ------------------------------------------------
+  deploy-mydoc-api:
+    needs: build-mydoc-api
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: azure/webapps-deploy@v3
         with:
-          dotnet-version: '8.0.x'
+          app-name: mydoc-api
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_MYDOC }}
+          images: ghcr.io/${{ secrets.GHCR_USERNAME }}/mydoc-api:${{ github.sha }}
 
-      - name: Publish Web API only
-        run: dotnet publish backend/MyDoc/MyDoc.csproj -c Release -o publish
-
-      - name: Deploy to Azure Web App
-        uses: azure/webapps-deploy@v3
+# ------------------------------------------------
+# DEPLOY IDENTITY API → Azure App Service
+# ------------------------------------------------
+  deploy-identity-api:
+    needs: build-identity-api
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: azure/webapps-deploy@v3
         with:
-          app-name: mydocbackend
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: publish
+          app-name: identity-api
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_AUTH }}
+          images: ghcr.io/${{ secrets.GHCR_USERNAME }}/identity-api:${{ github.sha }}

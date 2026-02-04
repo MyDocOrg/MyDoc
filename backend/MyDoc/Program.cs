@@ -166,16 +166,14 @@ app.UseMiddleware<ExceptionHandlerMiddleware>();
 
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+// Swagger habilitado para producción (proyecto educativo)
+app.MapOpenApi();
+app.UseSwagger(); // Enable middleware to serve generated Swagger as a JSON endpoint
+app.UseSwaggerUI(options =>
 {
-    app.MapOpenApi();
-    app.UseSwagger(); // Enable middleware to serve generated Swagger as a JSON endpoint
-    app.UseSwaggerUI(options =>
-    {
-        // Specify the Swagger endpoint and name it
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-    }); 
-}
+    // Specify the Swagger endpoint and name it
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+});
 
 if (!builder.Configuration.GetValue<bool>("DisableHttpsRedirect"))
 {

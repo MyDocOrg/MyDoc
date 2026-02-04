@@ -12,6 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile("appsettings.Local.json", optional: true, reloadOnChange: true);
 builder.Configuration.AddEnvironmentVariables();
 
+builder.Services.AddHealthChecks();
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
@@ -61,15 +62,16 @@ app.MapOpenApi();
 app.UseSwagger();
 app.UseSwaggerUI();
 
-if (!builder.Configuration.GetValue<bool>("DisableHttpsRedirect"))
-{
-    app.UseHttpsRedirection();
-}
+// if (!builder.Configuration.GetValue<bool>("DisableHttpsRedirect"))
+// {
+//     app.UseHttpsRedirection();
+// }
 
 app.UseCors("DefaultCors");
 
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHealthChecks("/health").AllowAnonymous();
 
 app.Run();

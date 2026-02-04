@@ -74,7 +74,7 @@ jobs:
       - name: Login GHCR
         run: echo ${{ secrets.GHCR_PAT }} | docker login ghcr.io -u ${{ secrets.GHCR_USERNAME }} --password-stdin
       - name: Build image
-        run: docker build -t ghcr.io/${{ secrets.GHCR_USERNAME }}/mydoc-api:${{ github.sha }} -f ./backend/MyDoc/Dockerfile ./backend/MyDoc
+        run: docker build -t ghcr.io/${{ secrets.GHCR_USERNAME }}/mydoc-api:${{ github.sha }} -f ./backend/MyDoc/Dockerfile ./backend
       - name: Push image
         run: docker push ghcr.io/${{ secrets.GHCR_USERNAME }}/mydoc-api:${{ github.sha }}
 
@@ -106,6 +106,15 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+      - name: Configure registry auth
+        run: |
+          az webapp config container set \
+            --name mydoc-api \
+            --resource-group MyDocRG \
+            --docker-registry-server-url https://ghcr.io \
+            --docker-registry-server-user ${{ secrets.GHCR_USERNAME }} \
+            --docker-registry-server-password ${{ secrets.GHCR_PAT }}
+
       - name: Set container image
         run: |
           az webapp config container set \
@@ -129,6 +138,15 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+      - name: Configure registry auth
+        run: |
+          az webapp config container set \
+            --name auth-identity-api \
+            --resource-group MyDocRG \
+            --docker-registry-server-url https://ghcr.io \
+            --docker-registry-server-user ${{ secrets.GHCR_USERNAME }} \
+            --docker-registry-server-password ${{ secrets.GHCR_PAT }}
+      
       - name: Set container image
         run: |
           az webapp config container set \

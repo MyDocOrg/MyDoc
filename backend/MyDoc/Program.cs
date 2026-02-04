@@ -20,6 +20,7 @@ builder.Configuration.AddEnvironmentVariables();
 
 // Add services to the container.
 
+builder.Services.AddHealthChecks();
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
@@ -172,17 +173,17 @@ app.UseSwagger(); // Enable middleware to serve generated Swagger as a JSON endp
 app.UseSwaggerUI(options =>
 {
     // Specify the Swagger endpoint and name it
-    options.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "mydoc-api");
 });
 
-if (!builder.Configuration.GetValue<bool>("DisableHttpsRedirect"))
-{
-    app.UseHttpsRedirection();
-}
+// if (!builder.Configuration.GetValue<bool>("DisableHttpsRedirect"))
+// {
+//     app.UseHttpsRedirection();
+// }
 
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
+app.MapHealthChecks("/health").AllowAnonymous();
 
 app.Run();

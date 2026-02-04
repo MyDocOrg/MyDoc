@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       backend: ${{ steps.filter.outputs.backend }}
-      auth: ${{ steps.filter.outputs.auth }}
+      auth-backend: ${{ steps.filter.outputs.auth-backend }}
       frontend: ${{ steps.filter.outputs.frontend }}
       mobile: ${{ steps.filter.outputs.mobile }}
     steps:
@@ -24,7 +24,7 @@ jobs:
           filters: |
             backend:
               - backend/**
-            auth:
+            auth-backend:
               - auth-backend/**
             frontend:
               - frontend/**
@@ -48,11 +48,11 @@ jobs:
       - run: dotnet test backend --no-build --verbosity normal
 
 # ------------------------------------------------
-# TEST IDENTITY API (.NET)
+# TEST AUTH IDENTITY API (.NET)
 # ------------------------------------------------
-  test-identity-api:
+  test-auth-identity-api:
     needs: changes
-    if: needs.changes.outputs.auth == 'true' || github.ref == 'refs/heads/main'
+    if: needs.changes.outputs.auth-backend == 'true' || github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -110,25 +110,25 @@ jobs:
       - name: Login GHCR
         run: echo ${{ secrets.GHCR_PAT }} | docker login ghcr.io -u ${{ secrets.GHCR_USERNAME }} --password-stdin
       - name: Build image
-        run: docker build -t ghcr.io/${{ secrets.GHCR_USERNAME }}/mydoc-api:${{ github.sha }} ./backend
+        run: docker build -t ghcr.io/${{ secrets.GHCR_USERNAME }}/mydoc-api:${{ github.sha }} -f ./backend/MyDoc/Dockerfile ./backend/MyDoc
       - name: Push image
         run: docker push ghcr.io/${{ secrets.GHCR_USERNAME }}/mydoc-api:${{ github.sha }}
 
 # ------------------------------------------------
-# BUILD & PUSH IDENTITY API IMAGE
+# BUILD & PUSH AUTH IDENTITY API IMAGE
 # ------------------------------------------------
-  build-identity-api:
-    needs: [changes, test-identity-api]
-    if: needs.changes.outputs.auth == 'true' || github.ref == 'refs/heads/main'
+  build-auth-identity-api:
+    needs: [changes, test-auth-identity-api]
+    if: needs.changes.outputs.auth-backend == 'true' || github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - name: Login GHCR
         run: echo ${{ secrets.GHCR_PAT }} | docker login ghcr.io -u ${{ secrets.GHCR_USERNAME }} --password-stdin
       - name: Build image
-        run: docker build -t ghcr.io/${{ secrets.GHCR_USERNAME }}/identity-api:${{ github.sha }} ./auth-backend
+        run: docker build -t ghcr.io/${{ secrets.GHCR_USERNAME }}/auth-identity-api:${{ github.sha }} -f ./auth-backend/auth-backend/Dockerfile ./auth-backend/auth-backend
       - name: Push image
-        run: docker push ghcr.io/${{ secrets.GHCR_USERNAME }}/identity-api:${{ github.sha }}
+        run: docker push ghcr.io/${{ secrets.GHCR_USERNAME }}/auth-identity-api:${{ github.sha }}
 
 # ------------------------------------------------
 # DEPLOY MYDOC API → Azure App Service
@@ -145,15 +145,15 @@ jobs:
           images: ghcr.io/${{ secrets.GHCR_USERNAME }}/mydoc-api:${{ github.sha }}
 
 # ------------------------------------------------
-# DEPLOY IDENTITY API → Azure App Service
+# DEPLOY AUTH IDENTITY API → Azure App Service
 # ------------------------------------------------
-  deploy-identity-api:
-    needs: build-identity-api
+  deploy-auth-identity-api:
+    needs: build-auth-identity-api
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - uses: azure/webapps-deploy@v3
         with:
-          app-name: identity-api
+          app-name: auth-identity-api
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_AUTH }}
-          images: ghcr.io/${{ secrets.GHCR_USERNAME }}/identity-api:${{ github.sha }}
+          images: ghcr.io/${{ secrets.GHCR_USERNAME }}/auth-identity-api:${{ github.sha }}

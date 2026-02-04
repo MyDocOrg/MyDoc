@@ -16,6 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Load configuration from appsettings.Local.json (for local secrets)
 builder.Configuration.AddJsonFile("appsettings.Local.json", optional: true, reloadOnChange: true);
+builder.Configuration.AddEnvironmentVariables();
 
 // Add services to the container.
 
@@ -176,7 +177,10 @@ if (app.Environment.IsDevelopment())
     }); 
 }
 
-app.UseHttpsRedirection();
+if (!builder.Configuration.GetValue<bool>("DisableHttpsRedirect"))
+{
+    app.UseHttpsRedirection();
+}
 
 app.UseAuthentication();
 app.UseAuthorization();

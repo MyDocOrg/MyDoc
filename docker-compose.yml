@@ -1,0 +1,46 @@
+services:
+  auth-backend:
+    build:
+      context: ./auth-backend/auth-backend
+      dockerfile: Dockerfile
+    container_name: auth-backend
+    ports:
+      - "5001:8080"
+    env_file:
+      - .env
+    environment:
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__MyDocConnection=${MYDOC_CONN}
+      - ConnectionStrings__AuthConnection=${AUTH_CONN}
+      - ConnectionStrings__MyVetConnection=${MYSQL_CONN}
+      - Jwt__Key=${JWT_KEY}
+      - Jwt__Issuer=${JWT_ISSUER}
+      - Jwt__Audience=${JWT_AUDIENCE}
+      - DisableHttpsRedirect=${DISABLE_HTTPS_REDIRECT}
+    networks:
+      - backend
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: MyDoc/Dockerfile
+    container_name: backend
+    ports:
+      - "5002:8080"
+    depends_on:
+      - auth-backend
+    env_file:
+      - .env
+    environment:
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__DefaultConnection=${DEFAULT_CONN}
+      - Jwt__Key=${JWT_KEY}
+      - Jwt__Issuer=${JWT_ISSUER}
+      - Jwt__Audience=${JWT_AUDIENCE}
+      - DisableHttpsRedirect=${DISABLE_HTTPS_REDIRECT}
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge

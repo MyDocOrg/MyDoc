@@ -36,7 +36,7 @@ jobs:
 # ------------------------------------------------
   test-mydoc-api:
     needs: changes
-    if: needs.changes.outputs.backend == 'true'
+    if: needs.changes.outputs.backend == 'true' || github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -52,7 +52,7 @@ jobs:
 # ------------------------------------------------
   test-identity-api:
     needs: changes
-    if: needs.changes.outputs.auth == 'true'
+    if: needs.changes.outputs.auth == 'true' || github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -68,7 +68,7 @@ jobs:
 # ------------------------------------------------
   frontend:
     needs: changes
-    if: needs.changes.outputs.frontend == 'true'
+    if: needs.changes.outputs.frontend == 'true' || github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -103,7 +103,7 @@ jobs:
 # ------------------------------------------------
   build-mydoc-api:
     needs: [changes, test-mydoc-api]
-    if: needs.changes.outputs.backend == 'true'
+    if: needs.changes.outputs.backend == 'true' || github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -119,7 +119,7 @@ jobs:
 # ------------------------------------------------
   build-identity-api:
     needs: [changes, test-identity-api]
-    if: needs.changes.outputs.auth == 'true'
+    if: needs.changes.outputs.auth == 'true' || github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

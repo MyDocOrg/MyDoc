@@ -5,10 +5,9 @@ on:
     branches: [dev, main]
 
 jobs:
-
-# ------------------------------------------------
-# Detect changes per service
-# ------------------------------------------------
+  # ------------------------------------------------
+  # Detect changes per service
+  # ------------------------------------------------
   changes:
     runs-on: ubuntu-latest
     outputs:
@@ -31,9 +30,9 @@ jobs:
             mobile:
               - mobile/**
 
-# ------------------------------------------------
-# TEST MYDOC API (.NET)
-# ------------------------------------------------
+  # ------------------------------------------------
+  # TEST MYDOC API (.NET)
+  # ------------------------------------------------
   test-mydoc-api:
     needs: changes
     if: needs.changes.outputs.backend == 'true' || github.ref == 'refs/heads/main'
@@ -42,14 +41,14 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: "8.0.x"
       - run: dotnet restore backend
       - run: dotnet build backend --configuration Release --no-restore
       - run: dotnet test backend --no-build --verbosity normal
 
-# ------------------------------------------------
-# TEST AUTH IDENTITY API (.NET)
-# ------------------------------------------------
+  # ------------------------------------------------
+  # TEST AUTH IDENTITY API (.NET)
+  # ------------------------------------------------
   test-auth-identity-api:
     needs: changes
     if: needs.changes.outputs.auth-backend == 'true' || github.ref == 'refs/heads/main'
@@ -58,31 +57,31 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: "8.0.x"
       - run: dotnet restore auth-backend
       - run: dotnet build auth-backend --configuration Release --no-restore
       - run: dotnet test auth-backend --no-build --verbosity normal
 
-# ------------------------------------------------
-# FRONTEND (Angular)
-# ------------------------------------------------
+  # ------------------------------------------------
+  # FRONTEND (Angular)
+  # ------------------------------------------------
   frontend:
     needs: changes
-    if: needs.changes.outputs.frontend == 'true' || github.ref == 'refs/heads/main'
+    if: needs.changes.outputs.frontend == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: "20"
       - run: |
           cd frontend
           npm ci
           npm run build -- --configuration production
 
-# ------------------------------------------------
-# MOBILE (Flutter)
-# ------------------------------------------------
+  # ------------------------------------------------
+  # MOBILE (Flutter)
+  # ------------------------------------------------
   mobile:
     needs: changes
     if: needs.changes.outputs.mobile == 'true'
@@ -91,16 +90,16 @@ jobs:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.24.0'
-          channel: 'stable'
+          flutter-version: "3.24.0"
+          channel: "stable"
       - run: |
           cd mobile
           flutter pub get
           flutter build apk --debug
 
-# ------------------------------------------------
-# BUILD & PUSH MYDOC API IMAGE
-# ------------------------------------------------
+  # ------------------------------------------------
+  # BUILD & PUSH MYDOC API IMAGE
+  # ------------------------------------------------
   build-mydoc-api:
     needs: [changes, test-mydoc-api]
     if: needs.changes.outputs.backend == 'true' || github.ref == 'refs/heads/main'
@@ -114,9 +113,9 @@ jobs:
       - name: Push image
         run: docker push ghcr.io/${{ secrets.GHCR_USERNAME }}/mydoc-api:${{ github.sha }}
 
-# ------------------------------------------------
-# BUILD & PUSH AUTH IDENTITY API IMAGE
-# ------------------------------------------------
+  # ------------------------------------------------
+  # BUILD & PUSH AUTH IDENTITY API IMAGE
+  # ------------------------------------------------
   build-auth-identity-api:
     needs: [changes, test-auth-identity-api]
     if: needs.changes.outputs.auth-backend == 'true' || github.ref == 'refs/heads/main'
@@ -130,19 +129,28 @@ jobs:
       - name: Push image
         run: docker push ghcr.io/${{ secrets.GHCR_USERNAME }}/auth-identity-api:${{ github.sha }}
 
-# ------------------------------------------------
-# DEPLOY MYDOC API → Azure App Service
-# ------------------------------------------------
+  # ------------------------------------------------
+  # DEPLOY MYDOC API → Azure App Service
+  # ------------------------------------------------
   deploy-mydoc-api:
     needs: build-mydoc-api
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
-      - uses: azure/webapps-deploy@v3
+      - uses: azure/login@v2
         with:
-          app-name: mydoc-api
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_MYDOC }}
-          images: ghcr.io/${{ secrets.GHCR_USERNAME }}/mydoc-api:${{ github.sha }}
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Set container image
+        run: |
+          az webapp config container set \
+            --name mydoc-api \
+            --resource-group MyDocRG \
+            --docker-custom-image-name ghcr.io/${{ secrets.GHCR_USERNAME }}/mydoc-api:${{ github.sha }} \
+            --docker-registry-server-url https://ghcr.io
+
+      - name: Restart app
+        run: az webapp restart --name mydoc-api --resource-group MyDocRG
 
 # ------------------------------------------------
 # DEPLOY AUTH IDENTITY API → Azure App Service
@@ -152,8 +160,17 @@ jobs:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
-      - uses: azure/webapps-deploy@v3
+      - uses: azure/login@v2
         with:
-          app-name: auth-identity-api
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_AUTH }}
-          images: ghcr.io/${{ secrets.GHCR_USERNAME }}/auth-identity-api:${{ github.sha }}
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Set container image
+        run: |
+          az webapp config container set \
+            --name auth-identity-api \
+            --resource-group MyDocRG \
+            --docker-custom-image-name ghcr.io/${{ secrets.GHCR_USERNAME }}/auth-identity-api:${{ github.sha }} \
+            --docker-registry-server-url https://ghcr.io
+
+      - name: Restart app
+        run: az webapp restart --name auth-identity-api --resource-group MyDocRG

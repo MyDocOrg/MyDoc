@@ -1,63 +1,70 @@
 <div class="sidebar-container" [class.collapsed]="isCollapsed()">
   <div class="sidebar-header">
-    <h3 class="sidebar-title">Sistema Médico</h3>
-    <button 
-      mat-icon-button 
-      (click)="toggleSidebar()" 
-      class="toggle-button"
+    <div class="logo-container">
+      @if (isCollapsed()) {
+      <img src="assets/images/logos/mydoc-icon.svg" alt="MyDoc Icon" class="logo-icon" />
+      } @else {
+      <img src="assets/images/logos/mydoc-logo-black.svg" alt="MyDoc Logo" class="logo-full" />
+      }
+    </div>
+    <button mat-icon-button (click)="toggleSidebar()" class="toggle-button"
       [matTooltip]="isCollapsed() ? 'Expandir menú' : 'Contraer menú'">
-      <mat-icon>{{ isCollapsed() ? 'menu' : 'menu_open' }}</mat-icon>
+      @if (isCollapsed()) {
+      <span class="iconify" data-icon="solar:hamburger-menu-bold-duotone"></span>
+      } @else {
+      <span class="iconify" data-icon="solar:alt-arrow-left-bold-duotone"></span>
+      }
     </button>
   </div>
 
   <mat-nav-list class="sidebar-nav">
     <a mat-list-item routerLink="/home" routerLinkActive="active">
-      <mat-icon matListItemIcon>home</mat-icon>
+      <span class="iconify" data-icon="solar:home-2-bold-duotone" matListItemIcon></span>
       <span matListItemTitle>Inicio</span>
     </a>
-    
+
     <a mat-list-item routerLink="/appointment" routerLinkActive="active">
-      <mat-icon matListItemIcon>event</mat-icon>
+      <span class="iconify" data-icon="solar:calendar-mark-bold-duotone" matListItemIcon></span>
       <span matListItemTitle>Citas</span>
     </a>
-    
+
     <a mat-list-item routerLink="/patient" routerLinkActive="active">
-      <mat-icon matListItemIcon>people</mat-icon>
+      <span class="iconify" data-icon="solar:users-group-rounded-bold-duotone" matListItemIcon></span>
       <span matListItemTitle>Pacientes</span>
     </a>
-    
+
     <a mat-list-item routerLink="/doctor" routerLinkActive="active">
-      <mat-icon matListItemIcon>medical_services</mat-icon>
+      <span class="iconify" data-icon="solar:stethoscope-bold-duotone" matListItemIcon></span>
       <span matListItemTitle>Doctores</span>
     </a>
-    
+
     <a mat-list-item routerLink="/clinic" routerLinkActive="active">
-      <mat-icon matListItemIcon>business</mat-icon>
+      <span class="iconify" data-icon="solar:hospital-bold-duotone" matListItemIcon></span>
       <span matListItemTitle>Clínicas</span>
     </a>
-    
+
     <a mat-list-item routerLink="/consultation" routerLinkActive="active">
-      <mat-icon matListItemIcon>assignment</mat-icon>
+      <span class="iconify" data-icon="solar:clipboard-text-bold-duotone" matListItemIcon></span>
       <span matListItemTitle>Consultas</span>
     </a>
-    
+
     <a mat-list-item routerLink="/prescription" routerLinkActive="active">
-      <mat-icon matListItemIcon>description</mat-icon>
+      <span class="iconify" data-icon="solar:document-medicine-bold-duotone" matListItemIcon></span>
       <span matListItemTitle>Prescripciones</span>
     </a>
-    
+
     <a mat-list-item routerLink="/medicine" routerLinkActive="active">
-      <mat-icon matListItemIcon>medication</mat-icon>
+      <span class="iconify" data-icon="solar:pill-bold-duotone" matListItemIcon></span>
       <span matListItemTitle>Medicamentos</span>
     </a>
-    
+
     <a mat-list-item routerLink="/medication-schedule" routerLinkActive="active">
-      <mat-icon matListItemIcon>schedule</mat-icon>
+      <span class="iconify" data-icon="solar:clock-circle-bold-duotone" matListItemIcon></span>
       <span matListItemTitle>Horarios</span>
     </a>
-    
+
     <a mat-list-item routerLink="/appointment-status" routerLinkActive="active">
-      <mat-icon matListItemIcon>info</mat-icon>
+      <span class="iconify" data-icon="solar:info-circle-bold-duotone" matListItemIcon></span>
       <span matListItemTitle>Estados</span>
     </a>
   </mat-nav-list>

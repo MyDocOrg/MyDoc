@@ -1,59 +1,38 @@
-import { Component, inject, signal } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { AuthService } from '../services/auth-service';
-import { TokenService } from '../../../../core/services/token-service';
+import { Component } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { RouterModule } from '@angular/router';
+import { MaterialModule } from '../../../../material.module';
+import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-login-component',
-  imports: [
-    ReactiveFormsModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatIconModule,
-    MatCheckboxModule,
-    RouterLink
-  ],
+  imports: [RouterModule, MaterialModule, FormsModule, ReactiveFormsModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
 export class LoginComponent {
-  loginForm: FormGroup;
-  tokenService = inject(TokenService);  
-  hidePassword = signal(true);
-  service = inject(AuthService); 
+  constructor(private router: Router) { }
 
-  constructor(private fb: FormBuilder, private router: Router) {
-    this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
-    });
+  loginForm = new FormGroup({
+    email: new FormControl('', [Validators.required, Validators.email]),
+    password: new FormControl('', [Validators.required, Validators.minLength(6)]),
+    rememberMe: new FormControl(false)
+  });
+
+  get f() {
+    return this.loginForm.controls;
   }
 
-  togglePasswordVisibility() {
-    this.hidePassword.set(!this.hidePassword());
+  get isFormValid(): boolean {
+    return this.loginForm.valid;
   }
 
-  onSubmit() {
-    // Navegar al home sin validaciones (como solicitó el usuario)
+  submit() {
     if (this.loginForm.valid) {
-      this.service.Login(this.loginForm.value).subscribe({
-        next: (response) => {
-          this.tokenService.setToken(response.data);
-          this.router.navigate(['/appointment']);
-        },
-        error:(response) =>{
-          console.log('Error en login', response);
-        }
-      })  
+      console.log('Form submitted:', this.loginForm.value);
+      this.router.navigate(['/appointment']);
     }
   }
 }

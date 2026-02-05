@@ -11,11 +11,6 @@
   &.collapsed {
     width: 64px;
 
-    .sidebar-title {
-      opacity: 0;
-      width: 0;
-    }
-
     .sidebar-header {
       justify-content: center;
       padding: 20px 0;
@@ -47,20 +42,48 @@
     flex-shrink: 0;
     transition: all 0.2s ease;
 
+    .iconify {
+      font-size: 24px;
+      color: var(--text-secondary);
+      transition: all 0.2s ease;
+      display: flex;
+      /* Asegura centrado */
+      align-items: center;
+      justify-content: center;
+    }
+
     &:hover {
       background-color: var(--bg-tertiary);
+
+      .iconify {
+        color: var(--text-primary);
+      }
     }
   }
 }
 
-.sidebar-title {
-  margin: 0;
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  white-space: nowrap;
+.logo-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
   overflow: hidden;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  .logo-icon {
+    height: 40px;
+    width: auto;
+    object-fit: contain;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .logo-full {
+    height: 190px;
+    width: auto;
+    max-width: 190px;
+    object-fit: contain;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
 }
 
 .sidebar-nav {
@@ -79,16 +102,23 @@
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    mat-icon {
+    .iconify {
+      font-size: 24px;
       color: var(--text-secondary);
       transition: all 0.2s ease;
       flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      margin-right: 16px;
     }
 
     &:hover {
       background-color: var(--bg-tertiary);
 
-      mat-icon {
+      .iconify {
         transform: scale(1.1);
         color: var(--text-primary);
       }
@@ -98,7 +128,7 @@
       background-color: rgba(25, 118, 210, 0.12);
       color: #1976d2;
 
-      mat-icon {
+      .iconify {
         color: #1976d2;
       }
     }
@@ -122,7 +152,7 @@ body[data-theme='dark'] {
         background-color: rgba(66, 165, 245, 0.16);
         color: #42a5f5;
 
-        mat-icon {
+        .iconify {
           color: #42a5f5;
         }
       }

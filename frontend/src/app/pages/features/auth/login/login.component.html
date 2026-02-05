@@ -1,84 +1,81 @@
-<div class="container-fluid h-100">
-  <div class="row h-100">
-    <!-- Columna Derecha - Card Centrada -->
-    <div class="col-lg-4 right-column">
-      <div class="login-form-container">
-        <div class="welcome-header">
-          <h2>Bienvenido</h2>
-          <p>Inicia sesión para continuar</p>
-        </div>
+<div class="blank-layout-container justify-content-center align-items-center bg-light">
+  <div class="position-relative row w-100 h-100 justify-content-center">
+    <div class="col-lg-5 d-flex align-items-center">
+      <mat-card class="cardWithShadow boxed-auth">
+        <mat-card-content class="p-32">
+          <div class="text-center">
+            <a [routerLink]="['/dashboard']">
+              <img src="./assets/images/logos/mydoc-icon.svg" width="120" height="120" class="align-middle m-2"
+                alt="logo" />
+            </a>
+          </div>
 
-        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Correo electrónico</mat-label>
-            <input matInput type="email" formControlName="email" placeholder="ejemplo@correo.com" />
-            <mat-icon matPrefix>email</mat-icon>
-            @if (loginForm.get('email')?.hasError('required') && loginForm.get('email')?.touched) {
-              <mat-error>El correo es requerido</mat-error>
-            }
-            @if (loginForm.get('email')?.hasError('email') && loginForm.get('email')?.touched) {
-              <mat-error>Ingresa un correo válido</mat-error>
-            }
-          </mat-form-field>
-
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Contraseña</mat-label>
-            <input
-              matInput
-              [type]="hidePassword() ? 'password' : 'text'"
-              formControlName="password"
-              placeholder="Ingresa tu contraseña"
-            />
-            <mat-icon matPrefix>lock</mat-icon>
-            <button
-              mat-icon-button
-              matSuffix
-              type="button"
-              (click)="togglePasswordVisibility()"
-              [attr.aria-label]="'Mostrar/Ocultar contraseña'"
-            >
-              <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
-            </button>
-            @if (
-              loginForm.get('password')?.hasError('required') && loginForm.get('password')?.touched
-            ) {
-              <mat-error>La contraseña es requerida</mat-error>
-            }
-            @if (
-              loginForm.get('password')?.hasError('minlength') && loginForm.get('password')?.touched
-            ) {
-              <mat-error>Mínimo 6 caracteres</mat-error>
-            }
-          </mat-form-field>
-
-          <div class="options-container">
-            <mat-checkbox color="primary" class="remember-checkbox">Recordarme</mat-checkbox>
-            <div class="links-row">
-              <a routerLink="/forgot-password" class="forgot-link">Olvidé mi contraseña</a>
-              <a routerLink="/register" class="register-link">Regístrate</a>
+          <div class="row m-t-24 custom-row">
+            <div class="col-6">
+              <button mat-stroked-button class="w-100">
+                <div class="d-flex align-items-center">
+                  <img src="/assets/images/svgs/google-icon.svg" alt="google" width="16" class="m-r-8" />
+                  <span class="d-none d-lg-block">Sign in with Google</span>
+                </div>
+              </button>
+            </div>
+            <div class="col-6">
+              <button mat-stroked-button class="w-100 d-flex align-items-center">
+                <div class="d-flex align-items-center">
+                  <img src="/assets/images/svgs/facebook-icon.svg" alt="facebook" width="40" class="m-r-4" />
+                  <span class="d-none d-lg-block">Sign in with FB</span>
+                </div>
+              </button>
             </div>
           </div>
 
-          <button mat-raised-button color="primary" type="submit" class="full-width submit-button">
-            Iniciar sesión
-          </button>
-        </form>
-      </div>
+          <div class="or-border m-t-30">or sign in with</div>
+
+          <form [formGroup]="loginForm" (ngSubmit)="submit()" class="m-t-30">
+            <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Correo electrónico</mat-label>
+            <mat-form-field appearance="outline" class="w-100" color="primary">
+              <input matInput type="email" formControlName="email" placeholder="ejemplo@correo.com" />
+              @if (f.email.hasError('required') && f.email.touched) {
+              <mat-error>El correo es requerido</mat-error>
+              }
+              @if (f.email.hasError('email') && f.email.touched) {
+              <mat-error>Ingresa un correo válido</mat-error>
+              }
+            </mat-form-field>
+            <!-- password -->
+            <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Contraseña</mat-label>
+            <mat-form-field appearance="outline" class="w-100" color="primary">
+              <input matInput type="password" formControlName="password" placeholder="Ingresa tu contraseña" />
+              @if (f.password.hasError('required') && f.password.touched) {
+              <mat-error>La contraseña es requerida</mat-error>
+              }
+              @if (f.password.hasError('minlength') && f.password.touched) {
+              <mat-error>Mínimo 6 caracteres</mat-error>
+              }
+            </mat-form-field>
+
+            <div class="d-flex align-items-center justify-content-between m-b-12">
+              <mat-checkbox color="primary" formControlName="rememberMe"
+                class="custom-checkbox">Recordarme</mat-checkbox>
+              <a [routerLink]="['/auth/forgot-password']"
+                class="text-primary f-w-600 text-decoration-none f-s-14">¿Olvidaste tu contraseña?</a>
+            </div>
+            <button type="submit" mat-flat-button color="primary" class="w-100" [disabled]="!isFormValid">
+              Iniciar sesión
+            </button>
+            <!-- input -->
+          </form>
+          <span class="d-block f-w-500 text-center m-t-24">¿No tienes una cuenta?
+            <a [routerLink]="['/auth/register']" class="text-decoration-none text-primary f-w-500 f-s-14">
+              Crear una cuenta</a>
+          </span>
+        </mat-card-content>
+      </mat-card>
     </div>
-    <!-- Columna Izquierda - Hero Section -->
-    <div class="col-lg-8 left-column">
-      <div class="left-content">
-        <div class="hero-content">
-          <h1 class="hero-title">
-            Bienvenido a<br>
-            <span class="brand-name">MyDoc</span>
-          </h1>
-          <p class="hero-description">
-            Sistema integral de gestión médica que conecta pacientes, doctores y clínicas para 
-            brindar un servicio de salud eficiente, moderno y accesible.
-          </p>
-          <button class="hero-button">Conoce más</button>
-        </div>
+    <!-- right column -->
+    <div class="col-lg-7 d-flex align-items-center justify-content-center right-column">
+      <div class="d-flex align-items-center justify-content-center">
+        <img src="./assets/images/logos/mydoc-logo.svg" width="600" height="300" class="align-middle" alt="logo" />
       </div>
     </div>
   </div>

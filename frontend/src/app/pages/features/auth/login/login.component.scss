@@ -1,250 +1,73 @@
-@use 'assets/variables' as *;
-@use 'assets/mixins' as *;
+@use 'assets/scss/variables' as *;
 
-.container-fluid { height: 100vh; padding: 0; margin: 0; overflow: hidden; }
-.row { height: 100%; margin: 0; }
+// Checkbox personalizado con borde
+.custom-checkbox {
+  ::ng-deep .mdc-checkbox {
+    .mdc-checkbox__background {
+      border: 2px solid rgba(0, 0, 0, 0.38) !important;
+      border-radius: 4px;
+    }
 
-// Columna Izquierda
-.left-column {
-  background: linear-gradient(135deg, $primary 0%, $primary-dark 50%, #0d47a1 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    &:hover .mdc-checkbox__background {
+      border-color: rgba(0, 0, 0, 0.6) !important;
+    }
+  }
+
+  ::ng-deep .mdc-checkbox--selected .mdc-checkbox__background {
+    border-color: $primary !important;
+    background-color: $primary !important;
+  }
+}
+
+// Columna derecha - Hero Section
+$bg-dark: #141d37; // base oscura real
+$bg-blue: #085fce; // mancha azul superior izquierda
+$bg-cyan: #3de2ff; // luz inferior derecha
+
+.right-column {
   position: relative;
   overflow: hidden;
-
-  &::before, &::after {
-    content: '';
-    position: absolute;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 50%;
-    animation: float 6s ease-in-out infinite;
-  }
-  &::before { width: 500px; height: 500px; top: -100px; left: -100px; }
-  &::after { width: 400px; height: 400px; bottom: -100px; right: -100px; animation-direction: reverse; }
+  background:
+    radial-gradient(circle at -25% -25%, rgba($bg-blue, 0.9) 0%, transparent 45%),
+    radial-gradient(circle at 120% 120%, rgba($bg-cyan, 0.85) 0%, transparent 50%),
+    $bg-dark;
 }
 
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-20px); }
+.right-column::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, transparent 60%, rgba(0, 0, 0, 0.35) 100%);
+  pointer-events: none;
 }
 
-.left-content {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  padding: $spacing-2xl;
-  position: relative;
-  z-index: 1;
-
-  .hero-content {
-    max-width: 600px;
-    text-align: left;
-    animation: fadeIn 1s ease-out;
-
-    .hero-title {
-      font-size: $font-size-4xl;
-      font-weight: $font-weight-normal;
-      color: $white;
-      margin: 0 0 $spacing-md 0;
-      letter-spacing: -1px;
-      line-height: 1.2;
-
-      .brand-name {
-        font-weight: $font-weight-bold;
-        font-size: calc($font-size-4xl * 1.2);
-        display: block;
-      }
-    }
-
-    .hero-description {
-      font-size: $font-size-lg;
-      color: rgba(255, 255, 255, 0.95);
-      line-height: 1.6;
-      margin: 0 0 $spacing-lg 0;
-    }
-
-    .hero-button {
-      background: $white;
-      color: $primary;
-      border: none;
-      padding: $spacing-md $spacing-2xl;
-      font-size: $font-size-base;
-      font-weight: $font-weight-semibold;
-      border-radius: $radius-xl;
-      cursor: pointer;
-      transition: all $transition-fast;
-      box-shadow: $shadow-lg;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-
-      &:hover { background: rgba(255, 255, 255, 0.95); transform: translateY(-3px); box-shadow: $shadow-xl; }
-      &:active { transform: translateY(-1px); }
-    }
-  }
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-// Columna Derecha
-.right-column {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(180deg, $bg-light-secondary 0%, $white 100%);
-  padding: $spacing-2xl;
-}
-
-.login-form-container {
-  width: 100%;
-  max-width: 480px;
-  padding: $spacing-2xl;
-  background: $white;
-  border-radius: $radius-2xl;
-}
-
-.welcome-header {
-  text-align: center;
-  margin-bottom: $spacing-2xl;
-
-  h2 {
-    font-size: $font-size-3xl;
-    font-weight: $font-weight-bold;
-    color: $primary;
-    margin: 0 0 $spacing-sm 0;
-    letter-spacing: -0.5px;
-  }
-
-  p {
-    color: $text-light-secondary;
-    margin: 0;
-    font-size: $font-size-base;
-  }
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-  gap: $spacing-lg;
-
-  .full-width { width: 100%; }
-
-  ::ng-deep mat-form-field.mat-mdc-form-field {
-    .mat-mdc-text-field-wrapper {
-      padding-bottom: 0;
-      .mat-mdc-form-field-flex { height: 48px; }
-    }
-
-    .mdc-notched-outline__leading,
-    .mdc-notched-outline__notch,
-    .mdc-notched-outline__trailing {
-      border: 1px solid $gray-300 !important;
-      border-radius: $radius-lg !important;
-    }
-
-    .mdc-notched-outline__leading { border-right: none !important; }
-    .mdc-notched-outline__trailing { border-left: none !important; }
-    .mdc-notched-outline__notch { border-left: none !important; border-right: none !important; }
-
-    &:hover .mdc-notched-outline__leading,
-    &:hover .mdc-notched-outline__notch,
-    &:hover .mdc-notched-outline__trailing { border-color: $gray-600 !important; }
-
-    &.mat-focused .mdc-notched-outline__leading,
-    &.mat-focused .mdc-notched-outline__notch,
-    &.mat-focused .mdc-notched-outline__trailing {
-      border-color: $primary !important;
-      border-width: 2px !important;
-    }
-
-    .mat-mdc-input-element {
-      font-family: $font-family-primary;
-      padding: $spacing-xs $spacing-sm;
-    }
-
-    mat-icon[matPrefix] { margin-right: $spacing-sm; color: $primary; }
-
-    button[matSuffix] mat-icon {
-      color: $gray-600;
-      transition: color $transition-fast;
-      &:hover { color: $primary; }
-    }
-  }
-
-  .options-container {
-    display: flex;
-    flex-direction: column;
-    gap: $spacing-md;
-    margin-top: -$spacing-xs;
-
-    .remember-checkbox ::ng-deep {
-      .mdc-checkbox__background {
-        border: 2px solid $gray-400 !important;
-        border-radius: $radius-sm;
-      }
-      .mdc-checkbox:hover .mdc-checkbox__background { border-color: $primary !important; }
-      .mdc-checkbox__native-control:checked ~ .mdc-checkbox__background {
-        border-color: $primary !important;
-        background: $primary !important;
-      }
-    }
-
-    .links-row { display: flex; justify-content: space-between; }
-
-    .forgot-link, .register-link {
-      color: $primary;
-      text-decoration: none;
-      font-size: $font-size-sm;
-      font-weight: $font-weight-medium;
-      transition: all $transition-fast;
-      position: relative;
-
-      &::after {
-        content: '';
-        position: absolute;
-        width: 0;
-        height: 2px;
-        bottom: -2px;
-        left: 0;
-        background: $primary;
-        transition: width $transition-fast;
-      }
-
-      &:hover {
-        color: $primary-dark;
-        &::after { width: 100%; }
-      }
-    }
-  }
-
-  .submit-button {
-    height: 48px;
-    font-weight: $font-weight-semibold;
-    margin-top: $spacing-md;
-    border-radius: $radius-lg !important;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    box-shadow: $shadow-md;
-    transition: all $transition-fast;
-    color: $white !important;
-
-    &:hover { box-shadow: $shadow-lg; transform: translateY(-2px); }
-    &:active { transform: translateY(0); box-shadow: $shadow; }
-  }
-}
-
+// Responsive
 @media (max-width: 991px) {
-  .left-column { display: none; }
-  .right-column { width: 100%; padding: $spacing-lg; }
-  .login-form-container { padding: $spacing-xl; }
+  .col-lg-7 {
+    display: none !important;
+  }
+
+  .col-lg-5 {
+    width: 100%;
+  }
 }
 
 @media (max-width: 576px) {
-  .right-column { padding: $spacing-md; }
-  .login-form-container { padding: $spacing-lg; border-radius: $radius-xl; }
-  .welcome-header h2 { font-size: $font-size-2xl; }
+  .right-content {
+    padding: 20px;
+
+    .hero-content {
+      .hero-title {
+        font-size: 2rem;
+
+        .brand-name {
+          font-size: 2.4rem;
+        }
+      }
+
+      .hero-description {
+        font-size: 1rem;
+      }
+    }
+  }
 }

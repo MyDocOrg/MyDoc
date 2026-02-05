@@ -1,77 +1,81 @@
-<mat-toolbar class="topbar-container">
-  <span class="topbar-title">
-    Panel Administrativo
-  </span>
+<mat-toolbar class="topbar gap-8">
+  <!-- Mobile Menu -->
+  @if(!showToggle) {
+  <button mat-icon-button (click)="toggleMobileNav.emit()" class="d-flex justify-content-center">
+    <i class="iconify icon-20 d-flex" data-icon="solar:hamburger-menu-line-duotone"></i>
+  </button>
+  }
+  <!-- --------------------------------------------------------------- -->
+  <!-- Sidebar Toggle -->
+  <!-- --------------------------------------------------------------- -->
+  <button mat-icon-button (click)="toggleSidebar()" class="d-flex align-items-center justify-content-center">
+    <span class="iconify icon-25 d-flex" data-icon="solar:hamburger-menu-line-duotone"></span>
+  </button>
 
-  <span class="spacer"></span>
+  <!-- --------------------------------------------------------------- -->
+  <!-- Notification Dropdown -->
+  <!-- --------------------------------------------------------------- -->
+  <button mat-icon-button aria-label="Notifications" [matMenuTriggerFor]="menu"
+    class="d-flex align-items-center justify-content-center">
+    <div matBadge="2" matBadgeSize="small" matBadgeOverlap="false" class="demo-section">
+      <i class="iconify icon-25 d-flex" data-icon="solar:bell-line-duotone"></i>
+    </div>
+  </button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item>Item 1</button>
+    <button mat-menu-item>Item 2</button>
+  </mat-menu>
 
-  <div class="topbar-actions">
-    <!-- Botón de cambio de tema -->
-    <button 
-      mat-icon-button
-      (click)="toggleTheme()"
-      [matTooltip]="isDarkMode ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'">
-      @if (isDarkMode) {
-        <mat-icon>light_mode</mat-icon>
+  <span class="flex-1-auto"></span>
+
+  <!-- --------------------------------------------------------------- -->
+  <!-- Language Toggle -->
+  <!-- --------------------------------------------------------------- -->
+  <button mat-icon-button (click)="toggleLanguage()" aria-label="Change Language"
+    class="d-flex align-items-center justify-content-center profile-btn-dd">
+    <img
+      [src]="currentLang === 'en' ? '/assets/images/language/icon-flag-english.png' : '/assets/images/language/icon-flag-spanish.png'"
+      class="rounded-circle object-cover icon-25 profile-dd" width="25" height="25" alt="language" />
+  </button>
+
+  <!-- --------------------------------------------------------------- -->
+  <!-- Theme Toggle -->
+  <!-- --------------------------------------------------------------- -->
+  <button mat-icon-button (click)="toggleTheme()" aria-label="Toggle Theme"
+    class="d-flex align-items-center justify-content-center profile-btn-dd">
+    <div class="d-flex align-items-center justify-content-center icon-25 profile-dd rounded-circle"
+      style="background-color: var(--mat-sys-surface-variant);">
+      @if(currentTheme() === 'dark') {
+      <i class="bi bi-sun-fill" style="font-size: 22px;"></i>
       } @else {
-        <mat-icon>dark_mode</mat-icon>
+      <i class="bi bi-moon-stars-fill" style="font-size: 22px;"></i>
       }
+    </div>
+  </button>
+
+  <!-- --------------------------------------------------------------- -->
+  <!-- profile Dropdown -->
+  <!-- --------------------------------------------------------------- -->
+  <button mat-icon-button extended [matMenuTriggerFor]="profilemenu" aria-label="Notifications"
+    class="d-flex align-items-center justify-content-center profile-btn-dd">
+    <img src="/assets/images/profile/user-1.jpg" class="rounded-circle object-cover icon-35 profile-dd" width="35" />
+  </button>
+  <mat-menu #profilemenu="matMenu" class="topbar-dd cardWithShadow">
+    <button mat-menu-item>
+      <mat-icon class="d-flex align-items-center"><i data-icon="solar:shield-user-line-duotone"
+          class="iconify icon-22"></i></mat-icon>My Profile
+    </button>
+    <button mat-menu-item>
+      <mat-icon class="d-flex align-items-center"><i data-icon="solar:user-id-line-duotone"
+          class="iconify icon-22"></i></mat-icon>My Account
+    </button>
+    <button mat-menu-item>
+      <mat-icon class="d-flex align-items-center"><i data-icon="solar:checklist-minimalistic-line-duotone"
+          class="iconify icon-22"></i> </mat-icon>My Task
     </button>
 
-    <!-- Botón de cambio de idioma -->
-    <button 
-      mat-icon-button
-      [matMenuTriggerFor]="flags"
-      [matTooltip]="'Cambiar idioma'"
-      class="language-button">
-      <img
-        [src]="currentLanguageObj.icon"
-        class="flag-icon-img"
-        [alt]="currentLanguageObj.language"
-      />
-    </button>
-
-    <mat-menu #flags="matMenu" class="cardWithShadow">
-      @for(lang of languages; track lang.code) {
-        <button mat-menu-item (click)="changeLanguage(lang)">
-          <div class="d-flex align-items-center">
-            <img
-              [src]="lang.icon"
-              class="rounded-circle object-cover m-r-8 icon-20"
-              [alt]="lang.language"
-            />
-            <span class="mat-subtitle-1 f-s-14">{{ lang.language }}</span>
-          </div>
-        </button>
-      }
-    </mat-menu>
-
-    <!-- Menú de usuario -->
-    <button 
-      mat-icon-button 
-      [matMenuTriggerFor]="userMenu" 
-      class="user-button"
-      [matTooltip]="'Usuario'">
-      <div class="user-icon-wrapper">
-        <mat-icon>account_circle</mat-icon>
-        <mat-icon class="dropdown-arrow">arrow_drop_down</mat-icon>
-      </div>
-    </button>
-    
-    <mat-menu #userMenu="matMenu" class="user-menu">
-      <button mat-menu-item>
-        <mat-icon>person</mat-icon>
-        <span>Perfil</span>
-      </button>
-      <button mat-menu-item>
-        <mat-icon>settings</mat-icon>
-        <span>Ajustes</span>
-      </button>
-      <mat-divider></mat-divider>
-      <button mat-menu-item class="logout-item" (click)="closeSession()">
-        <mat-icon>logout</mat-icon>
-        <span >Cerrar Sesión</span>
-      </button>
-    </mat-menu>
-  </div>
+    <div class="p-x-12 m-t-12">
+      <a [routerLink]="['/authentication/login']" mat-stroked-button class="w-100">Logout</a>
+    </div>
+  </mat-menu>
 </mat-toolbar>

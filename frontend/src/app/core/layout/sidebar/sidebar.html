@@ -1,20 +1,16 @@
 <div class="sidebar-container" [class.collapsed]="isCollapsed()">
   <div class="sidebar-header">
-    <div class="logo-container">
+    <div class="logo-container d-flex align-items-center justify-content-center">
       @if (isCollapsed()) {
       <img src="assets/images/logos/mydoc-icon.svg" alt="MyDoc Icon" class="logo-icon" />
       } @else {
+      @if (currentTheme() === 'dark') {
+      <img src="assets/images/logos/mydoc-logo-white.svg" alt="MyDoc Logo" class="logo-full" />
+      } @else {
       <img src="assets/images/logos/mydoc-logo-black.svg" alt="MyDoc Logo" class="logo-full" />
       }
-    </div>
-    <button mat-icon-button (click)="toggleSidebar()" class="toggle-button"
-      [matTooltip]="isCollapsed() ? 'Expandir menú' : 'Contraer menú'">
-      @if (isCollapsed()) {
-      <span class="iconify" data-icon="solar:hamburger-menu-bold-duotone"></span>
-      } @else {
-      <span class="iconify" data-icon="solar:alt-arrow-left-bold-duotone"></span>
       }
-    </button>
+    </div>
   </div>
 
   <mat-nav-list class="sidebar-nav">

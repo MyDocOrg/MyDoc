@@ -1,68 +1,51 @@
-import { Component, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, Output, EventEmitter, Input, ViewEncapsulation, inject } from '@angular/core';
 import { ThemeService } from '../../services/theme.service';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatDividerModule } from '@angular/material/divider';
-import { TokenService } from '../../services/token-service';
-import { Router } from '@angular/router';
+import { LanguageService } from '../../services/language.service';
+import { LayoutService } from '../../services/layout.service';
+import { RouterModule } from '@angular/router';
 
-interface Language {
-  language: string;
-  code: string;
-  type: string;
-  icon: string;
-}
+import { MaterialModule } from '../../../material.module';
+import { MatBadgeModule } from '@angular/material/badge';
 
 @Component({
   selector: 'app-topbar',
-  imports: [CommonModule, MatButtonModule, MatIconModule, MatMenuModule, MatToolbarModule, MatTooltipModule, MatDividerModule],
+  standalone: true,
+  imports: [
+    RouterModule,
+    MaterialModule,
+    MatBadgeModule
+  ],
   templateUrl: './topbar.html',
-  styleUrl: './topbar.scss',
+  encapsulation: ViewEncapsulation.None,
 })
 export class Topbar {
-  tokenService = inject(TokenService);
-  router = inject(Router);
-  themeService = inject(ThemeService);
-  currentLanguage = signal<string>('es');
-  
-  public languages: Language[] = [
-    {
-      language: 'English',
-      code: 'en',
-      type: 'US',
-      icon: 'assets/images/language/icon-flag-english.png',
-    },
-    {
-      language: 'Español',
-      code: 'es',
-      type: 'ES',
-      icon: 'assets/images/language/icon-flag-spanish.png',
-    },
-  ];
-  
-  get isDarkMode(): boolean {
-    return this.themeService.isDarkMode();
-  }
+  @Input() showToggle = true;
+  @Input() toggleChecked = false;
+  @Output() toggleMobileNav = new EventEmitter<void>();
 
-  get currentLanguageObj(): Language {
-    return this.languages.find(lang => lang.code === this.currentLanguage()) || this.languages[1];
+  private themeService = inject(ThemeService);
+  private languageService = inject(LanguageService);
+  private layoutService = inject(LayoutService);
+
+  currentTheme = this.themeService.currentTheme;
+  isCollapsed = this.layoutService.isSidebarCollapsed;
+
+  toggleSidebar(): void {
+    this.layoutService.toggleSidebar();
   }
 
   toggleTheme(): void {
     this.themeService.toggleTheme();
   }
 
-  changeLanguage(lang: Language): void {
-    this.currentLanguage.set(lang.code);
-    // Funcionalidad de i18n suspendida temporalmente
+  toggleLanguage(): void {
+    const current = this.languageService.getCurrentLanguage();
+    const next = current === 'es' ? 'en' : 'es';
+    this.languageService.changeLanguage(next);
   }
 
-  closeSession(){
-    this.tokenService.removeToken();
-    this.router.navigate(['/login']);
+  get currentLang() {
+    return this.languageService.getCurrentLanguage();
   }
 }
+

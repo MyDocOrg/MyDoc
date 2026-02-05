@@ -5,6 +5,8 @@ html .topbar {
   top: 0;
   z-index: 9;
   height: $header-height;
+  border-bottom: 1px solid $borderColor;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05);
 
   i-tabler {
     stroke-width: 1.5px;
@@ -72,7 +74,7 @@ html .topbar {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    text-fill-color: transparent;
+    // text-fill-color: transparent;
   }
 
   .live-preview-drop {

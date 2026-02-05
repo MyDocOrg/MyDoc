@@ -6,7 +6,8 @@
   transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
   position: absolute;
   overflow-x: hidden;
-  border-right-width: 0;
+  border-right: 1px solid $borderColor;
+  box-shadow: 4px 0px 6px rgba(0, 0, 0, 0.05);
 }
 
 .branding {
@@ -17,6 +18,7 @@
   &.mdc-list {
     padding: 0 18px;
     width: $sidenav-desktop;
+
     .sub-item-icon {
       width: 16px !important;
       height: 16px !important;
@@ -36,6 +38,7 @@
       .caption-icon {
         display: none;
       }
+
       .caption-text {
         display: inline;
       }
@@ -55,6 +58,7 @@
       padding: 11px 16px !important;
       margin-bottom: 4px;
       width: 100%;
+
       &.twoline {
         height: 60px;
         align-items: center;
@@ -130,4 +134,171 @@
 
 .side-img {
   margin-right: -30px;
+}
+
+// --------------------------------------------------------------------------------------
+// Unified Sidebar Styles (formerly from sidebar.scss)
+// --------------------------------------------------------------------------------------
+
+.sidebar-container {
+  width: 260px;
+  height: 100vh;
+  background-color: var(--bg-primary);
+  border-right: 1px solid $borderColor;
+  box-shadow: 4px 0px 6px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  &.collapsed {
+    width: 64px;
+
+    .sidebar-header {
+      justify-content: center;
+      padding: 20px 0;
+    }
+
+    .sidebar-nav {
+      a[mat-list-item] {
+        span[matListItemTitle] {
+          opacity: 0;
+          width: 0;
+        }
+      }
+    }
+  }
+}
+
+.sidebar-header {
+  padding: 0 16px;
+  min-height: $header-height;
+  height: $header-height;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-color);
+  background-color: var(--bg-primary);
+  gap: 8px;
+
+  .toggle-button {
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+
+    .iconify {
+      font-size: 24px;
+      color: var(--text-secondary);
+      transition: all 0.2s ease;
+      display: flex;
+      /* Asegura centrado */
+      align-items: center;
+      justify-content: center;
+    }
+
+    &:hover {
+      background-color: var(--bg-tertiary);
+
+      .iconify {
+        color: var(--text-primary);
+      }
+    }
+  }
+}
+
+.logo-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  .logo-icon {
+    height: 40px;
+    width: auto;
+    object-fit: contain;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .logo-full {
+    height: 60px;
+    width: auto;
+    max-width: 190px;
+    object-fit: contain;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 8px 0;
+
+  a[mat-list-item] {
+    margin: 4px 8px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    color: var(--text-primary);
+
+    span[matListItemTitle] {
+      white-space: nowrap;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .iconify {
+      font-size: 24px;
+      color: var(--text-secondary);
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      margin-right: 16px;
+    }
+
+    &:hover {
+      background-color: var(--bg-tertiary);
+
+      .iconify {
+        transform: scale(1.1);
+        color: var(--text-primary);
+      }
+    }
+
+    &.active {
+      background-color: rgba(25, 118, 210, 0.12);
+      color: #1976d2;
+
+      .iconify {
+        color: #1976d2;
+      }
+    }
+  }
+}
+
+// Tema oscuro
+body[data-theme='dark'] {
+  .sidebar-container {
+    background-color: var(--bg-primary);
+  }
+
+  .sidebar-header {
+    background-color: var(--bg-primary);
+    border-bottom-color: var(--border-color);
+  }
+
+  .sidebar-nav {
+    a[mat-list-item] {
+      &.active {
+        background-color: rgba(66, 165, 245, 0.16);
+        color: #42a5f5;
+
+        .iconify {
+          color: #42a5f5;
+        }
+      }
+    }
+  }
 }

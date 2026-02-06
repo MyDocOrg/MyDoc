@@ -1,0 +1,63 @@
+<h2 mat-dialog-title>{{ isEditMode() ? 'Editar Cita' : 'Crear Nueva Cita' }}</h2>
+
+<mat-dialog-content>
+    @if (isLoading()) {
+    <div class="text-center p-4">
+        <mat-spinner diameter="40"></mat-spinner>
+        <p class="mt-2">Cargando...</p>
+    </div>
+    } @else {
+    <form (submit)="onSubmit($event)" id="appointmentForm">
+        <!-- Doctor Selection -->
+        <div class="mb-3">
+            <label class="form-label">Doctor *</label>
+            <select class="form-select" [field]="appointmentForm.doctorId">
+                <option value="" disabled>Seleccione un doctor</option>
+                @for (doctor of doctors(); track doctor.id) {
+                <option [value]="doctor.id">{{ doctor.full_name }}</option>
+                }
+            </select>
+        </div>
+
+        <!-- Clinic Selection -->
+        <div class="mb-3">
+            <label class="form-label">Clínica *</label>
+            <select class="form-select" [field]="appointmentForm.clinicId">
+                <option value="" disabled>Seleccione una clínica</option>
+                @for (clinic of clinics(); track clinic.id) {
+                <option [value]="clinic.id">{{ clinic.name }}</option>
+                }
+            </select>
+        </div>
+
+        <!-- Status Selection -->
+        <div class="mb-3">
+            <label class="form-label">Estado *</label>
+            <select class="form-select" [field]="appointmentForm.statusId">
+                <option value="" disabled>Seleccione un estado</option>
+                @for (status of statuses(); track status.id) {
+                <option [value]="status.id">{{ status.name }}</option>
+                }
+            </select>
+        </div>
+
+        <!-- Appointment Date -->
+        <div class="mb-3">
+            <label class="form-label">Fecha y Hora de la Cita *</label>
+            <input type="datetime-local" class="form-control" [field]="appointmentForm.appointmentDate" />
+        </div>
+    </form>
+    }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-button (click)="onCancel()" [disabled]="isLoading()">
+        Cancelar
+    </button>
+    <button mat-raised-button color="primary" type="submit" form="appointmentForm" [disabled]="isLoading()">
+        @if (isLoading()) {
+        <span class="spinner-border spinner-border-sm me-2"></span>
+        }
+        {{ isEditMode() ? 'Actualizar' : 'Guardar' }}
+    </button>
+</mat-dialog-actions>

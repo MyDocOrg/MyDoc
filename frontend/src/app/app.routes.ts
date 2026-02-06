@@ -22,9 +22,9 @@ import { DoctorEdit } from './pages/features/doctor/doctor-edit/doctor-edit';
 import { ClinicHome } from './pages/features/clinic/clinic-home/clinic-home';
 import { ClinicAdd } from './pages/features/clinic/clinic-add/clinic-add';
 
+
 // Appointment
 import { AppointmentHome } from './pages/features/appointment/appointment-home/appointment-home';
-import { AppointmentAdd } from './pages/features/appointment/appointment-add/appointment-add';
 
 // Consultation
 import { ConsultationHome } from './pages/features/consultation/consultation-home/consultation-home';
@@ -52,7 +52,6 @@ import { AppointmentStatusAdd } from './pages/features/appointment-status/appoin
 import { AppointmentStatusEdit } from './pages/features/appointment-status/appointment-status-edit/appointment-status-edit';
 import { SelectRole } from './pages/features/auth/select-role/select-role';
 import { ClinicEdit } from './pages/features/clinic/clinic-edit/clinic-edit';
-import { AppointmentEdit } from './pages/features/appointment/appointment-edit/appointment-edit';
 
 // Notification
 import { NotificationHome } from './pages/features/notification/notification-home/notification-home';
@@ -69,8 +68,8 @@ export const routes: Routes = [
     { path: 'login', component: LoginComponent },
     { path: 'select-role', component: SelectRole },
     { path: 'home', component: HomeComponent },
-    { path: 'register', component: RegisterComponent},
-    
+    { path: 'register', component: RegisterComponent },
+
     // Patient
     {
         path: 'patient',
@@ -79,7 +78,7 @@ export const routes: Routes = [
             { path: 'add', component: PatientAdd },
             { path: 'edit/:id', component: PatientAdd }
         ]
-    },    
+    },
     // Doctor
     {
         path: 'doctor',
@@ -93,7 +92,7 @@ export const routes: Routes = [
             { path: 'schedule', component: ScheduleComponent },
             { path: 'settings', component: SettingsComponent }
         ]
-    },    
+    },
     // Clinic
     {
         path: 'clinic',
@@ -103,17 +102,15 @@ export const routes: Routes = [
             { path: 'edit/:id', component: ClinicEdit }
         ]
     },
-    
+
     // Appointment
     {
         path: 'appointment',
         children: [
-            { path: '', component: AppointmentHome },
-            { path: 'add', component: AppointmentAdd },
-            { path: 'edit/:id', component: AppointmentEdit }
+            { path: '', component: AppointmentHome }
         ]
     },
-    
+
     // Consultation
     {
         path: 'consultation',
@@ -122,7 +119,7 @@ export const routes: Routes = [
             { path: 'add', component: ConsultationAdd },
             { path: 'edit/:id', component: ConsultationAdd }
         ]
-    },    
+    },
     // Medicine
     {
         path: 'medicine',
@@ -131,7 +128,7 @@ export const routes: Routes = [
             { path: 'add', component: MedicineAdd },
             { path: 'edit/:id', component: MedicineAdd }
         ]
-    },    
+    },
     // Prescription
     {
         path: 'prescription',
@@ -140,7 +137,7 @@ export const routes: Routes = [
             { path: 'add', component: PrescriptionAdd },
             { path: 'edit/:id', component: PrescriptionAdd }
         ]
-    },    
+    },
     // Medication Schedule
     {
         path: 'medication-schedule',
@@ -149,7 +146,7 @@ export const routes: Routes = [
             { path: 'add', component: MedicationScheduleAdd },
             { path: 'edit/:id', component: MedicationScheduleAdd }
         ]
-    },    
+    },
     // Appointment Status
     {
         path: 'appointment-status',
@@ -178,6 +175,6 @@ export const routes: Routes = [
             { path: 'edit/:id', component: MedicalHistoryEdit }
         ]
     },
-    
+
     { path: '**', redirectTo: '/login' }
 ];

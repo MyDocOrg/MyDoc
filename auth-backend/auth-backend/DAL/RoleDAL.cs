@@ -32,6 +32,17 @@ namespace auth_backend.DAL
                 throw new Exception("Something went wrong fetching role by name", ex);
             }
         }
+        public async Task<Role> GetById(int id)
+        {
+            try
+            {
+                return await _context.Role.Where(r => r.Id == id).FirstOrDefaultAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Something went wrong fetching role by name", ex);
+            }
+        }
         public async Task<List<Role>> GetList()
         {
             try

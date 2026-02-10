@@ -39,6 +39,7 @@ namespace auth_backend.Controllers
                 return StatusCode(500, ApiResponse<string>.Fail($"An unexpected error occurred during login: {ex.Message}", 500));
             }
         }
+
         [HttpPost("MyDoc/Register/Patient")]
         public async Task<IActionResult> MyDocPatient(AuthRegisterPatientRequest request)
         {
@@ -46,6 +47,19 @@ namespace auth_backend.Controllers
             {
 
                 var result = await _service.RegisterPatientMyDoc(request);
+                return StatusCode(result.Status, result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResponse<string>.Fail($"An unexpected error occurred during login: {ex.Message}", 500));
+            }
+        }
+        [HttpPost("MyDoc/User")]
+        public async Task<IActionResult> MyDocUser(AuthUserRequest request)
+        {
+            try
+            {
+                var result = await _service.RegisterUserMyDoc(request);
                 return StatusCode(result.Status, result);
             }
             catch (Exception ex)

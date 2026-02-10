@@ -3,6 +3,7 @@ using auth_backend.DTO.Auth;
 using auth_backend.DTO.Contants;
 using auth_backend.Helper;
 using auth_backend.Models;
+using MySqlX.XDevAPI.Common;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -15,6 +16,8 @@ namespace auth_backend.Services
         private readonly JwtHelper _jwtHelper = jwtHelper;
         private readonly MyDocDAL _myDocDAL = myDocDAL;
         private readonly MyVetDAL _myVetDAL = myVetDAL;
+        private readonly RoleDAL _roleDAL = roleDAL;
+        private readonly ApplicationDAL _applicationDAL = applicationDAL;
         public async Task<ApiResponse<string>> Login(AuthLoginRequest request, string application)
         {
             try
@@ -36,6 +39,13 @@ namespace auth_backend.Services
                     case "Doctor":
                         result.DoctorId =
                             (await _myDocDAL.GetByUserIdDoctor(user.Id)).id;
+                        break;
+
+                    case "Admin":
+                        result.DoctorId =
+                            (await _myDocDAL.GetByUserIdDoctor(user.Id)).id;
+
+                        result.PatientId = (await _myDocDAL.GetByUserIdPatient(user.Id)).id;
                         break;
 
                     default:
@@ -152,6 +162,7 @@ namespace auth_backend.Services
         {
             try
             {
+                
                 var user = await _dAL.Add(new User
                 {
                     ApplicationId = request.ApplicationId,
@@ -173,6 +184,92 @@ namespace auth_backend.Services
                     created_at = DateTime.UtcNow,
                     user_id = user.Id
                 });
+
+                return ApiResponse<User>.Ok(user);
+            }
+            catch
+            {
+                return ApiResponse<User>.Fail("Error while login");
+            }
+        }
+        public async Task<ApiResponse<User>> RegisterUserMyDoc(AuthUserRequest request)
+        {
+            try
+            {
+                var role = await _roleDAL.GetById(request.RoleId);
+                if (role == null)
+                    throw new Exception("Role not found");
+
+                var user = await _dAL.Add(new User
+                {
+                    ApplicationId = request.ApplicationId,
+                    Email = request.Email,
+                    Password = PasswordHelper.HashPassword(request.Password),
+                    RoleId = request.RoleId,
+                    SuscriptionId = request.SuscriptionId
+                });
+
+                switch (role.Name)
+                {
+                    case "Paciente":
+                        await _myDocDAL.AddPatient(new Patient
+                        {
+                            is_active = true,
+                            address = request.address,
+                            birth_date = request.birth_date,
+                            email = request.Email,
+                            full_name = request.full_name,
+                            gender = request.gender,
+                            phone = request.phone,
+                            created_at = DateTime.UtcNow,
+                            user_id = user.Id
+                        });
+                        break;
+
+                    case "Doctor":
+                        await _myDocDAL.AddDoctor(new Doctor
+                        {
+                            is_active = true,
+                            specialty = request.specialty,
+                            created_at = DateTime.UtcNow,
+                            email = request.Email,
+                            full_name = request.full_name,
+                            phone = request.phone,
+                            professional_license = request.professional_license,
+                            user_id = user.Id
+                        });
+                        break;
+
+                    case "Admin":
+                        await _myDocDAL.AddDoctor(new Doctor
+                        {
+                            is_active = true,
+                            specialty = request.specialty,
+                            created_at = DateTime.UtcNow,
+                            email = request.Email,
+                            full_name = request.full_name,
+                            phone = request.phone,
+                            professional_license = request.professional_license,
+                            user_id = user.Id
+                        });
+
+                        await _myDocDAL.AddPatient(new Patient
+                        {
+                            is_active = true,
+                            address = request.address,
+                            birth_date = request.birth_date,
+                            email = request.Email,
+                            full_name = request.full_name,
+                            gender = request.gender,
+                            phone = request.phone,
+                            created_at = DateTime.UtcNow,
+                            user_id = user.Id
+                        });
+                        break;
+
+                    default:
+                        break; // Admin, Staff, etc.
+                }
 
                 return ApiResponse<User>.Ok(user);
             }

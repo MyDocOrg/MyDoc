@@ -186,4 +186,5 @@ app.UseAuthorization();
 app.MapControllers();
 app.MapHealthChecks("/health").AllowAnonymous();
 
+app.MapGet("/", () => Results.Ok("MyDoc API is running"));
 app.Run();

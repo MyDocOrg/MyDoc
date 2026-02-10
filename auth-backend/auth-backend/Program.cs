@@ -74,4 +74,5 @@ app.UseAuthorization();
 app.MapControllers();
 app.MapHealthChecks("/health").AllowAnonymous();
 
+app.MapGet("/", () => Results.Ok("Auth API running"));
 app.Run();

@@ -1,16 +1,19 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using MyDoc.Application.Services;
+using Microsoft.OpenApi;
 using MyDoc.Application.BO.Contants;
+using MyDoc.Application.BO.Mappers;
 using MyDoc.Application.DAL;
+using MyDoc.Application.Helper;
+using MyDoc.Application.Services;
 using MyDoc.Infrastructure.AuthModels;
 using MyDoc.Infrastructure.Models;
 using MyDoc.Middleware;
 using System.Text;
 using System.Text.Json;
-using MyDoc.Application.Helper;
-using MyDoc.Application.BO.Mappers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,7 +27,31 @@ builder.Services.AddHealthChecks();
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Mi API",
+        Version = "v1"
+    });
+
+    // 🔐 Definición del esquema JWT
+    c.AddSecurityDefinition("bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Ingresa el token JWT así: Bearer {tu_token}"
+    });
+
+    // 🔒 Requerir el token para los endpoints
+    c.AddSecurityRequirement(document => new OpenApiSecurityRequirement
+    {
+        [new OpenApiSecuritySchemeReference("bearer", document)] = []
+    });
+});
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
@@ -56,6 +83,15 @@ builder.Services
         {
             OnMessageReceived = context =>
             {
+                var authHeader = context.Request.Headers["Authorization"].FirstOrDefault();
+
+                if (!string.IsNullOrEmpty(authHeader) && authHeader.StartsWith("Bearer "))
+                {
+                    context.Token = authHeader.Substring("Bearer ".Length).Trim();
+                    return Task.CompletedTask;
+                }
+
+                // 2️⃣ Si no hay header, intenta cookie
                 if (context.Request.Cookies.ContainsKey("access_token"))
                 {
                     context.Token = context.Request.Cookies["access_token"];

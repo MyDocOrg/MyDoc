@@ -1,5 +1,6 @@
 using auth_backend.Controllers;
 using auth_backend.DAL;
+using auth_backend.DTO.Contants;
 using auth_backend.Helper;
 using auth_backend.Models;
 using auth_backend.Provider;
@@ -16,7 +17,9 @@ builder.Services.AddHealthChecks();
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+    c.OperationFilter<ApplicationHeaderOperationFilter>()
+);
 builder.Services.AddDbContext<AuthContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("AuthConnection"));

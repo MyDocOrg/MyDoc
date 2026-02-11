@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 import '../solicitar_cita.dart/solicitar_cita.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+final FlutterSecureStorage secureStorage = FlutterSecureStorage();
+
 
 class MiCitaPage extends StatefulWidget {
   const MiCitaPage({super.key});
@@ -9,6 +15,46 @@ class MiCitaPage extends StatefulWidget {
 }
 
 class _MiCitaPageState extends State<MiCitaPage> {
+  List<dynamic> _historial = [];
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchAppointments();
+  }
+
+  Future<void> fetchAppointments() async {
+    try {
+      final token = await secureStorage.read(key: 'jwt_token');
+      final response = await http.get(
+        Uri.parse('http://localhost:5002/api/appointment/table'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token', // si usas JWT
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+
+        setState(() {
+          _historial = data['data'];
+          _isLoading = false;
+        });
+      } else {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     final cita = ultimaCitaSolicitada; // Variable global
@@ -57,26 +103,40 @@ class _MiCitaPageState extends State<MiCitaPage> {
           ),
           const SizedBox(height: 8),
           Expanded(
-            child: ListView(
-              children: [
-                ListTile(
-                  leading: const Icon(Icons.check_circle, color: Colors.green),
-                  title: const Text('28/01/2026 - 09:00 AM'),
-                  subtitle: const Text('Dr. Ana López\nDirección: Calle Salud 456'),
-                  trailing: const Text('Completada', style: TextStyle(color: Colors.grey)),
-                  isThreeLine: true,
-                ),
-                ListTile(
-                  leading: const Icon(Icons.cancel, color: Colors.red),
-                  title: const Text('25/01/2026 - 11:00 AM'),
-                  subtitle: const Text('Dr. Mario Ruiz\nDirección: Calle Salud 789'),
-                  trailing: const Text('Cancelada', style: TextStyle(color: Colors.grey)),
-                  isThreeLine: true,
-                ),
-                // Puedes agregar más citas aquí
-              ],
-            ),
-          ),
+            child: _isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : _historial.isEmpty
+                    ? const Center(child: Text("No hay historial de citas"))
+                    : ListView.builder(
+                        itemCount: _historial.length,
+                        itemBuilder: (context, index) {
+                          final cita = _historial[index];
+
+                          return ListTile(
+                            leading: Icon(
+                              cita['statusName'] == 'Pending'
+                                  ? Icons.check_circle
+                                  : cita['statusName'] == 'Cancelada'
+                                      ? Icons.cancel
+                                      : Icons.schedule,
+                              color: cita['statusName'] == 'Completada'
+                                  ? Colors.green
+                                  : cita['statusName'] == 'Cancelada'
+                                      ? Colors.red
+                                      : Colors.orange,
+                            ),
+                            title: Text("${cita['appointmentDate']} - ${cita['hora']}"),
+                            subtitle: Text(
+                                "${cita['doctorName']}\nDirección: ${cita['clinicName']}"),
+                            trailing: Text(
+                              cita['statusName'],
+                              style: const TextStyle(color: Colors.grey),
+                            ),
+                            isThreeLine: true,
+                          );
+                        },
+                      ),
+        ),
         ],
       ),
     );

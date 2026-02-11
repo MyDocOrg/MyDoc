@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import '../../../widgets/showSuccesDialog.dart';
 import '../../../widgets/autocomplete.dart';
 import '../../../widgets/date_time.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+final FlutterSecureStorage secureStorage = FlutterSecureStorage();
 
 // Variable global para simular almacenamiento de la última cita
 Map<String, String>? ultimaCitaSolicitada;
@@ -17,18 +22,11 @@ class SolicitarCitaPage extends StatefulWidget {
 class _SolicitarCitaPageState extends State<SolicitarCitaPage> {
   final _formKey = GlobalKey<FormState>();
 
-  final List<String> _doctores = [
-    'Dr. Juan Pérez',
-    'Dra. Ana López',
-    'Dr. Mario Ruiz',
-    'Dra. Carla Gómez',
-  ];
-  final List<String> _consultorios = [
-    'Consultorio Central',
-    'Consultorio Norte',
-    'Consultorio Sur',
-    'Consultorio Este',
-  ];
+  List<dynamic> _doctores = [];
+  List<dynamic> _consultorios = [];
+
+  bool _isLoading = true;
+
 
   String? _doctorSeleccionado;
   String? _consultorioSeleccionado;
@@ -40,6 +38,47 @@ class _SolicitarCitaPageState extends State<SolicitarCitaPage> {
         .where((item) => item.toLowerCase().contains(query.toLowerCase()))
         .toList();
   }
+
+  Future<void> fetchDoctores() async {
+    final token = await secureStorage.read(key: 'jwt_token');
+
+    final response = await http.get(
+      Uri.parse('http://localhost:5002/api/doctor'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      print("doctores: ${data['data']}");
+      setState(() {
+        _doctores = data['data'];
+      });
+    }
+  }
+
+  Future<void> fetchConsultorios() async {
+    final token = await secureStorage.read(key: 'jwt_token');
+
+    final response = await http.get(
+      Uri.parse('http://localhost:5002/api/clinic'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      print("Consultorios: ${data['data']}");
+      setState(() {
+        _consultorios = data['data'];
+      });
+    }
+  }
+
 
   Future<void> _seleccionarFecha(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -67,32 +106,83 @@ class _SolicitarCitaPageState extends State<SolicitarCitaPage> {
     }
   }
 
-  void _enviarFormulario() {
-    if (_formKey.currentState!.validate() &&
-        _doctorSeleccionado != null &&
-        _consultorioSeleccionado != null &&
-        _fechaSeleccionada != null &&
-        _horaSeleccionada != null) {
-      // Guardar la cita como pendiente
-      ultimaCitaSolicitada = {  
-        'doctor': _doctorSeleccionado!,
-        'consultorio': _consultorioSeleccionado!,
-        'fecha':
-            '${_fechaSeleccionada!.day.toString().padLeft(2, '0')}/${_fechaSeleccionada!.month.toString().padLeft(2, '0')}/${_fechaSeleccionada!.year}',
-        'hora': _horaSeleccionada!.format(context),
-        'estado': 'Pendiente',
-      };
+  Future<void> _enviarFormulario() async {
+    if (!_formKey.currentState!.validate() ||
+        _doctorSeleccionado == null ||
+        _consultorioSeleccionado == null ||
+        _fechaSeleccionada == null ||
+        _horaSeleccionada == null) return;
+
+    final token = await secureStorage.read(key: 'jwt_token');
+
+    final doctor = _doctores.firstWhere(
+      (d) => d['fullName'] == _doctorSeleccionado,
+    );
+
+    final clinic = _consultorios.firstWhere(
+      (c) => c['name'] == _consultorioSeleccionado,
+    );
+
+    final appointmentDate = DateTime(
+      _fechaSeleccionada!.year,
+      _fechaSeleccionada!.month,
+      _fechaSeleccionada!.day,
+      _horaSeleccionada!.hour,
+      _horaSeleccionada!.minute,
+    ).toUtc();
+
+    final response = await http.post(
+      Uri.parse('http://localhost:5002/api/appointment'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode({
+        'doctorId': doctor['id'],
+        'clinicId': clinic['id'],
+        'statusId': 1, // 👈 estático como dijiste
+        'appointmentDate': appointmentDate.toIso8601String(),
+      }),
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
       showSuccessDialog(context, 'Cita registrada correctamente').then((_) {
         if (widget.onCitaRegistrada != null) {
           widget.onCitaRegistrada!();
         }
       });
-      setState(() {});
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Error al registrar cita'),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 
+
+  @override
+  void initState() {
+    super.initState();
+    _loadInitialData();
+  }
+
+  Future<void> _loadInitialData() async {
+    await fetchDoctores();
+    await fetchConsultorios();
+
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
     return Center(
       child: SingleChildScrollView(
         child: Card(
@@ -110,7 +200,7 @@ class _SolicitarCitaPageState extends State<SolicitarCitaPage> {
                   CustomAutocompleteField(
                     label: 'Doctor',
                     icon: Icons.person,
-                    options: _doctores,
+                    options: _doctores.map((d) => d['fullName'] as String).toList(),
                     value: _doctorSeleccionado,
                     onChanged: (value) {
                       setState(() {
@@ -127,7 +217,7 @@ class _SolicitarCitaPageState extends State<SolicitarCitaPage> {
                   CustomAutocompleteField(
                     label: 'Consultorio',
                     icon: Icons.local_hospital,
-                    options: _consultorios,
+                    options: _consultorios.map((c) => c['name'] as String).toList(),
                     value: _consultorioSeleccionado,
                     onChanged: (value) {
                       setState(() {

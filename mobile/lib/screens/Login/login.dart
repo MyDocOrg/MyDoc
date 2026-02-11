@@ -4,6 +4,11 @@ import 'widget/login_logo.dart';
 import 'widget/login_header.dart';
 import 'widget/login_form.dart';
 import 'widget/login_footer.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+final FlutterSecureStorage secureStorage = FlutterSecureStorage();
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -26,29 +31,67 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  void _login() {
-    // TODO: Descomentar para producción
-    // if (_formKey.currentState!.validate()) {
-      setState(() {
-        _isLoading = true;
-      });
+  Future<void> _login() async {
+    if (!_formKey.currentState!.validate()) return;
 
-      // Simulamos un delay de login
-      Future.delayed(const Duration(seconds: 1), () {
-        setState(() {
-          _isLoading = false;
-        });
+    setState(() {
+      _isLoading = true;
+    });
 
-        // Navegamos a la página de consultorios
+    try {
+      // Reemplaza con tu URL real de backend desplegado
+      final response = await http.post(
+        Uri.parse('http://localhost:5001/api/auth/login'),
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Application-Name': 'MyDoc'
+        },
+        body: jsonEncode({
+          'email': _emailController.text,
+          'password': _passwordController.text,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        
+        final data = jsonDecode(response.body);
+
+        final token = data['data']; // depende de tu backend
+
+        await secureStorage.write(key: 'jwt_token', value: token);
+
+        // Aquí puedes guardar el token si quieres
+        print("TOKEN: $token");
+
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => MyHomePage(email: _emailController.text),
+            builder: (context) =>
+                MyHomePage(email: _emailController.text),
           ),
         );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Credenciales incorrectas'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error de conexión'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } finally {
+      setState(() {
+        _isLoading = false;
       });
-    // }
+    }
   }
+
 
   void _togglePassword() {
     setState(() {

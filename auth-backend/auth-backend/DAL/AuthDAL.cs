@@ -17,18 +17,9 @@ namespace auth_backend.DAL
             await _context.SaveChangesAsync();
             return request;
         }
-
-        public async Task<User> Login()
+        public async Task<bool> AnyUserByEmailApplication(string email, int applicationId)
         {
-            try
-            {
-                // Implementation for login
-                return new User(); // Placeholder return
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Something went wrong during login");
-            }
+            return await _context.User.AnyAsync(u => u.Email == email && u.ApplicationId == applicationId);
         }
         public async Task<User> UserByEmail(string email)
         {

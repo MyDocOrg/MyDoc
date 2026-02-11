@@ -58,6 +58,9 @@ namespace auth_backend.Services
         }
         public async Task<ApiResponse<User>> RegisterVeterinarianMyVet(AuthRegisterVeterinarianRequest request)
         {
+            if(await _dAL.AnyUserByEmailApplication(request.Email, request.ApplicationId))
+                throw new BusinessException("Email already exists used it", 400);
+
             var user = await _dAL.Add(new User
             {
                 ApplicationId = request.ApplicationId,
@@ -84,33 +87,38 @@ namespace auth_backend.Services
         }
         public async Task<ApiResponse<User>> RegisterOwnerMyVet(AuthRegisterOwnerRequest request)
         {
-            
-                var user = await _dAL.Add(new User
-                {
-                    ApplicationId = request.ApplicationId,
-                    Email = request.Email,
-                    Password = PasswordHelper.HashPassword(request.Password),
-                    RoleId = request.RoleId,
-                    SuscriptionId = request.SuscriptionId
-                });
+            if (await _dAL.AnyUserByEmailApplication(request.Email, request.ApplicationId))
+                throw new BusinessException("Email already exists used it", 400);
 
-                _myVetDAL.AddOwner(new Owner
-                {
-                    is_active = true,
-                    address = request.address,
-                    birth_date = request.birth_date,
-                    email = request.Email,
-                    full_name = request.full_name,
-                    gender = request.gender,
-                    phone = request.phone,
-                    created_at = DateTime.UtcNow,
-                    user_id = user.Id
-                });
+            var user = await _dAL.Add(new User
+            {
+                ApplicationId = request.ApplicationId,
+                Email = request.Email,
+                Password = PasswordHelper.HashPassword(request.Password),
+                RoleId = request.RoleId,
+                SuscriptionId = request.SuscriptionId
+            });
 
-                return ApiResponse<User>.Ok(user);
+            _myVetDAL.AddOwner(new Owner
+            {
+                is_active = true,
+                address = request.address,
+                birth_date = request.birth_date,
+                email = request.Email,
+                full_name = request.full_name,
+                gender = request.gender,
+                phone = request.phone,
+                created_at = DateTime.UtcNow,
+                user_id = user.Id
+            });
+
+            return ApiResponse<User>.Ok(user);
         }
         public async Task<ApiResponse<User>> RegisterDoctorMyDoc(AuthRegisterDoctorRequest request)
         {
+            if (await _dAL.AnyUserByEmailApplication(request.Email, request.ApplicationId))
+                throw new BusinessException("Email already exists used it", 400);
+
             var user = await _dAL.Add(new User
             {
                 ApplicationId = request.ApplicationId,
@@ -136,6 +144,9 @@ namespace auth_backend.Services
         }
         public async Task<ApiResponse<User>> RegisterPatientMyDoc(AuthRegisterPatientRequest request)
         {
+            if (await _dAL.AnyUserByEmailApplication(request.Email, request.ApplicationId))
+                throw new BusinessException("Email already exists used it", 400);
+
             var user = await _dAL.Add(new User
             {
                 ApplicationId = request.ApplicationId,
@@ -162,6 +173,9 @@ namespace auth_backend.Services
         }
         public async Task<ApiResponse<User>> RegisterUserMyDoc(AuthUserRequest request)
         {
+            if (await _dAL.AnyUserByEmailApplication(request.Email, request.ApplicationId))
+                throw new BusinessException("Email already exists used it", 400);
+
             var role = await _roleDAL.GetById(request.RoleId);
             if (role == null)
                 throw new Exception("Role not found");

@@ -1,16 +1,7 @@
 ﻿using MyDoc.Application.BO.Contants;
 using MyDoc.Application.DAL;
-using MyDoc.Infrastructure.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
 using MyDoc.Application.BO.DTO.Patient;
 using MyDoc.Application.BO.Mappers;
-using MyDoc.Application.DAL;
-using MyDoc.Application.BO.Contants;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MyDoc.Application.Services
 {

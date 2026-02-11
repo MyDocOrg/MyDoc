@@ -12,27 +12,13 @@ namespace auth_backend.Services
         private readonly ApplicationDAL _dAL = dAL;
         public async Task<ApiResponse<Application>> GetById(int id)
         {
-            try
-            {
-                var result = await _dAL.GetById(id);
-                return ApiResponse<Application>.Ok(result);
-            }
-            catch
-            {
-                return ApiResponse<Application>.Fail("Error getting application");
-            }
+            var result = await _dAL.GetById(id);
+            return ApiResponse<Application>.Ok(result);
         }
         public async Task<ApiResponse<List<Application>>> GetList()
         {
-            try
-            {
-                var result = await _dAL.GetList();
-                return ApiResponse<List<Application>>.Ok(result);
-            }
-            catch
-            {
-                return ApiResponse<List<Application>>.Fail("Error getting application");
-            }
+            var result = await _dAL.GetList();
+            return ApiResponse<List<Application>>.Ok(result);
         }
     }
 }

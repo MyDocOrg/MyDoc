@@ -1,4 +1,5 @@
 ﻿using auth_backend.DTO.Contants;
+using auth_backend.Exceptions;
 using auth_backend.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,9 +19,13 @@ namespace auth_backend.Controllers
                 var result = await _service.GetByMyDoc();
                 return StatusCode(result.Status, result);
             }
+            catch (BusinessException ex)
+            {
+                return StatusCode(ex.StatusCode, ApiResponse<string>.Fail(ex.Message, ex.StatusCode));
+            }
             catch (Exception ex)
             {
-                return StatusCode(500, ApiResponse<string>.Fail($"An unexpected error occurred during login: {ex.Message}", 500));
+                return StatusCode(500, ApiResponse<string>.Fail($"Internal server error :{ex.Message}", 500));
             }
         }
         [HttpGet("MyVet")]
@@ -32,9 +37,13 @@ namespace auth_backend.Controllers
                 var result = await _service.GetByMyVet();
                 return StatusCode(result.Status, result);
             }
+            catch (BusinessException ex)
+            {
+                return StatusCode(ex.StatusCode, ApiResponse<string>.Fail(ex.Message, ex.StatusCode));
+            }
             catch (Exception ex)
             {
-                return StatusCode(500, ApiResponse<string>.Fail($"An unexpected error occurred during login: {ex.Message}", 500));
+                return StatusCode(500, ApiResponse<string>.Fail($"Internal server error :{ex.Message}", 500));
             }
         }
         [HttpGet]
@@ -46,9 +55,13 @@ namespace auth_backend.Controllers
                 var result = await _service.GetList();
                 return StatusCode(result.Status, result);
             }
+            catch (BusinessException ex)
+            {
+                return StatusCode(ex.StatusCode, ApiResponse<string>.Fail(ex.Message, ex.StatusCode));
+            }
             catch (Exception ex)
             {
-                return StatusCode(500, ApiResponse<string>.Fail($"An unexpected error occurred during login: {ex.Message}", 500));
+                return StatusCode(500, ApiResponse<string>.Fail($"Internal server error :{ex.Message}", 500));
             }
         }
     }

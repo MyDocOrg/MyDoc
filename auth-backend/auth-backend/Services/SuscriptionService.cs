@@ -1,5 +1,6 @@
 ﻿using auth_backend.DAL;
 using auth_backend.DTO.Contants;
+using auth_backend.Exceptions;
 using auth_backend.Models;
 
 namespace auth_backend.Services
@@ -10,47 +11,26 @@ namespace auth_backend.Services
         private readonly ApplicationDAL _applicationDAL = applicationDAL;
         public async Task<ApiResponse<List<Suscription>>> GetByMyDoc()
         {
-            try
-            {
-                var application = await _applicationDAL.GetApplicationByName("MyDoc");
-                if (application == null)
-                    return ApiResponse<List<Suscription>>.Fail("Application not found", 404);
+            var application = await _applicationDAL.GetApplicationByName("MyDoc");
+            if (application == null)
+                throw new BusinessException("Application not found", 404);
 
-                var result = await _dAL.GetByApplicationId(application.Id);
-                return ApiResponse<List<Suscription>>.Ok(result);
-            }
-            catch
-            {
-                return ApiResponse<List<Suscription>>.Fail("Error getting role");
-            }
+            var result = await _dAL.GetByApplicationId(application.Id);
+            return ApiResponse<List<Suscription>>.Ok(result);
         }
         public async Task<ApiResponse<List<Suscription>>> GetByMyVet()
         {
-            try
-            {
-                var application = await _applicationDAL.GetApplicationByName("MyVet");
-                if (application == null)
-                    return ApiResponse<List<Suscription>>.Fail("Application not found", 404);
+            var application = await _applicationDAL.GetApplicationByName("MyVet");
+            if (application == null)
+                throw new BusinessException("Application not found", 404);
 
-                var result = await _dAL.GetByApplicationId(application.Id);
-                return ApiResponse<List<Suscription>>.Ok(result);
-            }
-            catch
-            {
-                return ApiResponse<List<Suscription>>.Fail("Error getting role");
-            }
+            var result = await _dAL.GetByApplicationId(application.Id);
+            return ApiResponse<List<Suscription>>.Ok(result);
         }
         public async Task<ApiResponse<List<Suscription>>> GetList()
         {
-            try
-            {
-                var result = await _dAL.GetList();
-                return ApiResponse<List<Suscription>>.Ok(result);
-            }
-            catch
-            {
-                return ApiResponse<List<Suscription>>.Fail("Error getting application");
-            }
+            var result = await _dAL.GetList();
+            return ApiResponse<List<Suscription>>.Ok(result);
         }
     }
 }

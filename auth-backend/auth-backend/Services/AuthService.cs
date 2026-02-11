@@ -1,6 +1,7 @@
 ﻿using auth_backend.DAL;
 using auth_backend.DTO.Auth;
 using auth_backend.DTO.Contants;
+using auth_backend.Exceptions;
 using auth_backend.Helper;
 using auth_backend.Models;
 using MySqlX.XDevAPI.Common;
@@ -20,83 +21,70 @@ namespace auth_backend.Services
         private readonly ApplicationDAL _applicationDAL = applicationDAL;
         public async Task<ApiResponse<string>> Login(AuthLoginRequest request, string application)
         {
-            try
+            var user = await _dAL.UserByEmail(request.Email);
+
+            if (user == null)
+                throw new BusinessException("User not found", 404);
+
+            if (!PasswordHelper.VerifyPassword(request.Password, user.Password))
+                throw new BusinessException("Invalid password", 401);
+
+            var result = await _dAL.UserPermissions(user.Id);
+
+            switch (result.RoleName)
             {
-                var user = await _dAL.UserByEmail(request.Email);
-                if (user == null)
-                    throw new Exception("User not found");
-                if (!PasswordHelper.VerifyPassword(request.Password, user.Password))
-                    throw new Exception("Invalidad password");
+                case "Paciente":
+                    result.PatientId =
+                        (await _myDocDAL.GetByUserIdPatient(user.Id)).id;
+                    break;
 
-                var result = await _dAL.UserPermissions(user.Id);
-                switch (result.RoleName)
-                {
-                    case "Paciente":
-                        result.PatientId =
-                            (await _myDocDAL.GetByUserIdPatient(user.Id)).id;
-                        break;
+                case "Doctor":
+                    result.DoctorId =
+                        (await _myDocDAL.GetByUserIdDoctor(user.Id)).id;
+                    break;
 
-                    case "Doctor":
-                        result.DoctorId =
-                            (await _myDocDAL.GetByUserIdDoctor(user.Id)).id;
-                        break;
+                case "Admin":
+                    result.DoctorId =
+                        (await _myDocDAL.GetByUserIdDoctor(user.Id)).id;
 
-                    case "Admin":
-                        result.DoctorId =
-                            (await _myDocDAL.GetByUserIdDoctor(user.Id)).id;
-
-                        result.PatientId = (await _myDocDAL.GetByUserIdPatient(user.Id)).id;
-                        break;
-
-                    default:
-                        break; // Admin, Staff, etc.
-                }
-                var token = _jwtHelper.GenerateToken(result);
-
-                return ApiResponse<string>.Ok(token);
+                    result.PatientId =
+                        (await _myDocDAL.GetByUserIdPatient(user.Id)).id;
+                    break;
             }
-            catch
-            {
-                return ApiResponse<string>.Fail("Error while login");
-            }
+
+            var token = _jwtHelper.GenerateToken(result);
+
+            return ApiResponse<string>.Ok(token);
         }
         public async Task<ApiResponse<User>> RegisterVeterinarianMyVet(AuthRegisterVeterinarianRequest request)
         {
-            try
+            var user = await _dAL.Add(new User
             {
-                var user = await _dAL.Add(new User
-                {
-                    ApplicationId = request.ApplicationId,
-                    Email = request.Email,
-                    Password = PasswordHelper.HashPassword(request.Password) ,
-                    RoleId = request.RoleId,
-                    SuscriptionId = request.SuscriptionId
-                });
+                ApplicationId = request.ApplicationId,
+                Email = request.Email,
+                Password = PasswordHelper.HashPassword(request.Password) ,
+                RoleId = request.RoleId,
+                SuscriptionId = request.SuscriptionId
+            });
 
-                _myVetDAL.AddVeterinarian(new Veterinarian
-                {
-                    is_active = true,
-                    specialty = request.specialty,
-                    created_at = DateTime.UtcNow,
-                    email = request.Email,
-                    full_name = request.full_name,
-                    phone = request.phone,
-                    professional_license = request.professional_license,
-                    user_id = user.Id
-                });
-
-
-                return ApiResponse<User>.Ok(user);
-            }
-            catch
+            _myVetDAL.AddVeterinarian(new Veterinarian
             {
-                return ApiResponse<User>.Fail("Error while login");
-            }
+                is_active = true,
+                specialty = request.specialty,
+                created_at = DateTime.UtcNow,
+                email = request.Email,
+                full_name = request.full_name,
+                phone = request.phone,
+                professional_license = request.professional_license,
+                user_id = user.Id
+            });
+
+
+            return ApiResponse<User>.Ok(user);
         }
         public async Task<ApiResponse<User>> RegisterOwnerMyVet(AuthRegisterOwnerRequest request)
         {
-            try
-            {
+            
                 var user = await _dAL.Add(new User
                 {
                     ApplicationId = request.ApplicationId,
@@ -120,163 +108,136 @@ namespace auth_backend.Services
                 });
 
                 return ApiResponse<User>.Ok(user);
-            }
-            catch
-            {
-                return ApiResponse<User>.Fail("Error while login");
-            }
         }
         public async Task<ApiResponse<User>> RegisterDoctorMyDoc(AuthRegisterDoctorRequest request)
         {
-            try
+            var user = await _dAL.Add(new User
             {
-                var user = await _dAL.Add(new User
-                {
-                    ApplicationId = request.ApplicationId,
-                    Email = request.Email,
-                    Password = PasswordHelper.HashPassword(request.Password),
-                    RoleId = request.RoleId,
-                    SuscriptionId = request.SuscriptionId
-                });
+                ApplicationId = request.ApplicationId,
+                Email = request.Email,
+                Password = PasswordHelper.HashPassword(request.Password),
+                RoleId = request.RoleId,
+                SuscriptionId = request.SuscriptionId
+            });
 
-                await _myDocDAL.AddDoctor(new Doctor
-                {
-                    is_active = true,
-                    specialty = request.specialty,
-                    created_at = DateTime.UtcNow,
-                    email = request.Email,
-                    full_name = request.full_name,
-                    phone = request.phone,
-                    professional_license = request.professional_license,
-                    user_id = user.Id
-                });
-
-                return ApiResponse<User>.Ok(user);
-            }
-            catch
+            await _myDocDAL.AddDoctor(new Doctor
             {
-                return ApiResponse<User>.Fail("Error while login");
-            }
+                is_active = true,
+                specialty = request.specialty,
+                created_at = DateTime.UtcNow,
+                email = request.Email,
+                full_name = request.full_name,
+                phone = request.phone,
+                professional_license = request.professional_license,
+                user_id = user.Id
+            });
+
+            return ApiResponse<User>.Ok(user);
         }
         public async Task<ApiResponse<User>> RegisterPatientMyDoc(AuthRegisterPatientRequest request)
         {
-            try
+            var user = await _dAL.Add(new User
             {
-                
-                var user = await _dAL.Add(new User
-                {
-                    ApplicationId = request.ApplicationId,
-                    Email = request.Email,
-                    Password = PasswordHelper.HashPassword(request.Password),
-                    RoleId = request.RoleId,
-                    SuscriptionId = request.SuscriptionId
-                });
+                ApplicationId = request.ApplicationId,
+                Email = request.Email,
+                Password = PasswordHelper.HashPassword(request.Password),
+                RoleId = request.RoleId,
+                SuscriptionId = request.SuscriptionId
+            });
 
-                await _myDocDAL.AddPatient(new Patient
-                {
-                    is_active = true,
-                    address = request.address,
-                    birth_date = request.birth_date,
-                    email = request.Email,
-                    full_name = request.full_name,
-                    gender = request.gender,
-                    phone = request.phone,
-                    created_at = DateTime.UtcNow,
-                    user_id = user.Id
-                });
-
-                return ApiResponse<User>.Ok(user);
-            }
-            catch
+            await _myDocDAL.AddPatient(new Patient
             {
-                return ApiResponse<User>.Fail("Error while login");
-            }
+                is_active = true,
+                address = request.address,
+                birth_date = request.birth_date,
+                email = request.Email,
+                full_name = request.full_name,
+                gender = request.gender,
+                phone = request.phone,
+                created_at = DateTime.UtcNow,
+                user_id = user.Id
+            });
+
+            return ApiResponse<User>.Ok(user);
         }
         public async Task<ApiResponse<User>> RegisterUserMyDoc(AuthUserRequest request)
         {
-            try
+            var role = await _roleDAL.GetById(request.RoleId);
+            if (role == null)
+                throw new Exception("Role not found");
+
+            var user = await _dAL.Add(new User
             {
-                var role = await _roleDAL.GetById(request.RoleId);
-                if (role == null)
-                    throw new Exception("Role not found");
+                ApplicationId = request.ApplicationId,
+                Email = request.Email,
+                Password = PasswordHelper.HashPassword(request.Password),
+                RoleId = request.RoleId,
+                SuscriptionId = request.SuscriptionId
+            });
 
-                var user = await _dAL.Add(new User
-                {
-                    ApplicationId = request.ApplicationId,
-                    Email = request.Email,
-                    Password = PasswordHelper.HashPassword(request.Password),
-                    RoleId = request.RoleId,
-                    SuscriptionId = request.SuscriptionId
-                });
-
-                switch (role.Name)
-                {
-                    case "Paciente":
-                        await _myDocDAL.AddPatient(new Patient
-                        {
-                            is_active = true,
-                            address = request.address,
-                            birth_date = request.birth_date,
-                            email = request.Email,
-                            full_name = request.full_name,
-                            gender = request.gender,
-                            phone = request.phone,
-                            created_at = DateTime.UtcNow,
-                            user_id = user.Id
-                        });
-                        break;
-
-                    case "Doctor":
-                        await _myDocDAL.AddDoctor(new Doctor
-                        {
-                            is_active = true,
-                            specialty = request.specialty,
-                            created_at = DateTime.UtcNow,
-                            email = request.Email,
-                            full_name = request.full_name,
-                            phone = request.phone,
-                            professional_license = request.professional_license,
-                            user_id = user.Id
-                        });
-                        break;
-
-                    case "Admin":
-                        await _myDocDAL.AddDoctor(new Doctor
-                        {
-                            is_active = true,
-                            specialty = request.specialty,
-                            created_at = DateTime.UtcNow,
-                            email = request.Email,
-                            full_name = request.full_name,
-                            phone = request.phone,
-                            professional_license = request.professional_license,
-                            user_id = user.Id
-                        });
-
-                        await _myDocDAL.AddPatient(new Patient
-                        {
-                            is_active = true,
-                            address = request.address,
-                            birth_date = request.birth_date,
-                            email = request.Email,
-                            full_name = request.full_name,
-                            gender = request.gender,
-                            phone = request.phone,
-                            created_at = DateTime.UtcNow,
-                            user_id = user.Id
-                        });
-                        break;
-
-                    default:
-                        break; // Admin, Staff, etc.
-                }
-
-                return ApiResponse<User>.Ok(user);
-            }
-            catch
+            switch (role.Name)
             {
-                return ApiResponse<User>.Fail("Error while login");
+                case "Paciente":
+                    await _myDocDAL.AddPatient(new Patient
+                    {
+                        is_active = true,
+                        address = request.address,
+                        birth_date = request.birth_date,
+                        email = request.Email,
+                        full_name = request.full_name,
+                        gender = request.gender,
+                        phone = request.phone,
+                        created_at = DateTime.UtcNow,
+                        user_id = user.Id
+                    });
+                    break;
+
+                case "Doctor":
+                    await _myDocDAL.AddDoctor(new Doctor
+                    {
+                        is_active = true,
+                        specialty = request.specialty,
+                        created_at = DateTime.UtcNow,
+                        email = request.Email,
+                        full_name = request.full_name,
+                        phone = request.phone,
+                        professional_license = request.professional_license,
+                        user_id = user.Id
+                    });
+                    break;
+
+                case "Admin":
+                    await _myDocDAL.AddDoctor(new Doctor
+                    {
+                        is_active = true,
+                        specialty = request.specialty,
+                        created_at = DateTime.UtcNow,
+                        email = request.Email,
+                        full_name = request.full_name,
+                        phone = request.phone,
+                        professional_license = request.professional_license,
+                        user_id = user.Id
+                    });
+
+                    await _myDocDAL.AddPatient(new Patient
+                    {
+                        is_active = true,
+                        address = request.address,
+                        birth_date = request.birth_date,
+                        email = request.Email,
+                        full_name = request.full_name,
+                        gender = request.gender,
+                        phone = request.phone,
+                        created_at = DateTime.UtcNow,
+                        user_id = user.Id
+                    });
+                    break;
+
+                default:
+                    break; // Admin, Staff, etc.
             }
+
+            return ApiResponse<User>.Ok(user);
         }
     }
 }

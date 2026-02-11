@@ -11,48 +11,20 @@ namespace auth_backend.DAL
             _context = context;
         }
         public async Task<Role> GetRoleByNameApplicationId(string roleName, int applicationId)
-        {
-            try
-            {
-                return await _context.Role.Where(r => r.Name == roleName && r.ApplicationId == applicationId).FirstOrDefaultAsync();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Something went wrong fetching role by name", ex);
-            }
+        {            
+            return await _context.Role.Where(r => r.Name == roleName && r.ApplicationId == applicationId).FirstOrDefaultAsync();   
         }
         public async Task<List<Role>> GetByApplicationId(int applicationId)
         {
-            try
-            {
-                return await _context.Role.Where(r => r.ApplicationId == applicationId).ToListAsync();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Something went wrong fetching role by name", ex);
-            }
+            return await _context.Role.Where(r => r.ApplicationId == applicationId).ToListAsync();
         }
         public async Task<Role> GetById(int id)
-        {
-            try
-            {
-                return await _context.Role.Where(r => r.Id == id).FirstOrDefaultAsync();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Something went wrong fetching role by name", ex);
-            }
+        {            
+            return await _context.Role.Where(r => r.Id == id).FirstOrDefaultAsync();
         }
         public async Task<List<Role>> GetList()
         {
-            try
-            {
-                return await _context.Role.ToListAsync();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Something went wrong fetching role by name", ex);
-            }
+            return await _context.Role.ToListAsync();
         }
     }
 }

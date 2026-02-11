@@ -13,16 +13,9 @@ namespace auth_backend.DAL
         }
         public async Task<User> Add(User request)
         {
-            try
-            {
-                await _context.AddAsync(request);
-                await _context.SaveChangesAsync();
-                return request;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Something went wrong creating user");
-            }
+            await _context.AddAsync(request);
+            await _context.SaveChangesAsync();
+            return request;
         }
 
         public async Task<User> Login()
@@ -39,40 +32,26 @@ namespace auth_backend.DAL
         }
         public async Task<User> UserByEmail(string email)
         {
-            try
-            {
-                return await _context.User.Where(u => u.Email == email).FirstOrDefaultAsync();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Something went wrong fetching user by email");
-            }
+            return await _context.User.Where(u => u.Email == email).FirstOrDefaultAsync();
         }
         public async Task<UserAuthDTO> UserPermissions(int userId)
         {
-            try
-            {
-                return await (from user in _context.User
-                              join rol in _context.Role on user.RoleId equals rol.Id
-                              join sus in _context.Suscription on user.SuscriptionId equals sus.Id
-                              join app in _context.Application on user.ApplicationId equals app.Id
-                              where user.Id == userId
-                              select new UserAuthDTO
-                              {
-                                  Id = user.Id,
-                                  Email = user.Email,
-                                  RoleId = rol.Id,
-                                  RoleName = rol.Name,
-                                  ApplicationId = app.Id,
-                                  ApplicationName = app.Name,
-                                  SuscriptionId = sus.Id,
-                                  SuscriptionName = sus.Name
-                              }).FirstOrDefaultAsync();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Something went wrong fetching user by email", ex);
-            }
+            return await (from user in _context.User
+                            join rol in _context.Role on user.RoleId equals rol.Id
+                            join sus in _context.Suscription on user.SuscriptionId equals sus.Id
+                            join app in _context.Application on user.ApplicationId equals app.Id
+                            where user.Id == userId
+                            select new UserAuthDTO
+                            {
+                                Id = user.Id,
+                                Email = user.Email,
+                                RoleId = rol.Id,
+                                RoleName = rol.Name,
+                                ApplicationId = app.Id,
+                                ApplicationName = app.Name,
+                                SuscriptionId = sus.Id,
+                                SuscriptionName = sus.Name
+                            }).FirstOrDefaultAsync();
         }
     }
 }

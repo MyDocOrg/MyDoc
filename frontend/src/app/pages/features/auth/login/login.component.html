@@ -41,9 +41,24 @@
               <a [routerLink]="['/auth/forgot-password']"
                 class="text-primary f-w-600 text-decoration-none f-s-14">¿Olvidaste tu contraseña?</a>
             </div>
-            <button type="submit" mat-flat-button color="primary" class="w-100" [disabled]="!isFormValid">
+            <button type="submit" mat-flat-button color="primary" class="w-100"
+              [disabled]="!isFormValid || isLoading()">
+              @if (isLoading()) {
+              <mat-spinner diameter="20" class="d-inline-block m-r-8"></mat-spinner>
+              Iniciando sesión...
+              } @else {
               Iniciar sesión
+              }
             </button>
+
+            <!-- Error message -->
+            @if (errorMessage()) {
+            <div class="text-center m-t-16">
+              <span class="f-s-14 f-w-500" style="color: var(--mdc-theme-error, #f44336);">
+                {{ errorMessage() }}
+              </span>
+            </div>
+            }
             <!-- input -->
           </form>
           <span class="d-block f-w-500 text-center m-t-24">¿No tienes una cuenta?

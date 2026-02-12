@@ -6,22 +6,23 @@ import { provideClientHydration, withEventReplay } from '@angular/platform-brows
 import { provideServiceWorker } from '@angular/service-worker';
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { provideTranslateService } from '@ngx-translate/core';
-import {provideTranslateHttpLoader} from "@ngx-translate/http-loader";
+import { provideTranslateHttpLoader } from "@ngx-translate/http-loader";
 import { apiInterceptor } from './core/interceptors/api-interceptor';
+import { authInterceptor } from './core/interceptors/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideBrowserGlobalErrorListeners(), 
+    provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
-    provideHttpClient(withFetch(), withInterceptors([apiInterceptor])), 
-    provideRouter(routes), 
-    provideClientHydration(withEventReplay()), 
-    provideServiceWorker('ngsw-worker.js', { 
-      enabled: !isDevMode(), 
+    provideHttpClient(withFetch(), withInterceptors([apiInterceptor, authInterceptor])),
+    provideRouter(routes),
+    provideClientHydration(withEventReplay()),
+    provideServiceWorker('ngsw-worker.js', {
+      enabled: !isDevMode(),
       registrationStrategy: 'registerWhenStable:30000'
     }),
     provideTranslateService({
-      loader: provideTranslateHttpLoader({prefix:'/assets/i18n/', suffix:'.json'}),
+      loader: provideTranslateHttpLoader({ prefix: '/assets/i18n/', suffix: '.json' }),
       fallbackLang: 'en',
       lang: 'en'
     })

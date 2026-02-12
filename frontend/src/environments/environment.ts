@@ -1,5 +1,5 @@
 export const environment = {
-    apiAuthUrl : 'http://localhost:5091/api/',
-    apiMyDocUrl : 'http://localhost:5092/api/',
+    apiAuthUrl: 'https://auth-identity-api.azurewebsites.net',
+    apiMyDocUrl: 'http://localhost:5092/api/',
     production: true
 };

@@ -19,8 +19,12 @@ namespace auth_backend.DTO.Auth
 
         public DateOnly? birth_date { get; set; }
 
+        /// <summary>
+        /// Género del paciente. Solo acepta "H" (Hombre) o "M" (Mujer).
+        /// </summary>
         [StringLength(1)]
         [Unicode(false)]
+        [RegularExpression(@"^[HM]$", ErrorMessage = "El género debe ser 'H' (Hombre) o 'M' (Mujer)")]
         public string? gender { get; set; }
 
         [StringLength(20)]
@@ -34,18 +38,18 @@ namespace auth_backend.DTO.Auth
         public bool? is_active { get; set; }
 
         /// <summary>
-        /// Rol del paciente. Debe ser 3 (Paciente). Si no se especifica, se asigna automáticamente.
+        /// Rol del paciente. Valor fijo: 3 (Paciente). Se asigna automáticamente.
         /// </summary>
-        public int RoleId { get; set; }
+        public int RoleId { get; set; } = 3;
 
         /// <summary>
-        /// Aplicación MyDoc. Debe ser 1. Si no se especifica, se asigna automáticamente.
+        /// Aplicación MyDoc. Valor fijo: 1. Se asigna automáticamente.
         /// </summary>
-        public int ApplicationId { get; set; }
+        public int ApplicationId { get; set; } = 1;
 
         /// <summary>
-        /// Suscripción gratuita para pacientes. Debe ser 1. Si no se especifica, se asigna automáticamente.
+        /// Suscripción de paciente. Valor fijo: 1 (Suscripción gratuita). Se asigna automáticamente.
         /// </summary>
-        public int SuscriptionId { get; set; }
+        public int SuscriptionId { get; set; } = 1;
     }
 }

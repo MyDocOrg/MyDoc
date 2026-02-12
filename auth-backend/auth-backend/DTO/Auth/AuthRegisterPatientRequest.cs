@@ -5,7 +5,12 @@ namespace auth_backend.DTO.Auth
 {
     public record AuthRegisterPatientRequest
     {
+        [Required(ErrorMessage = "El email es requerido")]
+        [EmailAddress(ErrorMessage = "El formato del email no es válido")]
         public string Email { get; set; } = null!;
+
+        [Required(ErrorMessage = "La contraseña es requerida")]
+        [MinLength(6, ErrorMessage = "La contraseña debe tener al menos 6 caracteres")]
         public string Password { get; set; } = null!;
 
         [StringLength(100)]
@@ -28,10 +33,19 @@ namespace auth_backend.DTO.Auth
 
         public bool? is_active { get; set; }
 
+        /// <summary>
+        /// Rol del paciente. Debe ser 3 (Paciente). Si no se especifica, se asigna automáticamente.
+        /// </summary>
         public int RoleId { get; set; }
 
+        /// <summary>
+        /// Aplicación MyDoc. Debe ser 1. Si no se especifica, se asigna automáticamente.
+        /// </summary>
         public int ApplicationId { get; set; }
 
+        /// <summary>
+        /// Suscripción gratuita para pacientes. Debe ser 1. Si no se especifica, se asigna automáticamente.
+        /// </summary>
         public int SuscriptionId { get; set; }
     }
 }

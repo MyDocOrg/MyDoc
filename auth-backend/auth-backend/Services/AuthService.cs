@@ -34,21 +34,25 @@ namespace auth_backend.Services
             switch (result.RoleName)
             {
                 case "Paciente":
-                    result.PatientId =
-                        (await _myDocDAL.GetByUserIdPatient(user.Id)).id;
+                    var patient = await _myDocDAL.GetByUserIdPatient(user.Id);
+                    if (patient != null)
+                        result.PatientId = patient.id;
                     break;
 
                 case "Doctor":
-                    result.DoctorId =
-                        (await _myDocDAL.GetByUserIdDoctor(user.Id)).id;
+                    var doctor = await _myDocDAL.GetByUserIdDoctor(user.Id);
+                    if (doctor != null)
+                        result.DoctorId = doctor.id;
                     break;
 
                 case "Admin":
-                    result.DoctorId =
-                        (await _myDocDAL.GetByUserIdDoctor(user.Id)).id;
+                    var adminDoctor = await _myDocDAL.GetByUserIdDoctor(user.Id);
+                    if (adminDoctor != null)
+                        result.DoctorId = adminDoctor.id;
 
-                    result.PatientId =
-                        (await _myDocDAL.GetByUserIdPatient(user.Id)).id;
+                    var adminPatient = await _myDocDAL.GetByUserIdPatient(user.Id);
+                    if (adminPatient != null)
+                        result.PatientId = adminPatient.id;
                     break;
             }
 
@@ -144,6 +148,16 @@ namespace auth_backend.Services
         }
         public async Task<ApiResponse<User>> RegisterPatientMyDoc(AuthRegisterPatientRequest request)
         {
+            // Validar que los IDs sean los correctos para pacientes de MyDoc
+            if (request.RoleId != 3)
+                throw new BusinessException("El RoleId para pacientes debe ser 3 (Paciente)", 400);
+
+            if (request.ApplicationId != 1)
+                throw new BusinessException("El ApplicationId debe ser 1 (MyDoc)", 400);
+
+            if (request.SuscriptionId != 1)
+                throw new BusinessException("El SuscriptionId para pacientes debe ser 1 (Gratuita)", 400);
+
             if (await _dAL.AnyUserByEmailApplication(request.Email, request.ApplicationId))
                 throw new BusinessException("Email already exists used it", 400);
 

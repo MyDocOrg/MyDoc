@@ -10,7 +10,9 @@ namespace auth_backend.DAL
 
         public MyVetDAL(IConfiguration configuration)
         {
-            _connectionString = configuration.GetConnectionString("MyVetConnection");
+            _connectionString = Environment.GetEnvironmentVariable("MYSQL_CONN") 
+                ?? configuration.GetConnectionString("MyVetConnection") 
+                ?? throw new InvalidOperationException("MyVet connection string no configurado");
         }
 
         // ===================== OWNER =====================

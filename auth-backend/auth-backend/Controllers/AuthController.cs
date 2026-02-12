@@ -1,6 +1,5 @@
 ﻿using auth_backend.DTO.Auth;
 using auth_backend.DTO.Contants;
-using auth_backend.Exceptions;
 using auth_backend.Provider;
 using auth_backend.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -13,111 +12,52 @@ namespace auth_backend.Controllers
     {
         private readonly AuthService _service = service;
         private readonly ApplicationProvider _provider = provider;
+
         [HttpPost("Login")]
         public async Task<IActionResult> Login(AuthLoginRequest request)
         {
-            try
-            {
-                var result = await _service.Login(request, _provider.GetApplicationName());
-                return StatusCode(result.Status, result);
-            }
-            catch (BusinessException ex)
-            {
-                return StatusCode(ex.StatusCode, ApiResponse<string>.Fail(ex.Message, ex.StatusCode));
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ApiResponse<string>.Fail($"Internal server error :{ex.Message}", 500));
-            }
+            var result = await _service.Login(request, _provider.GetApplicationName());
+            return StatusCode(result.Status, result);
         }
+
         [HttpPost("MyDoc/Register/Doctor")]
         public async Task<IActionResult> MyDocRegister(AuthRegisterDoctorRequest request)
         {
-            try
-            {
-                var result = await _service.RegisterDoctorMyDoc(request);
-                return StatusCode(result.Status, result);
-            }
-            catch (BusinessException ex)
-            {
-                return StatusCode(ex.StatusCode, ApiResponse<string>.Fail(ex.Message, ex.StatusCode));
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ApiResponse<string>.Fail($"Internal server error :{ex.Message}", 500));
-            }
+            var result = await _service.RegisterDoctorMyDoc(request);
+            return StatusCode(result.Status, result);
         }
 
         [HttpPost("MyDoc/Register/Patient")]
         public async Task<IActionResult> MyDocPatient(AuthRegisterPatientRequest request)
         {
-            try
-            {
+            // Asignar valores por defecto si vienen como 0
+            if (request.RoleId == 0) request.RoleId = 3;
+            if (request.ApplicationId == 0) request.ApplicationId = 1;
+            if (request.SuscriptionId == 0) request.SuscriptionId = 1;
 
-                var result = await _service.RegisterPatientMyDoc(request);
-                return StatusCode(result.Status, result);
-            }
-            catch (BusinessException ex)
-            {
-                return StatusCode(ex.StatusCode, ApiResponse<string>.Fail(ex.Message, ex.StatusCode));
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ApiResponse<string>.Fail($"Internal server error :{ex.Message}", 500));
-            }
+            var result = await _service.RegisterPatientMyDoc(request);
+            return StatusCode(result.Status, result);
         }
+
         [HttpPost("MyDoc/User")]
         public async Task<IActionResult> MyDocUser(AuthUserRequest request)
         {
-            try
-            {
-                var result = await _service.RegisterUserMyDoc(request);
-                return StatusCode(result.Status, result);
-            }
-            catch (BusinessException ex)
-            {
-                return StatusCode(ex.StatusCode, ApiResponse<string>.Fail(ex.Message, ex.StatusCode));
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ApiResponse<string>.Fail($"Internal server error :{ex.Message}", 500));
-            }
+            var result = await _service.RegisterUserMyDoc(request);
+            return StatusCode(result.Status, result);
         }
+
         [HttpPost("MyVet/Register/Vet")]
         public async Task<IActionResult> MyVetRegister(AuthRegisterVeterinarianRequest request)
         {
-            try
-            {
-
-                var result = await _service.RegisterVeterinarianMyVet(request);
-                return StatusCode(result.Status, result);
-            }
-            catch (BusinessException ex)
-            {
-                return StatusCode(ex.StatusCode, ApiResponse<string>.Fail(ex.Message, ex.StatusCode));
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ApiResponse<string>.Fail($"Internal server error :{ex.Message}", 500));
-            }
+            var result = await _service.RegisterVeterinarianMyVet(request);
+            return StatusCode(result.Status, result);
         }
+
         [HttpPost("MyVet/Register/Owner")]
         public async Task<IActionResult> MyVetOwnerRegister(AuthRegisterOwnerRequest request)
         {
-            try
-            {
-
-                var result = await _service.RegisterOwnerMyVet(request);
-                return StatusCode(result.Status, result);
-            }
-            catch (BusinessException ex)
-            {
-                return StatusCode(ex.StatusCode, ApiResponse<string>.Fail(ex.Message, ex.StatusCode));
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ApiResponse<string>.Fail($"Internal server error :{ex.Message}", 500));
-            }
+            var result = await _service.RegisterOwnerMyVet(request);
+            return StatusCode(result.Status, result);
         }
     }
 }

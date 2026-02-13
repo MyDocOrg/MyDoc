@@ -34,8 +34,6 @@ namespace auth_backend.DAL
                     id = reader.GetInt32("id"),
                     user_id = reader["user_id"] as int?,
                     full_name = reader["full_name"] as string,
-                    birth_date = reader["birth_date"] as DateOnly?,
-                    gender = reader["gender"] as string,
                     phone = reader["phone"] as string,
                     email = reader["email"] as string,
                     address = reader["address"] as string,
@@ -48,27 +46,29 @@ namespace auth_backend.DAL
             return owners;
         }
 
-        public void AddOwner(Owner owner)
+        public async Task<Owner> AddOwner(Owner owner)
         {
             using var conn = new SqlConnection(_connectionString);
             using var cmd = new SqlCommand(@"
-                INSERT INTO owners
-                (user_id, full_name, birth_date, gender, phone, email, address, is_active, created_at)
+                INSERT INTO Owner
+                (user_id, full_name, phone, email, address, is_active, created_at)
                 VALUES
-                (@user_id, @full_name, @birth_date, @gender, @phone, @email, @address, @is_active, GETDATE())
+                (@user_id, @full_name, @phone, @email, @address, @is_active, GETDATE());
+                SELECT CAST(SCOPE_IDENTITY() as int);
             ", conn);
 
             cmd.Parameters.AddWithValue("@user_id", (object?)owner.user_id ?? DBNull.Value);
-            cmd.Parameters.AddWithValue("@full_name", owner.full_name);
-            cmd.Parameters.AddWithValue("@birth_date", (object?)owner.birth_date ?? DBNull.Value);
-            cmd.Parameters.AddWithValue("@gender", owner.gender);
-            cmd.Parameters.AddWithValue("@phone", owner.phone);
-            cmd.Parameters.AddWithValue("@email", owner.email);
-            cmd.Parameters.AddWithValue("@address", owner.address);
+            cmd.Parameters.AddWithValue("@full_name", (object?)owner.full_name ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("@phone", (object?)owner.phone ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("@email", (object?)owner.email ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("@address", (object?)owner.address ?? DBNull.Value);
             cmd.Parameters.AddWithValue("@is_active", owner.is_active);
 
-            conn.Open();
-            cmd.ExecuteNonQuery();
+            await conn.OpenAsync();
+            var id = await cmd.ExecuteScalarAsync();
+            owner.id = Convert.ToInt32(id);
+            
+            return owner;
         }
         public Owner? GetOwnerById(int id)
         {
@@ -91,8 +91,6 @@ namespace auth_backend.DAL
                 id = reader.GetInt32("id"),
                 user_id = reader["user_id"] as int?,
                 full_name = reader["full_name"] as string,
-                birth_date = reader["birth_date"] as DateOnly?,
-                gender = reader["gender"] as string,
                 phone = reader["phone"] as string,
                 email = reader["email"] as string,
                 address = reader["address"] as string,
@@ -135,26 +133,30 @@ namespace auth_backend.DAL
             return vets;
         }
 
-        public void AddVeterinarian(Veterinarian vet)
+        public async Task<Veterinarian> AddVeterinarian(Veterinarian vet)
         {
             using var conn = new SqlConnection(_connectionString);
             using var cmd = new SqlCommand(@"
-                INSERT INTO veterinarians
+                INSERT INTO Veterinarian
                 (user_id, full_name, specialty, professional_license, phone, email, is_active, created_at)
                 VALUES
-                (@user_id, @full_name, @specialty, @professional_license, @phone, @email, @is_active, GETDATE())
+                (@user_id, @full_name, @specialty, @professional_license, @phone, @email, @is_active, GETDATE());
+                SELECT CAST(SCOPE_IDENTITY() as int);
             ", conn);
 
             cmd.Parameters.AddWithValue("@user_id", (object?)vet.user_id ?? DBNull.Value);
-            cmd.Parameters.AddWithValue("@full_name", vet.full_name);
-            cmd.Parameters.AddWithValue("@specialty", vet.specialty);
-            cmd.Parameters.AddWithValue("@professional_license", vet.professional_license);
-            cmd.Parameters.AddWithValue("@phone", vet.phone);
-            cmd.Parameters.AddWithValue("@email", vet.email);
+            cmd.Parameters.AddWithValue("@full_name", (object?)vet.full_name ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("@specialty", (object?)vet.specialty ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("@professional_license", (object?)vet.professional_license ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("@phone", (object?)vet.phone ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("@email", (object?)vet.email ?? DBNull.Value);
             cmd.Parameters.AddWithValue("@is_active", vet.is_active);
 
-            conn.Open();
-            cmd.ExecuteNonQuery();
+            await conn.OpenAsync();
+            var id = await cmd.ExecuteScalarAsync();
+            vet.id = Convert.ToInt32(id);
+            
+            return vet;
         }
         public Veterinarian? GetVeterinarianById(int id)
         {

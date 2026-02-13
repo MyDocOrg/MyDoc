@@ -23,6 +23,11 @@ namespace auth_backend.Controllers
         [HttpPost("MyDoc/Register/Doctor")]
         public async Task<IActionResult> MyDocRegister(AuthRegisterDoctorRequest request)
         {
+            // Asignar valores por defecto si vienen como 0
+            if (request.RoleId == 0) request.RoleId = 2;
+            if (request.ApplicationId == 0) request.ApplicationId = 1;
+            if (request.SuscriptionId == 0) request.SuscriptionId = 1;
+
             var result = await _service.RegisterDoctorMyDoc(request);
             return StatusCode(result.Status, result);
         }
@@ -39,16 +44,21 @@ namespace auth_backend.Controllers
             return StatusCode(result.Status, result);
         }
 
-        [HttpPost("MyDoc/User")]
-        public async Task<IActionResult> MyDocUser(AuthUserRequest request)
-        {
-            var result = await _service.RegisterUserMyDoc(request);
-            return StatusCode(result.Status, result);
-        }
+        // [HttpPost("MyDoc/User")]
+        // public async Task<IActionResult> MyDocUser(AuthUserRequest request)
+        // {
+        //     var result = await _service.RegisterUserMyDoc(request);
+        //     return StatusCode(result.Status, result);
+        // }
 
         [HttpPost("MyVet/Register/Vet")]
         public async Task<IActionResult> MyVetRegister(AuthRegisterVeterinarianRequest request)
         {
+            // Asignar valores por defecto si vienen como 0
+            if (request.RoleId == 0) request.RoleId = 5;
+            if (request.ApplicationId == 0) request.ApplicationId = 2;
+            if (request.SuscriptionId == 0) request.SuscriptionId = 1;
+
             var result = await _service.RegisterVeterinarianMyVet(request);
             return StatusCode(result.Status, result);
         }
@@ -56,6 +66,11 @@ namespace auth_backend.Controllers
         [HttpPost("MyVet/Register/Owner")]
         public async Task<IActionResult> MyVetOwnerRegister(AuthRegisterOwnerRequest request)
         {
+            // Asignar valores por defecto si vienen como 0
+            if (request.RoleId == 0) request.RoleId = 6;
+            if (request.ApplicationId == 0) request.ApplicationId = 2;
+            if (request.SuscriptionId == 0) request.SuscriptionId = 1;
+
             var result = await _service.RegisterOwnerMyVet(request);
             return StatusCode(result.Status, result);
         }

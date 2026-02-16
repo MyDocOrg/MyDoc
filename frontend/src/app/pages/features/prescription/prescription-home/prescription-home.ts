@@ -1,54 +1,130 @@
-﻿import { Component, inject, signal } from '@angular/core';
-import { PrescriptionService } from '../services/prescription-service';
-import { GenericTable } from '../../../../shared/components/generic-table/generic-table';
-import { Router, RouterLink } from '@angular/router';
+﻿import { Component, inject, signal, ViewChild } from '@angular/core';
+import { PrescriptionService } from '../services/prescription.service';
+import { MatDialog } from '@angular/material/dialog';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { MaterialModule } from '../../../../material.module';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { PrescriptionForm } from '../prescription-form/prescription-form';
 
 @Component({
   selector: 'app-prescription-home',
-  imports: [GenericTable, RouterLink],
+  imports: [MaterialModule, CommonModule, FormsModule],
   templateUrl: './prescription-home.html',
   styleUrl: './prescription-home.scss',
 })
 export class PrescriptionHome {
-  service = inject(PrescriptionService);
-  prescriptionList = signal<any[]>([]);
-  loading = false;
-  router = inject(Router);
+  private service = inject(PrescriptionService);
+  private dialog = inject(MatDialog);
+
+  // Table configuration
+  displayedColumns: string[] = ['medicalHistoryId', 'generalInstructions', 'createdAt', 'actions'];
+  dataSource = new MatTableDataSource<any>([]);
+  searchText = '';
+  loading = signal<boolean>(false);
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   ngOnInit(): void {
-    this.GetAll();
+    this.loadPrescriptions();
   }
 
-  GetAll(): void {
-    this.loading = true;
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+  }
+
+  /**
+   * Load all prescriptions from the service
+   */
+  loadPrescriptions(): void {
+    this.loading.set(true);
     this.service.GetAll().subscribe({
       next: (res) => {
-        this.loading = false;
-        this.prescriptionList.set(res.data || res);
+        this.dataSource.data = res.data || res;
+        this.loading.set(false);
       },
       error: (error) => {
-        this.loading = false;
         console.error('Error al obtener prescripciones:', error);
+        this.loading.set(false);
       },
     });
   }
 
-  editPrescription(event: any): void {
-    this.router.navigate(['/prescription/edit', event]);
-  }
+  /**
+   * Open dialog to create a new prescription
+   */
+  openCreateDialog(): void {
+    const dialogRef = this.dialog.open(PrescriptionForm, {
+      width: '600px',
+      disableClose: true,
+    });
 
-  deletePrescription(event: any): void {
-    this.service.Delete(event).subscribe({
-      next: () => {
-        this.GetAll();
-      },
-      error: (error) => {
-        console.error('Error al eliminar prescripción:', error);
-      },
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadPrescriptions();
+      }
     });
   }
 
-  viewPrescription(event: any): void {
+  /**
+   * Open dialog to edit an existing prescription
+   */
+  editPrescription(id: number): void {
+    const dialogRef = this.dialog.open(PrescriptionForm, {
+      width: '600px',
+      disableClose: true,
+      data: { prescriptionId: id }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadPrescriptions();
+      }
+    });
+  }
+
+  /**
+   * Delete a prescription
+   */
+  deletePrescription(id: number): void {
+    if (confirm('¿Está seguro de que desea eliminar esta prescripción?')) {
+      this.service.Delete(id).subscribe({
+        next: () => {
+          this.loadPrescriptions();
+        },
+        error: (error) => {
+          console.error('Error al eliminar prescripción:', error);
+        },
+      });
+    }
+  }
+
+  /**
+   * View prescription details (placeholder)
+   */
+  viewPrescription(id: number): void {
     // TODO: Implementar vista de detalles
+    console.log('View prescription:', id);
+  }
+
+  /**
+   * Apply search filter to the table
+   */
+  applyFilter(event: Event): void {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
+  /**
+   * Clear search filter
+   */
+  clearSearch(): void {
+    this.searchText = '';
+    this.dataSource.filter = '';
   }
 }

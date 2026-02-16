@@ -1,0 +1,32 @@
+<h2 mat-dialog-title>{{ isEditMode() ? 'Editar Prescripción' : 'Nueva Prescripción' }}</h2>
+
+<mat-dialog-content>
+    <form (submit)="onSubmit($event)">
+        <!-- Medical History ID -->
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>ID Historia Médica</mat-label>
+            <input matInput type="number" [field]="prescriptionForm.medicalHistoryId"
+                placeholder="ID de la historia médica" />
+        </mat-form-field>
+
+        <!-- General Instructions -->
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Instrucciones Generales</mat-label>
+            <textarea matInput [field]="prescriptionForm.generalInstructions"
+                placeholder="Ingrese instrucciones generales" rows="4"></textarea>
+        </mat-form-field>
+    </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-button (click)="onCancel()" [disabled]="isLoading()">
+        Cancelar
+    </button>
+    <button mat-raised-button color="primary" (click)="onSubmit($event)" [disabled]="isLoading()">
+        @if (isLoading()) {
+        <mat-spinner diameter="20"></mat-spinner>
+        } @else {
+        {{ isEditMode() ? 'Actualizar' : 'Guardar' }}
+        }
+    </button>
+</mat-dialog-actions>

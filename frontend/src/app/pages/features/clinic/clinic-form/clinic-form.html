@@ -1,0 +1,49 @@
+<h2 mat-dialog-title>{{ isEditMode() ? 'Editar Clínica' : 'Nueva Clínica' }}</h2>
+
+<mat-dialog-content>
+    <form (submit)="onSubmit($event)">
+        <!-- Name -->
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Nombre de la Clínica</mat-label>
+            <input matInput [field]="clinicForm.name" placeholder="Ingrese nombre de la clínica" />
+        </mat-form-field>
+
+        <!-- Address -->
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Dirección</mat-label>
+            <textarea matInput [field]="clinicForm.address" placeholder="Ingrese dirección" rows="3"></textarea>
+        </mat-form-field>
+
+        <!-- Phone -->
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Teléfono</mat-label>
+            <input matInput type="tel" [field]="clinicForm.phone" placeholder="Ingrese teléfono" />
+        </mat-form-field>
+
+        <!-- Email -->
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Email</mat-label>
+            <input matInput type="email" [field]="clinicForm.email" placeholder="Ingrese email" />
+        </mat-form-field>
+
+        <!-- Is Active (only for edit mode) -->
+        @if (isEditMode()) {
+        <div class="checkbox-container">
+            <mat-checkbox [field]="clinicForm.isActive">Activo</mat-checkbox>
+        </div>
+        }
+    </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-button (click)="onCancel()" [disabled]="isLoading()">
+        Cancelar
+    </button>
+    <button mat-raised-button color="primary" (click)="onSubmit($event)" [disabled]="isLoading()">
+        @if (isLoading()) {
+        <mat-spinner diameter="20"></mat-spinner>
+        } @else {
+        {{ isEditMode() ? 'Actualizar' : 'Guardar' }}
+        }
+    </button>
+</mat-dialog-actions>

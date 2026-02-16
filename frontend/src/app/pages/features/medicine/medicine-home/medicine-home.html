@@ -1,24 +1,113 @@
-﻿<div class="container-fluid">
-  <div class="row align-items-center">
-    <div class="col">
-      <h5 class="mb-0">Medicamentos</h5>
-    </div>
-
-    <div class="col text-end">
-      <button type="button" class="btn btn-primary" routerLink="add">
-        Crear Medicamento
+﻿<mat-card>
+  <mat-card-content>
+    <!-- Header with title and action button -->
+    <div class="d-flex justify-content-between align-items-center m-b-16">
+      <mat-card-title class="mb-0">Gestión de Medicamentos</mat-card-title>
+      <button mat-raised-button color="primary" (click)="openCreateDialog()">
+        <span class="iconify" data-icon="mdi:plus"></span>
+        <span>Nuevo Medicamento</span>
       </button>
     </div>
-  </div>
-  <div class="row mt-3">
-    <app-generic-table
-      [headersTable]="['Id','Nombre', 'Descripción', 'Presentación', 'Activo']"
-      [columsData]="['id', 'name', 'description', 'presentation', 'isActive']"
-      [tableData]="medicineList()"
-      [loading]="loading"
-      (edit)="editMedicine($event)"
-      (delete)="deleteMedicine($event)"
-      (detail)="viewMedicine($event)"
-    />
-  </div>
-</div>
+
+    <!-- Search Field -->
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Buscar medicamentos</mat-label>
+      <input matInput placeholder="Nombre, descripción, presentación..." [(ngModel)]="searchText"
+        (input)="applyFilter($event)">
+      <span class="iconify" data-icon="mdi:magnify" matPrefix></span>
+      <button matSuffix mat-icon-button *ngIf="searchText" (click)="clearSearch()" aria-label="Limpiar búsqueda">
+        <span class="iconify" data-icon="mdi:close"></span>
+      </button>
+    </mat-form-field>
+
+    <!-- Table -->
+    <div class="table-responsive">
+      <table mat-table [dataSource]="dataSource" class="w-100">
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef class="f-w-400 f-s-14 p-l-0">
+            Nombre
+          </th>
+          <td mat-cell *matCellDef="let element" class="p-l-0">
+            {{ element.name || '-' }}
+          </td>
+        </ng-container>
+
+        <!-- Description Column -->
+        <ng-container matColumnDef="description">
+          <th mat-header-cell *matHeaderCellDef class="f-w-400 f-s-14">
+            Descripción
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.description || '-' }}
+          </td>
+        </ng-container>
+
+        <!-- Presentation Column -->
+        <ng-container matColumnDef="presentation">
+          <th mat-header-cell *matHeaderCellDef class="f-w-400 f-s-14">
+            Presentación
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.presentation || '-' }}
+          </td>
+        </ng-container>
+
+        <!-- Is Active Column -->
+        <ng-container matColumnDef="isActive">
+          <th mat-header-cell *matHeaderCellDef class="f-w-400 f-s-14">
+            Estado
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <span [class]="element.isActive ? 'status-active' : 'status-inactive'">
+              {{ element.isActive ? 'Activo' : 'Inactivo' }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Actions Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef class="f-w-400 f-s-14">
+            Acciones
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <button mat-icon-button [matMenuTriggerFor]="menu">
+              <span class="iconify" data-icon="mdi:dots-vertical"></span>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="viewMedicine(element.id)">
+                <span class="iconify" data-icon="mdi:eye"></span>
+                <span>Ver</span>
+              </button>
+              <button mat-menu-item (click)="editMedicine(element.id)">
+                <span class="iconify" data-icon="mdi:pencil"></span>
+                <span>Editar</span>
+              </button>
+              <button mat-menu-item (click)="deleteMedicine(element.id)">
+                <span class="iconify" data-icon="mdi:delete"></span>
+                <span>Eliminar</span>
+              </button>
+            </mat-menu>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+        <!-- Empty state -->
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" [attr.colspan]="displayedColumns.length" style="text-align: center; padding: 20px;">
+            No hay medicamentos disponibles
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- Paginator -->
+    <div class="paginator-container">
+      <mat-paginator [pageSize]="30" [pageSizeOptions]="[10, 30, 50, 100]" showFirstLastButtons
+        aria-label="Seleccionar página de medicamentos">
+      </mat-paginator>
+    </div>
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,58 @@
+<h2 mat-dialog-title>{{ isEditMode() ? 'Editar Consulta' : 'Nueva Consulta' }}</h2>
+
+<mat-dialog-content>
+    <form (submit)="onSubmit($event)">
+        <!-- Appointment ID -->
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>ID de Cita</mat-label>
+            <input matInput type="number" [field]="consultationForm.appointmentId" placeholder="ID de la cita" />
+        </mat-form-field>
+
+        <!-- Reason -->
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Motivo de Consulta</mat-label>
+            <textarea matInput [field]="consultationForm.reason" placeholder="Ingrese motivo de consulta"
+                rows="3"></textarea>
+        </mat-form-field>
+
+        <!-- Diagnosis -->
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Diagnóstico</mat-label>
+            <textarea matInput [field]="consultationForm.diagnosis" placeholder="Ingrese diagnóstico"
+                rows="3"></textarea>
+        </mat-form-field>
+
+        <!-- Consultation Date -->
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Fecha de Consulta</mat-label>
+            <input matInput type="datetime-local" [field]="consultationForm.consultationDate" />
+        </mat-form-field>
+
+        <!-- Weight -->
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Peso (kg)</mat-label>
+            <input matInput type="number" [field]="consultationForm.weightKg" placeholder="Ingrese peso en kg"
+                step="0.01" />
+        </mat-form-field>
+
+        <!-- Height -->
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Altura (cm)</mat-label>
+            <input matInput type="number" [field]="consultationForm.heightCm" placeholder="Ingrese altura en cm"
+                step="0.01" />
+        </mat-form-field>
+    </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-button (click)="onCancel()" [disabled]="isLoading()">
+        Cancelar
+    </button>
+    <button mat-raised-button color="primary" (click)="onSubmit($event)" [disabled]="isLoading()">
+        @if (isLoading()) {
+        <mat-spinner diameter="20"></mat-spinner>
+        } @else {
+        {{ isEditMode() ? 'Actualizar' : 'Guardar' }}
+        }
+    </button>
+</mat-dialog-actions>

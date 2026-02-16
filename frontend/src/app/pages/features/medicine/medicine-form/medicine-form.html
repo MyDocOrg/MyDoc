@@ -1,0 +1,43 @@
+<h2 mat-dialog-title>{{ isEditMode() ? 'Editar Medicamento' : 'Nuevo Medicamento' }}</h2>
+
+<mat-dialog-content>
+    <form (submit)="onSubmit($event)">
+        <!-- Name -->
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Nombre del Medicamento</mat-label>
+            <input matInput [field]="medicineForm.name" placeholder="Ingrese nombre del medicamento" />
+        </mat-form-field>
+
+        <!-- Description -->
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Descripción</mat-label>
+            <textarea matInput [field]="medicineForm.description" placeholder="Ingrese descripción" rows="3"></textarea>
+        </mat-form-field>
+
+        <!-- Presentation -->
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Presentación</mat-label>
+            <input matInput [field]="medicineForm.presentation" placeholder="Ej: Tabletas, Cápsulas, Inyectable" />
+        </mat-form-field>
+
+        <!-- Is Active (only for edit mode) -->
+        @if (isEditMode()) {
+        <div class="checkbox-container">
+            <mat-checkbox [field]="medicineForm.isActive">Activo</mat-checkbox>
+        </div>
+        }
+    </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-button (click)="onCancel()" [disabled]="isLoading()">
+        Cancelar
+    </button>
+    <button mat-raised-button color="primary" (click)="onSubmit($event)" [disabled]="isLoading()">
+        @if (isLoading()) {
+        <mat-spinner diameter="20"></mat-spinner>
+        } @else {
+        {{ isEditMode() ? 'Actualizar' : 'Guardar' }}
+        }
+    </button>
+</mat-dialog-actions>

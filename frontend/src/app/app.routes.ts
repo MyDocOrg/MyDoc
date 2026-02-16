@@ -10,8 +10,6 @@ import { SettingsComponent } from './pages/features/doctor/settings/settings.com
 
 // Patient
 import { PatientHome } from './pages/features/patient/patient-home/patient-home';
-import { PatientAdd } from './pages/features/patient/patient-add/patient-add';
-import { PatientEdit } from './pages/features/patient/patient-edit/patient-edit';
 
 // Doctor
 import { DoctorHome } from './pages/features/doctor/doctor-home/doctor-home';
@@ -20,7 +18,6 @@ import { DoctorEdit } from './pages/features/doctor/doctor-edit/doctor-edit';
 
 // Clinic
 import { ClinicHome } from './pages/features/clinic/clinic-home/clinic-home';
-import { ClinicAdd } from './pages/features/clinic/clinic-add/clinic-add';
 
 
 // Appointment
@@ -28,18 +25,12 @@ import { AppointmentHome } from './pages/features/appointment/appointment-home/a
 
 // Consultation
 import { ConsultationHome } from './pages/features/consultation/consultation-home/consultation-home';
-import { ConsultationAdd } from './pages/features/consultation/consultation-add/consultation-add';
-import { ConsultationEdit } from './pages/features/consultation/consultation-edit/consultation-edit';
 
 // Medicine
 import { MedicineHome } from './pages/features/medicine/medicine-home/medicine-home';
-import { MedicineAdd } from './pages/features/medicine/medicine-add/medicine-add';
-import { MedicineEdit } from './pages/features/medicine/medicine-edit/medicine-edit';
 
 // Prescription
 import { PrescriptionHome } from './pages/features/prescription/prescription-home/prescription-home';
-import { PrescriptionAdd } from './pages/features/prescription/prescription-add/prescription-add';
-import { PrescriptionEdit } from './pages/features/prescription/prescription-edit/prescription-edit';
 
 // Medication Schedule
 import { MedicationScheduleHome } from './pages/features/medication-schedule/medication-schedule-home/medication-schedule-home';
@@ -51,7 +42,6 @@ import { AppointmentStatusHome } from './pages/features/appointment-status/appoi
 import { AppointmentStatusAdd } from './pages/features/appointment-status/appointment-status-add/appointment-status-add';
 import { AppointmentStatusEdit } from './pages/features/appointment-status/appointment-status-edit/appointment-status-edit';
 import { SelectRole } from './pages/features/auth/select-role/select-role';
-import { ClinicEdit } from './pages/features/clinic/clinic-edit/clinic-edit';
 
 // Notification
 import { NotificationHome } from './pages/features/notification/notification-home/notification-home';
@@ -74,9 +64,7 @@ export const routes: Routes = [
     {
         path: 'patient',
         children: [
-            { path: '', component: PatientHome },
-            { path: 'add', component: PatientAdd },
-            { path: 'edit/:id', component: PatientAdd }
+            { path: '', component: PatientHome }
         ]
     },
     // Doctor
@@ -97,9 +85,7 @@ export const routes: Routes = [
     {
         path: 'clinic',
         children: [
-            { path: '', component: ClinicHome },
-            { path: 'add', component: ClinicAdd },
-            { path: 'edit/:id', component: ClinicEdit }
+            { path: '', component: ClinicHome }
         ]
     },
 
@@ -115,27 +101,21 @@ export const routes: Routes = [
     {
         path: 'consultation',
         children: [
-            { path: '', component: ConsultationHome },
-            { path: 'add', component: ConsultationAdd },
-            { path: 'edit/:id', component: ConsultationAdd }
+            { path: '', component: ConsultationHome }
         ]
     },
     // Medicine
     {
         path: 'medicine',
         children: [
-            { path: '', component: MedicineHome },
-            { path: 'add', component: MedicineAdd },
-            { path: 'edit/:id', component: MedicineAdd }
+            { path: '', component: MedicineHome }
         ]
     },
     // Prescription
     {
         path: 'prescription',
         children: [
-            { path: '', component: PrescriptionHome },
-            { path: 'add', component: PrescriptionAdd },
-            { path: 'edit/:id', component: PrescriptionAdd }
+            { path: '', component: PrescriptionHome }
         ]
     },
     // Medication Schedule

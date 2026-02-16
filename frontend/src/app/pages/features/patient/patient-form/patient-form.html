@@ -1,0 +1,66 @@
+<h2 mat-dialog-title>{{ isEditMode() ? 'Editar Paciente' : 'Nuevo Paciente' }}</h2>
+
+<mat-dialog-content>
+    <form (submit)="onSubmit($event)">
+        <!-- Full Name -->
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Nombre Completo</mat-label>
+            <input matInput [field]="patientForm.fullName" placeholder="Ingrese nombre completo" />
+        </mat-form-field>
+
+        <!-- Birth Date -->
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Fecha de Nacimiento</mat-label>
+            <input matInput type="date" [field]="patientForm.birthDate" />
+        </mat-form-field>
+
+        <!-- Gender -->
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Género</mat-label>
+            <mat-select [field]="patientForm.gender">
+                <mat-option value="">Seleccione género</mat-option>
+                <mat-option value="M">Masculino</mat-option>
+                <mat-option value="F">Femenino</mat-option>
+                <mat-option value="O">Otro</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <!-- Phone -->
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Teléfono</mat-label>
+            <input matInput type="tel" [field]="patientForm.phone" placeholder="Ingrese teléfono" />
+        </mat-form-field>
+
+        <!-- Email -->
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Email</mat-label>
+            <input matInput type="email" [field]="patientForm.email" placeholder="Ingrese email" />
+        </mat-form-field>
+
+        <!-- Address -->
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Dirección</mat-label>
+            <textarea matInput [field]="patientForm.address" placeholder="Ingrese dirección" rows="3"></textarea>
+        </mat-form-field>
+
+        <!-- Is Active (only for edit mode) -->
+        @if (isEditMode()) {
+        <div class="checkbox-container">
+            <mat-checkbox [field]="patientForm.isActive">Activo</mat-checkbox>
+        </div>
+        }
+    </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-button (click)="onCancel()" [disabled]="isLoading()">
+        Cancelar
+    </button>
+    <button mat-raised-button color="primary" (click)="onSubmit($event)" [disabled]="isLoading()">
+        @if (isLoading()) {
+        <mat-spinner diameter="20"></mat-spinner>
+        } @else {
+        {{ isEditMode() ? 'Actualizar' : 'Guardar' }}
+        }
+    </button>
+</mat-dialog-actions>

@@ -1,16 +1,18 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
-import { RouterModule } from '@angular/router';
-import { MaterialModule } from '../../../../material.module';
+import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../services/auth.service';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatError, MatFormFieldModule, MatLabel } from '@angular/material/form-field';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-login-component',
-  imports: [RouterModule, MaterialModule, FormsModule, ReactiveFormsModule, CommonModule],
+  imports: [RouterLink, FormsModule, ReactiveFormsModule, CommonModule, MatProgressSpinner, MatLabel, MatFormFieldModule, MatError, MatDividerModule, MatButtonModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })

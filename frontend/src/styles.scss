@@ -1,27 +1,28 @@
 // Importar librería de estilos personalizada
-@use 'assets/scss/style.scss';
+@use "@angular/material" as mat;
+// @use 'assets/scss/style.scss';
 
-// Importar fuente Poppins de Google Fonts
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+// // Importar fuente Poppins de Google Fonts
+// @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
 
 
-html,
-body {
-  height: 100%;
-}
+// html,
+// body {
+//   height: 100%;
+// }
 
-body {
-  margin: 0;
-  font-family: "Poppins", sans-serif;
-}
+// body {
+//   margin: 0;
+//   font-family: "Poppins", sans-serif;
+// }
 
-// Aplicar Poppins a todos los elementos de Material
-* {
-  font-family: "Poppins", sans-serif !important;
-}
+// // Aplicar Poppins a todos los elementos de Material
+// * {
+//   font-family: "Poppins", sans-serif !important;
+// }
 
-// Estilos globales para iconos de Iconify
-.iconify {
-  display: inline-block;
-  vertical-align: middle;
-}
+// // Estilos globales para iconos de Iconify
+// .iconify {
+//   display: inline-block;
+//   vertical-align: middle;
+// }

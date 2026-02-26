@@ -4,10 +4,11 @@ import { MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatCardActions } 
 import { MatIcon } from "@angular/material/icon";
 import { MatToolbar } from "@angular/material/toolbar";
 import { RouterLink } from "@angular/router";
+import { MatButton } from '@angular/material/button';
 
 @Component({
   selector: 'app-home',
-  imports: [CommonModule, MatCard, MatCardHeader, MatIcon, MatCardTitle, MatCardContent, MatCardActions, MatToolbar, RouterLink],
+  imports: [CommonModule, MatCard, MatCardHeader, MatIcon, MatCardTitle, MatCardContent, MatCardActions, MatToolbar, RouterLink, MatButton],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })

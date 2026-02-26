@@ -1,5 +1,5 @@
-<div class="sidebar-container" [class.collapsed]="isCollapsed()">
-  <div class="sidebar-header">
+<div [class.collapsed]="isCollapsed()">
+  <!-- <div class="sidebar-header">
     <div class="logo-container d-flex align-items-center justify-content-center">
       @if (isCollapsed()) {
       <img src="assets/images/logos/mydoc-icon.svg" alt="MyDoc Icon" class="logo-icon" />
@@ -11,7 +11,7 @@
       }
       }
     </div>
-  </div>
+  </div> -->
 
   <mat-nav-list class="sidebar-nav">
     <a mat-list-item routerLink="/home" routerLinkActive="active">

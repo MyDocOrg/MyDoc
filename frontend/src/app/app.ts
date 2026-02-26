@@ -7,6 +7,7 @@ import { ThemeService } from './core/services/theme.service';
 
 @Component({
   selector: 'app-root',
+  styleUrl: './app.scss',
   imports: [RouterOutlet, Sidebar, Topbar],
   templateUrl: './app.html',
 })

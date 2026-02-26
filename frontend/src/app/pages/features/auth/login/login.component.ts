@@ -9,10 +9,11 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatError, MatFormFieldModule, MatLabel } from '@angular/material/form-field';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-login-component',
-  imports: [RouterLink, FormsModule, ReactiveFormsModule, CommonModule, MatProgressSpinner, MatLabel, MatFormFieldModule, MatError, MatDividerModule, MatButtonModule],
+  imports: [RouterLink, FormsModule, ReactiveFormsModule, CommonModule, MatProgressSpinner, MatLabel, MatFormFieldModule, MatError, MatDividerModule, MatButtonModule, MatCheckboxModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })

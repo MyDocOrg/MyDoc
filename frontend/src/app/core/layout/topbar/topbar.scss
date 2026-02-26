@@ -1,0 +1,33 @@
+:host {
+  display: block;
+}
+
+mat-toolbar {
+  background: var(--mat-sys-surface);
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+  gap: 8px;
+  padding: 0 16px;
+}
+
+.profile-btn-dd {
+  overflow: hidden;
+}
+
+.profile-dd {
+  object-fit: cover;
+}
+
+.icon-25 {
+  width: 25px;
+  height: 25px;
+}
+
+.icon-35 {
+  width: 35px;
+  height: 35px;
+}
+
+// Empuja los items de la derecha
+.spacer {
+  flex: 1;
+}

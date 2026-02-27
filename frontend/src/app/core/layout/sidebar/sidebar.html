@@ -14,6 +14,17 @@
   </div>
 
   <mat-nav-list class="sidebar-nav">
+    @if(roleName == "Paciente"){
+      <a mat-list-item routerLink="/appointment" routerLinkActive="active">
+        <span class="iconify" data-icon="solar:calendar-mark-bold-duotone" matListItemIcon></span>
+        <span matListItemTitle>Citas</span>
+      </a>
+      <a mat-list-item routerLink="/consultation" routerLinkActive="active">
+        <span class="iconify" data-icon="solar:clipboard-text-bold-duotone" matListItemIcon></span>
+        <span matListItemTitle>Consultas</span>
+      </a>
+    }
+    @else{
     <a mat-list-item routerLink="/home" routerLinkActive="active">
       <span class="iconify" data-icon="solar:home-2-bold-duotone" matListItemIcon></span>
       <span matListItemTitle>Inicio</span>
@@ -63,5 +74,6 @@
       <span class="iconify" data-icon="solar:info-circle-bold-duotone" matListItemIcon></span>
       <span matListItemTitle>Estados</span>
     </a>
+  }
   </mat-nav-list>
 </div>

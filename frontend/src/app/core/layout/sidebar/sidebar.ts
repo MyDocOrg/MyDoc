@@ -6,6 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ThemeService } from '../../services/theme.service';
 import { LayoutService } from '../../services/layout.service';
+import { TokenService } from '../../services/token-service';
 
 @Component({
   selector: 'app-sidebar',
@@ -13,8 +14,11 @@ import { LayoutService } from '../../services/layout.service';
   templateUrl: './sidebar.html',
 })
 export class Sidebar {
+  tokenService = inject(TokenService);
   private themeService = inject(ThemeService);
   private layoutService = inject(LayoutService);
+
+  roleName = this.tokenService.getDecodedToken().roleName;
 
   isCollapsed = this.layoutService.isSidebarCollapsed;
   currentTheme = this.themeService.currentTheme;

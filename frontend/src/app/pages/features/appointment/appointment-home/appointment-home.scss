@@ -1,4 +1,10 @@
 ﻿// Appointment Home Styles
+
+:host {
+    display: block;
+    box-sizing: border-box;
+}
+
 mat-card {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
@@ -8,6 +14,11 @@ mat-card {
 mat-card-content {
     padding: 24px;
 }
+
+.calendar-container {
+    margin-top: 24px;
+}
+
 
 mat-card-title {
     font-size: 1.5rem;
@@ -27,46 +38,38 @@ mat-card-title {
     align-items: center;
 }
 
+.flex-wrap {
+    flex-wrap: wrap;
+}
+
+.gap-2 {
+    gap: 8px;
+}
+
+.mb-2 {
+    margin-bottom: 8px;
+}
+
+@media (min-width: 768px) {
+    .mb-md-0 {
+        margin-bottom: 0;
+    }
+}
+
 .m-b-16 {
     margin-bottom: 16px;
+    flex-shrink: 0; // Don't let controls shrink
 }
 
 .mb-0 {
     margin-bottom: 0;
 }
 
-.table-responsive {
-    overflow-x: auto;
-    margin-top: 16px;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-
-    th {
-        font-weight: 500;
-        color: #555;
-        padding: 12px 16px;
-        text-align: left;
-        border-bottom: 2px solid #e0e0e0;
-    }
-
-    td {
-        padding: 12px 16px;
-        border-bottom: 1px solid #f0f0f0;
-        color: #666;
-    }
-
-    tr:hover {
-        background-color: #f9f9f9;
-    }
-}
-
-button[mat-raised-button] {
+button[mat-raised-button],
+button[mat-stroked-button],
+button[mat-button] {
     font-weight: 500;
     border-radius: 6px;
-    padding: 8px 20px;
     transition: all 0.2s ease;
     display: inline-flex;
     align-items: center;
@@ -76,6 +79,14 @@ button[mat-raised-button] {
         font-size: 20px;
         width: 20px;
         height: 20px;
+    }
+}
+
+button[mat-stroked-button] {
+    &.active {
+        background-color: rgba(63, 81, 181, 0.1); // Angular Material primary 100
+        border-color: #3f51b5;
+        color: #3f51b5;
     }
 }
 
@@ -93,60 +104,112 @@ button[mat-icon-button] {
     }
 }
 
-.mat-mdc-menu-item {
-    .iconify {
-        margin-right: 12px;
-        color: #666;
-        font-size: 20px;
-        width: 20px;
-        height: 20px;
+
+.f-w-600 {
+    font-weight: 600;
+}
+
+.f-s-16 {
+    font-size: 16px;
+}
+
+
+// --- Angular Calendar Custom Overrides ---
+::ng-deep {
+
+    // Enforce strict sizing recursively inside the calendar wrappers
+    mwl-calendar-month-view,
+    mwl-calendar-week-view,
+    mwl-calendar-day-view {
+        display: block; // Revert back to block, the flex was too tricky and forced scrolls
     }
-}
 
-// Empty state styling
-.mat-row {
-    &:last-child td {
-        color: #999;
-        font-style: italic;
+    .cal-month-view {
+        background-color: #fff;
     }
-}
 
-// Utility classes
-.w-100 {
-    width: 100%;
-}
-
-.p-l-0 {
-    padding-left: 0 !important;
-}
-
-.f-w-400 {
-    font-weight: 400;
-}
-
-.f-s-14 {
-    font-size: 14px;
-}
-
-// Search field styles
-.search-field {
-    width: 100%;
-    max-width: 500px;
-    margin-bottom: 16px;
-
-    .iconify {
-        color: #666;
-        font-size: 20px;
+    .cal-month-view .cal-days {
+        border: 1px solid #e1e1e1;
+        border-bottom: 0;
     }
-}
 
-// Paginator container - aligned to the right
-.paginator-container {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 16px;
+    .cal-month-view .cal-cell-row {
+        min-height: calc((100vh - 350px) / 6);
+        /* Ensure there's enough subtracted space for navbars and headers */
+    }
 
-    mat-paginator {
-        background: transparent;
+    /* Design Touches */
+    .cal-month-view .cal-day-cell {
+        min-height: auto; // Let it shrink
+    }
+
+    .cal-month-view .cal-day-cell.cal-today {
+        background-color: rgba(63, 81, 181, 0.05);
+    }
+
+    .cal-month-view .cal-day-cell .cal-day-number {
+        font-size: 1rem; // Reduce font size slightly
+        opacity: 0.8;
+        margin: 4px; // Reduce margin to save space
+    }
+
+    .cal-month-view .cal-day-cell.cal-today .cal-day-number {
+        font-size: 1.1rem;
+        font-weight: bold;
+        color: #3f51b5;
+        opacity: 1;
+    }
+
+    .cal-month-view .cal-day-cell.cal-weekend .cal-day-number {
+        color: #f44336;
+    }
+
+    .cal-month-view .cal-cell-row:hover {
+        background-color: #fafafa;
+    }
+
+    .cal-month-view .cal-day-cell:hover,
+    .cal-month-view .cal-cell-top:hover {
+        background-color: rgba(0, 0, 0, 0.02);
+    }
+
+    .cal-month-view .cal-day-badge {
+        background-color: #3f51b5;
+        margin-top: 4px; // Reduce margin
+    }
+
+    .cal-month-view .cal-event {
+        border-radius: 4px;
+        padding: 2px 4px;
+        font-size: 0.75rem; // Slightly smaller event text
+        margin: 1px 2px; // Reduce margins between events
+    }
+
+    .cal-month-view .cal-open-day-events {
+        background-color: #f5f5f5;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+        border-radius: 4px;
+        padding: 12px; // Reduce padding
+        margin-top: 4px;
+    }
+
+    .cal-month-view .cal-header .cal-cell {
+        padding: 4px 0; // Reduce header padding drastically
+        font-weight: 500;
+        color: #555;
+        flex-shrink: 0;
+        font-size: 0.85rem; // Reduce header font size slightly
+    }
+
+    .cal-week-view .cal-day-headers {
+        padding-left: 0;
+    }
+
+    .cal-week-view .cal-time-events .cal-day-columns {
+        border-color: #e0e0e0;
+    }
+
+    .cal-day-view .cal-hour-rows {
+        border-color: #e0e0e0;
     }
 }

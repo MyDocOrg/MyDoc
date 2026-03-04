@@ -1,17 +1,25 @@
-﻿import { Component, inject, signal, ViewChild, AfterViewInit } from '@angular/core';
+﻿import { Component, inject, ViewChild, AfterViewInit } from '@angular/core';
 import { AppointmentService } from '../services/appointment-service';
 import { Router } from '@angular/router';
 import { MaterialModule } from '../../../../material.module';
-import { CommonModule } from '@angular/common';
+import { CommonModule, registerLocaleData } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
 import { AppointmentForm } from '../appointment-form/appointment-form';
+import { CalendarModule, CalendarEvent, CalendarView } from 'angular-calendar';
+import { isSameDay, isSameMonth } from 'date-fns';
+import localeEs from '@angular/common/locales/es';
+
+registerLocaleData(localeEs);
 
 @Component({
   selector: 'app-appointment-home',
-  imports: [MaterialModule, CommonModule, FormsModule],
+  imports: [
+    MaterialModule,
+    CommonModule,
+    FormsModule,
+    CalendarModule
+  ],
   templateUrl: './appointment-home.html',
   styleUrl: './appointment-home.scss',
 })
@@ -20,27 +28,20 @@ export class AppointmentHome implements AfterViewInit {
   dialog = inject(MatDialog);
   router = inject(Router);
 
-  dataSource = new MatTableDataSource<any>([]);
-  displayedColumns: string[] = ['assigned', 'patient', 'date', 'actions'];
-  loading = false;
-  searchText = '';
+  // Calendar properties
+  view: CalendarView = CalendarView.Month;
+  CalendarView = CalendarView;
+  viewDate: Date = new Date();
+  events: CalendarEvent[] = [];
+  activeDayIsOpen: boolean = false;
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  loading = false;
 
   ngOnInit(): void {
     this.GetAll();
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
-
-    // Configure custom filter predicate to search across multiple fields
-    this.dataSource.filterPredicate = (data: any, filter: string) => {
-      const searchStr = filter.toLowerCase();
-      return data.doctorName?.toLowerCase().includes(searchStr) ||
-        data.patientName?.toLowerCase().includes(searchStr) ||
-        data.appointmentDate?.toLowerCase().includes(searchStr);
-    };
   }
 
   GetAll(): void {
@@ -48,7 +49,18 @@ export class AppointmentHome implements AfterViewInit {
     this.service.GetTable().subscribe({
       next: (res) => {
         this.loading = false;
-        this.dataSource.data = res.data || res;
+        const data = res.data || res;
+        this.events = data.map((item: any) => ({
+          start: new Date(item.appointmentDate),
+          title: `Cita: ${item.patientName} con Dr. ${item.doctorName}`,
+          color: {
+            primary: '#3f51b5',
+            secondary: '#e8eaf6',
+          },
+          meta: {
+            appointment: item
+          }
+        }));
       },
       error: (error) => {
         this.loading = false;
@@ -57,25 +69,33 @@ export class AppointmentHome implements AfterViewInit {
     });
   }
 
-  /**
-   * Apply filter to the table
-   */
-  applyFilter(event: Event): void {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-
-    // Reset to first page when filtering
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
+  dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
+    if (isSameMonth(date, this.viewDate)) {
+      if (
+        (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
+        events.length === 0
+      ) {
+        this.activeDayIsOpen = false;
+      } else {
+        this.activeDayIsOpen = true;
+      }
+      this.viewDate = date;
     }
   }
 
-  /**
-   * Clear search filter
-   */
-  clearSearch(): void {
-    this.searchText = '';
-    this.dataSource.filter = '';
+  handleEvent(action: string, event: CalendarEvent): void {
+    const appointmentId = event.meta?.appointment?.id;
+    if (appointmentId) {
+      this.editAppointment(appointmentId);
+    }
+  }
+
+  setView(view: CalendarView) {
+    this.view = view;
+  }
+
+  closeOpenMonthViewDay() {
+    this.activeDayIsOpen = false;
   }
 
   /**

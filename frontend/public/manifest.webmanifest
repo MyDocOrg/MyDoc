@@ -1,9 +1,9 @@
 {
-  "name": "frontend",
-  "short_name": "frontend",
+  "name": "frontend-mobile",
+  "short_name": "frontend-mobile",
   "display": "standalone",
   "scope": "./",
-  "start_url": "./",
+  "start_url": "./homepwa",
   "icons": [
     {
       "src": "icons/icon-72x72.png",

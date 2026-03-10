@@ -53,12 +53,18 @@ import { MedicalHistoryHome } from './pages/features/medical-history/medical-his
 import { MedicalHistoryAdd } from './pages/features/medical-history/medical-history-add/medical-history-add';
 import { MedicalHistoryEdit } from './pages/features/medical-history/medical-history-edit/medical-history-edit';
 
+// pwa
+// pwa-home
+import { HomePwa } from './pages/features/pwa/home/home';
+
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
     { path: 'login', component: LoginComponent },
     { path: 'select-role', component: SelectRole },
     { path: 'home', component: HomeComponent },
+    { path: 'homepwa', component: HomePwa },
     { path: 'register', component: RegisterComponent },
+
 
     // Patient
     {

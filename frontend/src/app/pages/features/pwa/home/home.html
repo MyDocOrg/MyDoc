@@ -1,0 +1,224 @@
+<div class="doctor-notes-container">
+  <!-- Header Bar -->
+  <div class="header-bar">
+    <div class="header-content">
+      <div class="logo-section">
+        <mat-icon class="logo-icon">local_hospital</mat-icon>
+        <div class="logo-text">
+          <h3 class="app-title">MyDoc</h3>
+          <p class="app-subtitle">Notas Médicas</p>
+        </div>
+      </div>
+      
+      <!-- Connection Status Badge -->
+      <div class="connection-badge" [class.online]="isOnline()" [class.offline]="!isOnline()" [matTooltip]="isOnline() ? 'Conectado' : 'Desconectado (Offline)'">
+        <mat-icon class="badge-icon">{{ isOnline() ? 'cloud_done' : 'cloud_off' }}</mat-icon>
+      </div>
+    </div>
+  </div>
+
+  <div class="notes-content">
+    <!-- Header -->
+    <div class="notes-header">
+      <h1>Mis Notas</h1>
+      <p class="subtitle">Sistema de notas rápidas para tu equipo médico</p>
+    </div>
+
+    <!-- Nueva Nota -->
+    <mat-card class="new-note-card">
+      <mat-card-header>
+        <mat-card-title>Crear Nueva Nota</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="form-group">
+          <mat-form-field class="full-width">
+            <mat-label>Título</mat-label>
+            <input
+              matInput
+              [(ngModel)]="newNote.title"
+              (keyup.enter)="addNote()"
+              placeholder="Título de la nota"
+            />
+          </mat-form-field>
+        </div>
+
+        <div class="form-group">
+          <mat-form-field class="full-width">
+            <mat-label>Contenido</mat-label>
+            <textarea
+              matInput
+              [(ngModel)]="newNote.content"
+              rows="4"
+              placeholder="Escribe tu nota aquí..."
+            ></textarea>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field class="half-width">
+            <mat-label>Fecha de vencimiento</mat-label>
+            <input
+              matInput
+              type="date"
+              [(ngModel)]="newNote.dueDate"
+            />
+          </mat-form-field>
+
+          <mat-form-field class="half-width">
+            <mat-label>Hora</mat-label>
+            <input
+              matInput
+              type="time"
+              [(ngModel)]="newNote.dueTime"
+            />
+          </mat-form-field>
+        </div>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="primary" (click)="addNote()">
+          <mat-icon>add_circle</mat-icon>
+          Agregar Nota
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+    <!-- Notas Pendientes -->
+    <div class="notes-section" *ngIf="activeNotes.length > 0">
+      <h2 class="section-title">
+        <mat-icon>assignment</mat-icon>
+        Tareas Pendientes ({{ activeNotes.length }})
+      </h2>
+
+      <div class="notes-grid">
+        <mat-card
+          *ngFor="let note of activeNotes"
+          class="note-card"
+          [class.completed]="note.isCompleted"
+        >
+          <mat-card-header>
+            <div class="note-header-content">
+              <mat-checkbox
+                [(ngModel)]="note.isCompleted"
+                (ngModelChange)="toggleComplete(note.id)"
+              ></mat-checkbox>
+              <mat-card-title [class.completed-title]="note.isCompleted">
+                {{ note.title }}
+              </mat-card-title>
+            </div>
+          </mat-card-header>
+
+          <mat-card-content>
+            <div *ngIf="editingNote?.id === note.id" class="edit-mode">
+              <mat-form-field class="full-width">
+                <mat-label>Editar nota</mat-label>
+                <textarea
+                  matInput
+                  [(ngModel)]="editingText"
+                  rows="4"
+                ></textarea>
+              </mat-form-field>
+            </div>
+            <div *ngIf="editingNote?.id !== note.id" class="note-content">
+              <p>{{ note.content }}</p>
+              <div *ngIf="note.dueDate" class="note-due-date" [class.overdue]="isOverdue(note.dueDate, note.dueTime)">
+                <mat-icon>schedule</mat-icon>
+                <span>{{ formatDueDateTime(note.dueDate, note.dueTime) }}</span>
+                <span *ngIf="isOverdue(note.dueDate, note.dueTime)" class="overdue-label">VENCIDA</span>
+              </div>
+              <p class="note-date">{{ formatDate(note.updatedAt) }}</p>
+            </div>
+          </mat-card-content>
+
+          <mat-card-actions>
+            <div class="actions-group">
+              <button
+                *ngIf="editingNote?.id === note.id"
+                mat-icon-button
+                [matTooltip]="'Guardar'"
+                (click)="saveEdit()"
+              >
+                <mat-icon>save</mat-icon>
+              </button>
+              <button
+                *ngIf="editingNote?.id === note.id"
+                mat-icon-button
+                [matTooltip]="'Cancelar'"
+                (click)="cancelEdit()"
+              >
+                <mat-icon>close</mat-icon>
+              </button>
+              <button
+                *ngIf="editingNote?.id !== note.id"
+                mat-icon-button
+                [matTooltip]="'Editar'"
+                (click)="startEdit(note)"
+              >
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                [matTooltip]="'Eliminar'"
+                (click)="deleteNote(note.id)"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </div>
+
+    <!-- Notas Completadas -->
+    <div class="notes-section" *ngIf="completedNotes.length > 0">
+      <h2 class="section-title completed-section">
+        <mat-icon>check_circle</mat-icon>
+        Completadas ({{ completedNotes.length }})
+      </h2>
+
+      <div class="notes-grid">
+        <mat-card
+          *ngFor="let note of completedNotes"
+          class="note-card completed"
+        >
+          <mat-card-header>
+            <div class="note-header-content">
+              <mat-checkbox
+                [(ngModel)]="note.isCompleted"
+                (ngModelChange)="toggleComplete(note.id)"
+              ></mat-checkbox>
+              <mat-card-title class="completed-title">
+                {{ note.title }}
+              </mat-card-title>
+            </div>
+          </mat-card-header>
+
+          <mat-card-content>
+            <p class="note-content-completed">{{ note.content }}</p>
+            <div *ngIf="note.dueDate" class="note-due-date">
+              <mat-icon>schedule</mat-icon>
+              <span>{{ formatDueDateTime(note.dueDate, note.dueTime) }}</span>
+            </div>
+            <p class="note-date">{{ formatDate(note.updatedAt) }}</p>
+          </mat-card-content>
+
+          <mat-card-actions>
+            <button
+              mat-icon-button
+              [matTooltip]="'Eliminar'"
+              (click)="deleteNote(note.id)"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </div>
+
+    <!-- Sin Notas -->
+    <div class="empty-state" *ngIf="notes.length === 0">
+      <mat-icon>note_add</mat-icon>
+      <h3>No hay notas</h3>
+      <p>Crea tu primera nota para comenzar a organizar tus tareas</p>
+    </div>
+  </div>
+</div>

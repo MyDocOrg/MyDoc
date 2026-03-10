@@ -20,6 +20,13 @@ export class App {
     // Inicializar servicio de tema
     this.themeService;
     
+    // Detectar si está en modo PWA y redirigir a /homepwa
+    if (this.isRunningAsPWA()) {
+      if (this.router.url === '/' || this.router.url === '') {
+        this.router.navigate(['/homepwa']);
+      }
+    }
+    
     // Verificar la URL inicial
     this.updateLayoutVisibility(this.router.url);
 
@@ -30,9 +37,23 @@ export class App {
       this.updateLayoutVisibility(event.urlAfterRedirects);
     });
   }
+
+  /**
+   * Detecta si la aplicación está corriendo como PWA
+   */
+  private isRunningAsPWA(): boolean {
+    // Detectar si se está ejecutando como PWA en iOS
+    const isIOSPwa = (window.navigator as any).standalone === true;
+
+    // Detectar si se está ejecutando como PWA en Android
+    const isAndroidPwa = window.matchMedia('(display-mode: standalone)').matches;
+
+    return isIOSPwa || isAndroidPwa;
+  }
   
   private updateLayoutVisibility(url: string) {
-    const shouldShowLayout = url !== '/login' && !url.startsWith('/register') && url !== '/home' && url !== '/select-role';
+    const shouldShowLayout = url !== '/login' && !url.startsWith('/register') && url !== '/home' && url !== '/homepwa' && url !== '/select-role';
     this.isShowLayout.set(shouldShowLayout);
   }
 }
+

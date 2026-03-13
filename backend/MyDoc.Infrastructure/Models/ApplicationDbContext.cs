@@ -62,6 +62,7 @@ public partial class ApplicationDbContext : DbContext
                 .HasConstraintName("FK_Appointment_Doctor");
 
             entity.HasOne(d => d.patient).WithMany(p => p.Appointments)
+                .IsRequired(false)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Appointment_Patient");
 

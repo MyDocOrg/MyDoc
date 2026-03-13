@@ -33,7 +33,7 @@ services:
       - .env
     environment:
       - ASPNETCORE_URLS=http://+:8080
-      - ConnectionStrings__DefaultConnection=${DEFAULT_CONN}
+      - ConnectionStrings__MyDocConnection=${MYDOC_CONN}
       - Jwt__Key=${JWT_KEY}
       - Jwt__Issuer=${JWT_ISSUER}
       - Jwt__Audience=${JWT_AUDIENCE}

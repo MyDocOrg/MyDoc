@@ -37,7 +37,7 @@ public partial class Appointment
 
     [ForeignKey("patient_id")]
     [InverseProperty("Appointments")]
-    public virtual Patient patient { get; set; } = null!;
+    public virtual Patient? patient { get; set; }
 
     [ForeignKey("status_id")]
     [InverseProperty("Appointments")]

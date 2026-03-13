@@ -74,7 +74,13 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     var connectionString = Environment.GetEnvironmentVariable("MYDOC_CONN") 
-        ?? builder.Configuration.GetConnectionString("DefaultConnection");
+        ?? builder.Configuration.GetConnectionString("MyDocConnection");
+
+    if (string.IsNullOrEmpty(connectionString))
+    {
+        throw new InvalidOperationException("Fatal error: Database connection string 'MYDOC_CONN' or 'MyDocConnection' not found.");
+    }
+
     options.UseSqlServer(connectionString);
 });
 
